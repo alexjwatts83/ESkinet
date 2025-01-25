@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ESkitNet.Infrastructure.Data.Configurations;
 public class ProductConfiguration : IEntityTypeConfiguration<Product>

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ESkitNet.Infrastructure.Data;
 
