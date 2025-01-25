@@ -11,6 +11,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Id).HasConversion(productId => productId.Value, dbId => ProductId.Of(dbId));
 
         builder.Property(p => p.Name).HasMaxLength(100);
+
         builder.Property(p => p.Description).HasMaxLength(255);
+
+        builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
     }
 }

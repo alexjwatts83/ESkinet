@@ -7,3 +7,7 @@ ESkinet
 `docker-compose down`
 
 ## migrations
+
+`dotnet ef migrations add InitialCreate -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure -o Data\Migrations`
+
+`dotnet ef migrations remove -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure`
