@@ -9,6 +9,10 @@ public interface IProductRepository
 
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<string>> GetBrandsAsync(CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<string>> GetTypesAsync(CancellationToken cancellationToken);
+
     void Add(Product product);
 
     void Update(Product product);

@@ -42,6 +42,11 @@ public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
         return (pageNumber, pageSize, totalCount, products);
     }
 
+    public async Task<IReadOnlyList<string>> GetBrandsAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext.Products.Select(x => x.Brand).Distinct().Order().ToListAsync(cancellationToken);
+    }
+
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var productId = ProductId.Of(id);
@@ -49,6 +54,11 @@ public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
         var product = await dbContext.Products.FindAsync([productId], cancellationToken: cancellationToken);
 
         return product;
+    }
+
+    public async Task<IReadOnlyList<string>> GetTypesAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext.Products.Select(x => x.Type).Distinct().ToListAsync(cancellationToken);
     }
 
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)
