@@ -1,4 +1,6 @@
-﻿namespace ESkitNet.API;
+﻿using System.Reflection;
+
+namespace ESkitNet.API;
 
 public static class DependencyInjection
 {
@@ -6,11 +8,11 @@ public static class DependencyInjection
     {
         services.AddCarter();
 
-        //services.AddMediatR(config =>
-        //{
-        //    config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-        //    //config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
-        //});
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            //config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+        });
 
         //services.AddExceptionHandler<CustomExceptionHandler>();
 
