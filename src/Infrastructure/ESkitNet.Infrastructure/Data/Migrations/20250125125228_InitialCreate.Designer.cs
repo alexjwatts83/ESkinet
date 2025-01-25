@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ESkitNet.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    [Migration("20250125114703_InitialCreate")]
+    [Migration("20250125125228_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

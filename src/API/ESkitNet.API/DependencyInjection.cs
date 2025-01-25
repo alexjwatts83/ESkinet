@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using ESkitNet.Core.Behaviors;
+using ESkitNet.Core.Exceptions.Handler;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using System.Reflection;
 
 namespace ESkitNet.API;
 
@@ -12,12 +16,15 @@ public static class DependencyInjection
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
             //config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            config.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
 
-        //services.AddExceptionHandler<CustomExceptionHandler>();
+        services.AddExceptionHandler<CustomExceptionHandler>();
 
-        //services.AddHealthChecks()
-        //    .AddSqlServer(configuration.GetConnectionString("Database")!);
+        services.AddHealthChecks()
+            .AddSqlServer(configuration.GetConnectionString("Database")!);
 
         return services;
     }
@@ -26,13 +33,13 @@ public static class DependencyInjection
     {
         app.MapCarter();
 
-        //app.UseExceptionHandler(options => { });
+        app.UseExceptionHandler(options => { });
 
-        //app.UseHealthChecks("/health",
-        //    new HealthCheckOptions
-        //    {
-        //        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-        //    });
+        app.UseHealthChecks("/health",
+            new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
         return app;
     }
