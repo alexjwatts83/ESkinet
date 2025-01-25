@@ -1,4 +1,6 @@
-﻿using ESkitNet.Infrastructure.Data.Interceptors;
+﻿using ESkitNet.Core.Interfaces;
+using ESkitNet.Infrastructure.Data.Interceptors;
+using ESkitNet.Infrastructure.Data.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -16,9 +18,12 @@ public static class DependencyInjection
 
         var connectionString = configuration.GetConnectionString("Database");
 
+        // common services
         services.AddScoped<IAppTimeProvider, AppTimeProvider>();
         services.AddScoped<IUserAccessor, UserAccessor>();
 
+        // db services
+        services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 

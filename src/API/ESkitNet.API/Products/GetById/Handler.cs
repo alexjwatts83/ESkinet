@@ -4,14 +4,11 @@ public record Query(Guid Id) : IQuery<Result>;
 
 public record Result(ProductDto Product);
 
-public class Handler(StoreDbContext dbContext) : IQueryHandler<Query, Result>
+public class Handler(IProductRepository productRepository) : IQueryHandler<Query, Result>
 {
     public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
     {
-        // get orders with pagination
-        // return result
-        var productId = ProductId.Of(query.Id);
-        var product = await dbContext.Products.FindAsync([productId], cancellationToken: cancellationToken);
+        var product = await productRepository.GetByIdAsync(query.Id, cancellationToken);
 
         if (product is null)
             throw new ProductNotFoundException(query.Id);

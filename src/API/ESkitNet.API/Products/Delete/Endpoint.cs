@@ -12,7 +12,10 @@ public class Endpoint : ICarterModule
 
             var response = result.Adapt<Response>();
 
-            return Results.Ok(response);
+            // TODO return better response
+            return (response == null)
+             ? Results.BadRequest("Failed to delete Product")
+             : Results.NoContent();
         })
         .WithName("DeleteProduct")
         .Produces<Response>(StatusCodes.Status200OK)

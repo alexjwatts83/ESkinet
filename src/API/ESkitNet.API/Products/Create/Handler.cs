@@ -3,10 +3,11 @@
 public record Command(ProductDto Product) : ICommand<Result>;
 public record Result(Guid Id);
 
-public class Handler(StoreDbContext dbContext) : ICommandHandler<Command, Result>
+public class Handler(IProductRepository productRepository) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
+        // TODO use a mapper
         var product = new Product() 
         { 
             Id = ProductId.Of(Guid.NewGuid()),
@@ -19,9 +20,9 @@ public class Handler(StoreDbContext dbContext) : ICommandHandler<Command, Result
             QuantityInStock = command.Product.QuantityInStock,
         };
 
-        dbContext.Products.Add(product);
+        productRepository.Add(product);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        await productRepository.SaveChangesAsync(cancellationToken);
 
         return new Result(product.Id.Value);
     }

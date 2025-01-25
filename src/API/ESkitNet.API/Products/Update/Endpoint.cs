@@ -15,7 +15,10 @@ public class Endpoint : ICarterModule
 
             var response = result.Adapt<Response>();
 
-            return Results.Ok(response);
+            // TODO return better response
+            return (response == null)
+             ? Results.BadRequest("Failed to update Product")
+             : Results.NoContent();
         })
         .WithName("UpdateProduct")
         .Produces<Response>(StatusCodes.Status200OK)

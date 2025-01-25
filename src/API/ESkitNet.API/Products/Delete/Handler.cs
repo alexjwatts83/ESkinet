@@ -4,25 +4,19 @@ public record Command(Guid ProductId) : ICommand<Result>;
 
 public record Result(bool IsSuccess);
 
-public class Handler(StoreDbContext dbContext) : ICommandHandler<Command, Result>
+public class Handler(IProductRepository productRepository) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
-        //Delete Order entity from command object
-        //save to database
-        //return result
-
-        var productId = ProductId.Of(command.ProductId);
-        var product = await dbContext.Products
-            .FindAsync([productId], cancellationToken: cancellationToken);
+        var product = await productRepository.GetByIdAsync(command.ProductId, cancellationToken);
 
         if (product is null)
             throw new ProductNotFoundException(command.ProductId);
 
-        dbContext.Products.Remove(product);
+        productRepository.Delete(product);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        var result = await productRepository.SaveChangesAsync(cancellationToken);
 
-        return new Result(true);
+        return new Result(result);
     }
 }

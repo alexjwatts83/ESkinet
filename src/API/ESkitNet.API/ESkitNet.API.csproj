@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\ESkitNet.Core\ESkitNet.Core.csproj" />
     <ProjectReference Include="..\..\Infrastructure\ESkitNet.Infrastructure\ESkitNet.Infrastructure.csproj" />
   </ItemGroup>
 

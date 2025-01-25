@@ -4,22 +4,16 @@ public record Command(ProductDto Product) : ICommand<Result>;
 
 public record Result(bool IsSuccess);
 
-public class Handler(StoreDbContext dbContext): ICommandHandler<Command, Result>
+public class Handler(IProductRepository productRepository) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
-        //Update Order entity from command object
-        //save to database
-        //return result
-        var productId = ProductId.Of(command.Product.Id);
-        var product = await dbContext.Products
-            .FindAsync([productId], cancellationToken: cancellationToken);
+        var product = await productRepository.GetByIdAsync(command.Product.Id, cancellationToken);
 
         if (product is null)
             throw new ProductNotFoundException(command.Product.Id);
 
-        //order.UpdateFromDto(command.Order);
-
+        // TODO: use a mapper
         product.Name = command.Product.Name;
         product.Description = command.Product.Description;
         product.Price = command.Product.Price;
@@ -28,10 +22,10 @@ public class Handler(StoreDbContext dbContext): ICommandHandler<Command, Result>
         product.ProductBrand = command.Product.ProductBrand;
         product.QuantityInStock = command.Product.QuantityInStock;
 
-        dbContext.Products.Update(product);
+        productRepository.Update(product);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        var result = await productRepository.SaveChangesAsync(cancellationToken);
 
-        return new Result(true);
+        return new Result(result);
     }
 }

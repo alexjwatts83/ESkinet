@@ -9,6 +9,7 @@ global using ESkitNet.Core.Entities;
 global using ESkitNet.Core.Pagination;
 global using ESkitNet.Infrastructure.Data;
 global using Microsoft.EntityFrameworkCore;
+global using ESkitNet.Core.Interfaces;
 
 global using MediatR;
 global using Mapster;
