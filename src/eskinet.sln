@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A2A2BDAA-6817-487C-88E2-8516E7031D37}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.editorconfig = ..\..\.editorconfig
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{08C75D93-6258-48B4-B3FE-F3580A29905B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.API", "API\ESkitNet.API\ESkitNet.API.csproj", "{3AAD9714-A23D-4CA9-970F-36749BD54DB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2ADB33F7-38DD-4F90-92E5-123BD4ED8932}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.Core", "Core\ESkitNet.Core\ESkitNet.Core.csproj", "{90F8BD15-1424-45E9-BC20-70124379B1DF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{28A3C46B-60A8-455A-9D4A-FFC7B5A58842}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.Infrastructure", "Infrastructure\ESkitNet.Infrastructure\ESkitNet.Infrastructure.csproj", "{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AAD9714-A23D-4CA9-970F-36749BD54DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAD9714-A23D-4CA9-970F-36749BD54DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAD9714-A23D-4CA9-970F-36749BD54DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAD9714-A23D-4CA9-970F-36749BD54DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F8BD15-1424-45E9-BC20-70124379B1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F8BD15-1424-45E9-BC20-70124379B1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F8BD15-1424-45E9-BC20-70124379B1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F8BD15-1424-45E9-BC20-70124379B1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3AAD9714-A23D-4CA9-970F-36749BD54DB4} = {08C75D93-6258-48B4-B3FE-F3580A29905B}
+		{90F8BD15-1424-45E9-BC20-70124379B1DF} = {2ADB33F7-38DD-4F90-92E5-123BD4ED8932}
+		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD} = {28A3C46B-60A8-455A-9D4A-FFC7B5A58842}
+	EndGlobalSection
+EndGlobal
