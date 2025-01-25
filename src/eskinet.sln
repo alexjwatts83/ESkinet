@@ -5,8 +5,8 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A2A2BDAA-6817-487C-88E2-8516E7031D37}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\.editorconfig = ..\..\.editorconfig
-		..\..\README.md = ..\..\README.md
+		..\.editorconfig = ..\.editorconfig
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{08C75D93-6258-48B4-B3FE-F3580A29905B}"
@@ -20,6 +20,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{28A3C46B-60A8-455A-9D4A-FFC7B5A58842}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.Infrastructure", "Infrastructure\ESkitNet.Infrastructure\ESkitNet.Infrastructure.csproj", "{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{26C7C6A0-B360-4446-9197-4E4811282B53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26C7C6A0-B360-4446-9197-4E4811282B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26C7C6A0-B360-4446-9197-4E4811282B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26C7C6A0-B360-4446-9197-4E4811282B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26C7C6A0-B360-4446-9197-4E4811282B53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

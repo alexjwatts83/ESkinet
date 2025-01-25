@@ -1,0 +1,8 @@
+services:
+  storedb:
+    container_name: storedb
+    environment:
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=SwN@12345678
+    ports:
+      - "1433:1433"

@@ -13,8 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["API/ESkitNet.API/ESkitNet.API.csproj", "API/ESkitNet.API/"]
-COPY ["Core/ESkitNet.Core/ESkitNet.Core.csproj", "Core/ESkitNet.Core/"]
-COPY ["Infrastructure/ESkitNet.Infrastructure/ESkitNet.Infrastructure.csproj", "Infrastructure/ESkitNet.Infrastructure/"]
 RUN dotnet restore "./API/ESkitNet.API/ESkitNet.API.csproj"
 COPY . .
 WORKDIR "/src/API/ESkitNet.API"
