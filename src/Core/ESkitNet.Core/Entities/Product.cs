@@ -1,6 +1,6 @@
 ﻿namespace ESkitNet.Core.Entities;
 
-public class Product : BaseEntity
+public class Product : Entity<ProductId>
 {
     public required string Name { get; set; }
     public required string Description { get; set; }
