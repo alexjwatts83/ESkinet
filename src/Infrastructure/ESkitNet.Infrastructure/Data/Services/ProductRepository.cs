@@ -1,10 +1,9 @@
 ﻿using ESkitNet.Core.Interfaces;
 using ESkitNet.Core.Pagination;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ESkitNet.Infrastructure.Data.Services;
 
-public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
+public class ProductRepository(StoreDbContext dbContext) : IProductRepository
 {
     public void Add(Product product)
     {
@@ -23,7 +22,7 @@ public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
         return dbContext.Products.Any(x => x.Id == productId);
     }
 
-    public async Task<(int PageNumber, int PageSize, long Count, IEnumerable<Product> Data)> 
+    public async Task<(int PageNumber, int PageSize, long Count, IEnumerable<Product> Data)>
         GetAsync(PaginationRequest request, CancellationToken cancellationToken)
     {
         var pageNumber = request.PageNumber <= 0
@@ -44,7 +43,7 @@ public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
 
     public async Task<IReadOnlyList<string>> GetBrandsAsync(CancellationToken cancellationToken)
     {
-        return await dbContext.Products.Select(x => x.Brand).Distinct().Order().ToListAsync(cancellationToken);
+        return await dbContext.Products.Select(x => x.Brand).Distinct().OrderBy(x => x).ToListAsync(cancellationToken);
     }
 
     public async Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -58,7 +57,7 @@ public class ProductRepository(StoreDbContext  dbContext) : IProductRepository
 
     public async Task<IReadOnlyList<string>> GetTypesAsync(CancellationToken cancellationToken)
     {
-        return await dbContext.Products.Select(x => x.Type).Distinct().ToListAsync(cancellationToken);
+        return await dbContext.Products.Select(x => x.Type).Distinct().OrderBy(x => x).ToListAsync(cancellationToken);
     }
 
     public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken)

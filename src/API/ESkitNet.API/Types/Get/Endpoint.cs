@@ -1,12 +1,12 @@
-﻿namespace ESkitNet.API.Brands.Get;
+﻿namespace ESkitNet.API.Types.Get;
 
-public record Response(IReadOnlyList<string> Brands);
+public record Response(IReadOnlyList<string> Types);
 
 public class Endpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/brands", async (ISender sender) =>
+        app.MapGet("/types", async (ISender sender) =>
         {
             var result = await sender.Send(new Query());
 
@@ -14,11 +14,11 @@ public class Endpoint : ICarterModule
 
             return Results.Ok(response);
         })
-        .WithName("GetBrands")
+        .WithName("GetTypes")
         .Produces<Response>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound)
-        .WithSummary("Get Brands")
-        .WithDescription("Get Brands");
+        .WithSummary("Get Types")
+        .WithDescription("Get Types");
     }
 }
