@@ -13,7 +13,7 @@ public class Handler(IProductRepository productRepository) : IQueryHandler<Query
         var (pageNumber, pageSize, count, products) = await productRepository.GetAsync(query.PaginationRequest, cancellationToken);
 
         var productDtos = products
-            .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.ProductBrand, x.QuantityInStock));
+            .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
 
         var paginatedResult = new PaginatedResult<ProductDto>(pageNumber, pageSize, count, productDtos);
 

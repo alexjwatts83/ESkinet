@@ -13,7 +13,7 @@ public class Handler(IProductRepository productRepository) : IQueryHandler<Query
         if (product is null)
             throw new ProductNotFoundException(query.Id);
 
-        var dto = new ProductDto(product.Id.Value, product.Name, product.Description, product.Price, product.PictureUrl, product.Type, product.ProductBrand, product.QuantityInStock);
+        var dto = new ProductDto(product.Id.Value, product.Name, product.Description, product.Price, product.PictureUrl, product.Type, product.Brand, product.QuantityInStock);
 
         return new Result(dto);
     }

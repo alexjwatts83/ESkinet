@@ -19,7 +19,7 @@ public class Handler(IProductRepository productRepository) : ICommandHandler<Com
         product.Price = command.Product.Price;
         product.PictureUrl = command.Product.PictureUrl;
         product.Type = command.Product.Type;
-        product.ProductBrand = command.Product.ProductBrand;
+        product.Brand = command.Product.Brand;
         product.QuantityInStock = command.Product.QuantityInStock;
 
         productRepository.Update(product);

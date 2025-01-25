@@ -7,6 +7,6 @@ public record ProductDto(
     decimal Price,
     string PictureUrl,
     string Type,
-    string ProductBrand,
+    string Brand,
     int QuantityInStock
 );

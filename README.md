@@ -17,3 +17,7 @@ ESkinet
 
 ### update
 `dotnet ef database update -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure`
+
+
+### drop
+`dotnet ef database drop -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure`
