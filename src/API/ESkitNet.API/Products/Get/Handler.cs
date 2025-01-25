@@ -2,7 +2,7 @@
 
 public record Query(PaginationRequest PaginationRequest) : IQuery<Result>;
 
-public record Result(PaginatedResult<Product> Products);
+public record Result(PaginatedResult<ProductDto> Products);
 
 public class Handler(StoreDbContext dbContext)
     : IQueryHandler<Query, Result>
@@ -18,17 +18,19 @@ public class Handler(StoreDbContext dbContext)
 
         var totalCount = await dbContext.Products.LongCountAsync(cancellationToken);
 
-        var orders = await dbContext.Products
+        var products = await dbContext.Products
                        .OrderBy(o => o.Name)
                        .Skip(pageSize * (pageNumber - 1))
                        .Take(pageSize)
                        .ToListAsync(cancellationToken);
-
-        return new Result(
-            new PaginatedResult<Product>(
-                pageNumber,
-                pageSize,
-                totalCount,
-                orders));
+        var productDtos = products
+            .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.ProductBrand, x.QuantityInStock));
+        var result = new PaginatedResult<ProductDto>(
+            pageNumber,
+            pageSize,
+            totalCount,
+            productDtos
+        );
+        return new Result(result);
     }
 }

@@ -12,3 +12,7 @@ global using Microsoft.EntityFrameworkCore;
 
 global using MediatR;
 global using Mapster;
+
+global using ESkitNet.API.Exceptions;
+global using ESkitNet.Core.ValueObjects;
+global using ESkitNet.API.Products.Dtos;
