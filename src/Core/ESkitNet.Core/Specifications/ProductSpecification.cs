@@ -21,3 +21,23 @@ public class ProductSpecification : BaseSpecification<Product>
         }
     }
 }
+
+public class BrandListSpecification : BaseSpecification<Product, string>
+{
+    public BrandListSpecification()
+    {
+        AddSelect(x => x.Brand);
+        ApplyDistinct();
+        ApplyDistinctOrdered();
+    }
+}
+
+public class TypeListSpecification : BaseSpecification<Product, string>
+{
+    public TypeListSpecification()
+    {
+        AddSelect(x => x.Type);
+        ApplyDistinct();
+        ApplyDistinctOrderedDesc();
+    }
+}

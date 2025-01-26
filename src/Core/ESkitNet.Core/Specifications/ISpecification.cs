@@ -11,4 +11,12 @@ public interface ISpecification<T>
     //int Take { get; }
     //int Skip { get; }
     //bool IsPagingEnabled { get; }
+    bool? IsDistinct { get; }
+    bool? IsDistinctOrdered { get; }
+    bool? IsDistinctOrderedDesc { get; }
+}
+
+public interface ISpecification<T, TResult> : ISpecification<T>
+{
+    Expression<Func<T, TResult>>? Select { get; }
 }

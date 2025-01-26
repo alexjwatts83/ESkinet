@@ -3,13 +3,18 @@ using ESkitNet.Core.Specifications;
 
 namespace ESkitNet.Infrastructure.Data.Services;
 
-public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGenericRepository<TEntity, TKey> 
+public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGenericRepository<TEntity, TKey>
     where TEntity : Entity<TKey>
     where TKey : class
 {
     private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
     {
         return SpecificationEvaluator<TEntity, TKey>.GetQuery(dbContext.Set<TEntity>().AsQueryable(), spec);
+    }
+
+    private IQueryable<TResult> ApplySpecification<TResult>(ISpecification<TEntity, TResult> spec)
+    {
+        return SpecificationEvaluator<TEntity, TKey>.GetQuery<TEntity, TResult>(dbContext.Set<TEntity>().AsQueryable(), spec);
     }
 
     public void Add(TEntity entity)
@@ -27,19 +32,19 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
         return dbContext.Set<TEntity>().Any(x => x.Id == id);
     }
 
-    //public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
-    //{
-    //    return await dbContext
-    //        .Set<TEntity>()
-    //        .FindAsync([id], cancellationToken);
-    //}
+    public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
+    {
+        return await dbContext
+            .Set<TEntity>()
+            .FindAsync([id], cancellationToken);
+    }
 
-    //public async Task<IReadOnlyList<TEntity>> ListAllAsync(CancellationToken cancellationToken)
-    //{
-    //    return await dbContext
-    //        .Set<TEntity>()
-    //        .ToListAsync(cancellationToken);
-    //}
+    public async Task<IReadOnlyList<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await dbContext
+            .Set<TEntity>()
+            .ToListAsync(cancellationToken);
+    }
 
     public async Task<bool> SaveAllAsync(CancellationToken cancellationToken)
     {
@@ -49,16 +54,27 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
     public void Update(TEntity entity)
     {
         dbContext.Set<TEntity>().Update(entity);
+
         //dbContext.Set<TEntity>().Attach(entity);
         //dbContext.Entry(entity).State = EntityState.Modified;
     }
 
-    public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetOneWithSpecAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
     {
-        return await dbContext.Set<TEntity>().FindAsync([id], cancellationToken);
+        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TEntity>> GetAllWithSpecAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        return await ApplySpecification(specification).ToListAsync(cancellationToken);
+    }
+
+    public async Task<TResult?> GetOneWithSpecAsync<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken)
+    {
+        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<TResult>> GetAllWithSpecAsync<TResult>(ISpecification<TEntity, TResult> specification, CancellationToken cancellationToken)
     {
         return await ApplySpecification(specification).ToListAsync(cancellationToken);
     }
