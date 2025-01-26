@@ -33,3 +33,5 @@ installing https://v3.tailwindcss.com/docs/installation instead of version 4, ju
 
 Added lint in the setting to ignore the scss warning when adding the @s ine the style.scss file
 `"scss.lint.unknownAtRules": "ignore"`
+
+Settings -> type in folders -> uncheck `Explorer : Compact Folders`
