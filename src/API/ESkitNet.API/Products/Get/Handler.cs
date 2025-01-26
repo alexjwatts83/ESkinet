@@ -10,16 +10,13 @@ public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandle
 {
     public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
     {
-        //// TODO: return the dto by adding some additional mapper or something like tha
-        ////       so the mapping isn't done here
-        //var (pageNumber, pageSize, count, products) = await productRepository.GetAsync(query.PaginationRequest, cancellationToken);
-
-        //var productDtos = products
-        //    .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
+        // TODO: return the dto by adding some additional mapper or something like tha
+        //       so the mapping isn't done here
         var specParams = new ProductSpecParams(
             query.PaginationRequest.Brand,
             query.PaginationRequest.Type,
             query.PaginationRequest.Sort,
+            query.PaginationRequest.Search,
             query.PaginationRequest.PageNumber,
             query.PaginationRequest.PageSize
         );
