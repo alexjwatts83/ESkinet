@@ -39,6 +39,9 @@ public static class SpecificationEvaluator<TEntity, TKey>
                 break;
         }
 
+        if (specification.IsPagingEnabled)
+            query = query.Skip(specification.Skip).Take(specification.Take);
+
         return query;
     }
 
@@ -80,6 +83,9 @@ public static class SpecificationEvaluator<TEntity, TKey>
             default:
                 break;
         }
+
+        if (specification.IsPagingEnabled)
+            selectQuery = selectQuery?.Skip(specification.Skip).Take(specification.Take);
 
         return selectQuery!;
     }

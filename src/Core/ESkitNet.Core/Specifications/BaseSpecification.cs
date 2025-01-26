@@ -17,11 +17,11 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
 
     public string? DistinctSort { get; private set; }
 
-    //public int Take { get; private set; }
+    public int Take { get; private set; }
 
-    //public int Skip { get; private set; }
+    public int Skip { get; private set; }
 
-    //public bool IsPagingEnabled { get; private set; }
+    public bool IsPagingEnabled { get; private set; }
 
     //protected void AddInclude(Expression<Func<T, object>> includeExpression)
     //{
@@ -38,12 +38,12 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
         OrderByDescending = orderByDescExpression;
     }
 
-    //protected void ApplyPaging(int skip, int take)
-    //{
-    //    Skip = skip;
-    //    Take = take;
-    //    IsPagingEnabled = true;
-    //}
+    protected void ApplyPaging(int skip, int take)
+    {
+        Skip = skip;
+        Take = take;
+        IsPagingEnabled = true;
+    }
 
     protected void ApplyDistinct()
     {
@@ -54,10 +54,16 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
     {
         DistinctSort = sort;
     }
-    //protected void ApplyDistinctOrderedDesc()
-    //{
-    //    IsDistinctOrderedDesc = true;
-    //}
+
+    public IQueryable<T> ApplyCriteria(IQueryable<T> query)
+    {
+        if (Criteria == null)
+            return query;
+
+        query = query.Where(Criteria);
+
+        return query;
+    }
 }
 
 public class BaseSpecification<T, TResult>(Expression<Func<T, bool>>? criteria)

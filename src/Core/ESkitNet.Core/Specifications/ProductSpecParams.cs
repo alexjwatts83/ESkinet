@@ -1,25 +1,37 @@
 ﻿namespace ESkitNet.Core.Specifications;
 public class ProductSpecParams
 {
-    public ProductSpecParams(string? brands = "", string? types = "", string? sort = "")
+    // TODO I don't really like how this is done pretty it up later or find a better approach online
+    public ProductSpecParams(string? brands = "", string? types = "", string? sort = "", int pageNumber = 1, int pageSize = 5)
     {
         _brands = string.IsNullOrEmpty(brands) ? [] : [.. brands.Split(',', StringSplitOptions.RemoveEmptyEntries)];
         _types = string.IsNullOrEmpty(types) ? [] : [.. types.Split(',', StringSplitOptions.RemoveEmptyEntries)];
         Sort = sort ?? "";
+        PageNumber = pageNumber;
+        _pageSize = pageSize;
     }
+
     private List<string> _brands = [];
     public List<string> Brands
     {
         get => _brands;
-        //set => _brands = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
     }
 
     private List<string> _types = [];
     public List<string> Types
     {
         get => _types;
-        //set => _types = value.SelectMany(x => x.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
     }
 
     public string Sort { get; set; }
+
+    public int PageNumber { get; set; } = 1;
+
+    private const int _maxPageSize = 50;
+    private int _pageSize = 5;
+    public int PageSize
+    {
+        get => _pageSize;
+        set => _pageSize = (value > _maxPageSize) ? _maxPageSize : value;
+    }
 }

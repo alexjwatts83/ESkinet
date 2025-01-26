@@ -78,4 +78,13 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
     {
         return await ApplySpecification(specification).ToListAsync(cancellationToken);
     }
+
+    public async Task<long> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Set<TEntity>().AsQueryable();
+
+        query = specification.ApplyCriteria(query);
+
+        return await query.LongCountAsync(cancellationToken);
+    }
 }

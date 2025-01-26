@@ -18,4 +18,5 @@ public interface IGenericRepository<TEntity, TKey> where TEntity : Entity<TKey>
     void Delete(TEntity entity);
     bool Exists(TKey id);
     Task<bool> SaveAllAsync(CancellationToken cancellationToken);
+    Task<long> CountAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken);
 }

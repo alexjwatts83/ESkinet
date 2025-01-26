@@ -16,12 +16,19 @@ public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandle
 
         //var productDtos = products
         //    .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
-        var specParams = new ProductSpecParams(query.PaginationRequest.Brand, query.PaginationRequest.Type, query.PaginationRequest.Sort);
+        var specParams = new ProductSpecParams(
+            query.PaginationRequest.Brand,
+            query.PaginationRequest.Type,
+            query.PaginationRequest.Sort,
+            query.PaginationRequest.PageNumber,
+            query.PaginationRequest.PageSize
+        );
         var spec = new ProductSpecification(specParams);
         var products = await repo.GetAllWithSpecAsync(spec, cancellationToken);
+        var count = await repo.CountAsync(spec, cancellationToken);
         var productDtos = products
             .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
-        var paginatedResult = new PaginatedResult<ProductDto>(1, products.Count, products.Count, productDtos);
+        var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);
 
         return new Result(paginatedResult);
     }
