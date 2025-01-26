@@ -6,7 +6,7 @@ public class Endpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/types", async (ISender sender, string sort = "") =>
+        app.MapGet("api/types", async (ISender sender, string sort = "") =>
         {
             var result = await sender.Send(new Query(sort));
 
