@@ -23,7 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IUserAccessor, UserAccessor>();
 
         // db services
-        services.AddScoped<IProductRepository, ProductRepository>();
+        //services.AddScoped<IProductRepository, ProductRepository>();
         // No <>
         services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
