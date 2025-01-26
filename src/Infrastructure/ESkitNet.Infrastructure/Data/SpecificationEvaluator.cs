@@ -10,9 +10,13 @@ public static class SpecificationEvaluator<TEntity, TKey>
         var query = inputQuery;
 
         if (specification.Criteria != null)
-        {
             query = query.Where(specification.Criteria);
-        }
+
+        if (specification.OrderBy != null)
+            query = query.OrderBy(specification.OrderBy);
+
+        if (specification.OrderByDescending != null)
+            query = query.OrderByDescending(specification.OrderByDescending);
 
         return query;
     }

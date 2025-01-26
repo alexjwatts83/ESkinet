@@ -9,9 +9,9 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
 
     //public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
 
-    //public Expression<Func<T, object>> OrderBy { get; private set; }
+    public Expression<Func<T, object>>? OrderBy { get; private set; }
 
-    //public Expression<Func<T, object>> OrderByDescending { get; private set; }
+    public Expression<Func<T, object>>? OrderByDescending { get; private set; }
 
     //public int Take { get; private set; }
 
@@ -24,15 +24,15 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
     //    Includes.Add(includeExpression);
     //}
 
-    //protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
-    //{
-    //    OrderBy = orderByExpression;
-    //}
+    protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+    {
+        OrderBy = orderByExpression;
+    }
 
-    //protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
-    //{
-    //    OrderByDescending = orderByDescExpression;
-    //}
+    protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression)
+    {
+        OrderByDescending = orderByDescExpression;
+    }
 
     //protected void ApplyPaging(int skip, int take)
     //{
@@ -40,11 +40,4 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
     //    Take = take;
     //    IsPagingEnabled = true;
     //}
-}
-
-public class ProductSpecification(string? brand, string? type) : BaseSpecification<Product>(x =>
-        (string.IsNullOrWhiteSpace(brand) || x.Brand == brand) && 
-        (string.IsNullOrWhiteSpace(type) || x.Type == type)
-    )
-{
 }
