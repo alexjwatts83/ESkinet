@@ -6,7 +6,7 @@ public class Endpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/products", async ([AsParameters] PaginationRequest request, ISender sender) =>
+        app.MapGet("/products", async ([AsParameters] ProductsPaginationRequest request, ISender sender) =>
         {
             var result = await sender.Send(new Query(request));
 

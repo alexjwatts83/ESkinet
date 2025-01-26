@@ -1,5 +1,6 @@
 ﻿using ESkitNet.Core.Interfaces;
 using ESkitNet.Core.Pagination;
+using ESkitNet.Infrastructure.Data.Extensions;
 
 namespace ESkitNet.Infrastructure.Data.Services;
 
@@ -23,20 +24,24 @@ public class ProductRepository(StoreDbContext dbContext) : IProductRepository
     }
 
     public async Task<(int PageNumber, int PageSize, long Count, IEnumerable<Product> Data)>
-        GetAsync(PaginationRequest request, CancellationToken cancellationToken)
+        GetAsync(ProductsPaginationRequest request, CancellationToken cancellationToken)
     {
         var pageNumber = request.PageNumber <= 0
             ? 1
             : request.PageNumber;
         var pageSize = request.PageSize;
 
-        var totalCount = await dbContext.Products.LongCountAsync(cancellationToken);
+        var query = dbContext.Products
+            .WhereIf(!string.IsNullOrWhiteSpace(request.Brand), x => x.Brand.ToLower() == request.Brand!.ToLower())
+            .WhereIf(!string.IsNullOrWhiteSpace(request.Type), x => x.Type.ToLower() == request.Type!.ToLower());
 
-        var products = await dbContext.Products
-               .OrderBy(o => o.Name)
-               .Skip(pageSize * (pageNumber - 1))
-               .Take(pageSize)
-               .ToListAsync(cancellationToken);
+        var totalCount = await query.LongCountAsync(cancellationToken);
+
+        var products = await query
+            .OrderBy(o => o.Name)
+            .Skip(pageSize * (pageNumber - 1))
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
 
         return (pageNumber, pageSize, totalCount, products);
     }

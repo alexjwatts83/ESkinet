@@ -5,7 +5,7 @@ namespace ESkitNet.Core.Interfaces;
 public interface IProductRepository
 {
     Task<(int PageNumber, int PageSize, long Count, IEnumerable<Product> Data)> 
-        GetAsync(PaginationRequest request, CancellationToken cancellationToken);
+        GetAsync(ProductsPaginationRequest request, CancellationToken cancellationToken);
 
     Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
