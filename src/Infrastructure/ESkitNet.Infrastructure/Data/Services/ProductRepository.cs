@@ -37,8 +37,14 @@ public class ProductRepository(StoreDbContext dbContext) : IProductRepository
 
         var totalCount = await query.LongCountAsync(cancellationToken);
 
+        query = request.Sort switch
+        {
+            "priceAsc" => query.OrderBy(o => o.Price),
+            "priceDesc" => query.OrderByDescending(o => o.Price),
+            _ => query.OrderBy(o => o.Name)
+        };
+
         var products = await query
-            .OrderBy(o => o.Name)
             .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
             .ToListAsync(cancellationToken);
