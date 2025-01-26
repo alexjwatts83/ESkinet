@@ -24,6 +24,8 @@ public static class DependencyInjection
 
         // db services
         services.AddScoped<IProductRepository, ProductRepository>();
+        // No <>
+        services.AddScoped(typeof(IGenericRepository<,>), typeof(GenericRepository<,>));
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
 

@@ -3,7 +3,7 @@
 public record Command(ProductDto Product) : ICommand<Result>;
 public record Result(Guid Id);
 
-public class Handler(IProductRepository productRepository) : ICommandHandler<Command, Result>
+public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
@@ -20,9 +20,9 @@ public class Handler(IProductRepository productRepository) : ICommandHandler<Com
             QuantityInStock = command.Product.QuantityInStock,
         };
 
-        productRepository.Add(product);
+        repo.Add(product);
 
-        await productRepository.SaveChangesAsync(cancellationToken);
+        await repo.SaveAllAsync(cancellationToken);
 
         return new Result(product.Id.Value);
     }

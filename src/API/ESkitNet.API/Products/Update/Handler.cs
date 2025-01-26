@@ -4,11 +4,12 @@ public record Command(ProductDto Product) : ICommand<Result>;
 
 public record Result(bool IsSuccess);
 
-public class Handler(IProductRepository productRepository) : ICommandHandler<Command, Result>
+public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
 {
     public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
     {
-        var product = await productRepository.GetByIdAsync(command.Product.Id, cancellationToken);
+        var productId = ProductId.Of(command.Product.Id);
+        var product = await repo.GetByIdAsync(productId, cancellationToken);
 
         if (product is null)
             throw new ProductNotFoundException(command.Product.Id);
@@ -22,9 +23,9 @@ public class Handler(IProductRepository productRepository) : ICommandHandler<Com
         product.Brand = command.Product.Brand;
         product.QuantityInStock = command.Product.QuantityInStock;
 
-        productRepository.Update(product);
+        repo.Update(product);
 
-        var result = await productRepository.SaveChangesAsync(cancellationToken);
+        var result = await repo.SaveAllAsync(cancellationToken);
 
         return new Result(result);
     }

@@ -4,11 +4,12 @@ public record Query(Guid Id) : IQuery<Result>;
 
 public record Result(ProductDto Product);
 
-public class Handler(IProductRepository productRepository) : IQueryHandler<Query, Result>
+public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandler<Query, Result>
 {
     public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
     {
-        var product = await productRepository.GetByIdAsync(query.Id, cancellationToken);
+        var productId = ProductId.Of(query.Id);
+        var product = await repo.GetByIdAsync(productId, cancellationToken);
 
         if (product is null)
             throw new ProductNotFoundException(query.Id);
