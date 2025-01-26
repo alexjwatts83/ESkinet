@@ -38,7 +38,10 @@ public static class DependencyInjection
     {
         app.MapCarter();
 
-        app.UseMiddleware<ExceptionMiddleware>();
+        // TODO delete ExceptionMiddleware altogether later on
+        //app.UseMiddleware<ExceptionMiddleware>();
+
+        
 
         app.UseExceptionHandler(options => { });
 

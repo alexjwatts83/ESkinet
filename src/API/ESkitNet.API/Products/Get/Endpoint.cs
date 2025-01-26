@@ -19,6 +19,7 @@ public class Endpoint : ICarterModule
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .WithSummary("Get Products")
-        .WithDescription("Get Products");
+        .WithDescription("Get Products")
+        .RequireCors("CorsPolicy");
     }
 }
