@@ -1,2 +1,8 @@
 <app-header></app-header>
-<h2 class="text-3xl font-bold underline">Welcome {{ title }}</h2>
+
+<div class="container mt-6">
+    <h2 class="text-3xl font-bold underline">Welcome {{ title }}</h2>
+    <ul>
+        <li *ngFor="let product of products">{{product.name}}</li>
+    </ul>
+</div>
