@@ -9,7 +9,13 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-filters-dialog',
   standalone: true,
-  imports: [MatDivider, MatSelectionList, MatListOption, MatButton, FormsModule],
+  imports: [
+    MatDivider,
+    MatSelectionList,
+    MatListOption,
+    MatButton,
+    FormsModule,
+  ],
   templateUrl: './filters-dialog.component.html',
   styleUrl: './filters-dialog.component.scss',
 })
@@ -22,13 +28,17 @@ export class FiltersDialogComponent implements OnInit {
   selectedBrands: string[] = this.data.selectedBrands;
 
   ngOnInit(): void {
-    console.log({data: this.data});
+    console.log({ data: this.data });
   }
 
   applyFilters() {
     this.dialogRef.close({
       selectTypes: this.selectTypes,
       selectedBrands: this.selectedBrands,
-    })
+    });
+  }
+  
+  onNoClick() {
+    this.dialogRef.close();
   }
 }

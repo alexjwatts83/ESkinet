@@ -1,8 +1,12 @@
 <div class="flex flex-col gap-3">
-  <div class="flex justify-end">
+  <div class="flex justify-end gap-3">
     <button mat-stroked-button (click)="openFiltersDialog()">
       <mat-icon>filter_list</mat-icon>
       Filters
+    </button>
+    <button mat-stroked-button [matMenuTriggerFor]="sortMenu">
+      <mat-icon>swap_vert</mat-icon>
+      Sort
     </button>
   </div>
 
@@ -12,3 +16,14 @@
     </ng-container>
   </div>
 </div>
+
+<!-- sort menu -->
+<mat-menu #sortMenu="matMenu">
+  <mat-selection-list [multiple]="false" (selectionChange)="onSortChanged($event)">
+    <ng-container *ngFor="let sort of sortOptions">
+      <mat-list-option [value]="sort.value" [selected]="selectedSort == sort.value">{{
+        sort.name
+      }}</mat-list-option>
+    </ng-container>
+  </mat-selection-list>
+</mat-menu>
