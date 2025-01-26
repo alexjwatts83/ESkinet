@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
   private httpClient = inject(HttpClient);
 
   title = 'client';
-  baseUrl = 'https://localhost:5151';
+  baseUrl = 'https://localhost:5151/api';
   products: Product[] = [];
 
   constructor() {
