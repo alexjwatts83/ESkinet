@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Pagination } from '../../shared/models/pagination';
 import { Product } from '../../shared/models/products';
 import { Observable } from 'rxjs';
+import { ShopParams } from '../../shared/models/shop-params';
 
 @Injectable({
   providedIn: 'root'
@@ -14,32 +15,39 @@ export class ShopService {
   types: string[] = [];
   brands: string[] = [];
 
-  getProducts(brands?: string[], types?: string[], sort?: string, pageNumber?: number, pageSize?: number): Observable<Pagination<Product>> {
+  getProducts(shopParams: ShopParams): Observable<Pagination<Product>> {
     let params = new HttpParams();
-    console.log({ brands, types, pageNumber, pageSize});
-    if (brands && brands?.length > 0) {
-      console.log('adding brands');
-      params = params.append('brand', brands.join(','));
-    }
-    if (types && types?.length > 0) {
-      console.log('adding types');
-      params = params.append('type', types.join(','));
-    }
+    console.log({ shopParams });
+    params = params.append('brand', shopParams.brands.join(','));
+    params = params.append('type', shopParams.types.join(','));
+    params = params.append('sort', shopParams.sort);
+    params = params.append('search', shopParams.search);
+    params = params.append('pageNumber', shopParams.pageNumber);
+    params = params.append('pageSize', shopParams.pageSize);
+    // console.log({ brands, types, pageNumber, pageSize});
+    // if (brands && brands?.length > 0) {
+    //   console.log('adding brands');
+    //   params = params.append('brand', brands.join(','));
+    // }
+    // if (types && types?.length > 0) {
+    //   console.log('adding types');
+    //   params = params.append('type', types.join(','));
+    // }
 
-    if (sort) {
-      console.log('adding sort');
-      params = params.append('sort', sort);
-    }
+    // if (sort) {
+    //   console.log('adding sort');
+    //   params = params.append('sort', sort);
+    // }
 
-    if (pageNumber) {
-      console.log('adding pageNumber');
-      params = params.append('pageNumber', pageNumber);
-    }
+    // if (pageNumber) {
+    //   console.log('adding pageNumber');
+    //   params = params.append('pageNumber', pageNumber);
+    // }
 
-    if (pageSize) {
-      console.log('adding pageSize');
-      params = params.append('pageSize', pageSize);
-    }
+    // if (pageSize) {
+    //   console.log('adding pageSize');
+    //   params = params.append('pageSize', pageSize);
+    // }
 
     console.log({params});
     return this.httpClient.get<Pagination<Product>>(`${this._baseUrl}/products`, { params });
