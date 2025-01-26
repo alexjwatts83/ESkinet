@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Product } from '../../../shared/models/products';
 import { CurrencyPipe, NgIf } from '@angular/common';
 import { MatCard, MatCardContent, MatCardActions } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+
 @Component({
   selector: 'app-product-item',
   standalone: true,
@@ -11,10 +12,6 @@ import { MatButton } from '@angular/material/button';
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.scss'
 })
-export class ProductItemComponent implements OnInit {
+export class ProductItemComponent {
   @Input() product?: Product;
-
-  ngOnInit(): void {
-    console.log({prod: this.product});
-  }
 }

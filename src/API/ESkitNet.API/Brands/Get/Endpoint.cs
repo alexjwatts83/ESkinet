@@ -12,10 +12,10 @@ public class Endpoint : ICarterModule
 
             var response = result.Adapt<Response>();
 
-            return Results.Ok(response);
+            return Results.Ok(response.Brands);
         })
         .WithName("GetBrands")
-        .Produces<Response>(StatusCodes.Status200OK)
+        .Produces<IReadOnlyList<string>>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .WithSummary("Get Brands")
