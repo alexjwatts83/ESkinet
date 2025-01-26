@@ -1,27 +1,38 @@
 ﻿namespace ESkitNet.API.Products.Delete;
 
-public record Response(bool IsSuccess);
-
-public class Endpoint : ICarterModule
+public static class Endpoint
 {
-    public void AddRoutes(IEndpointRouteBuilder app)
+    public record Response(bool IsSuccess);
+    public record Command(Guid ProductId) : ICommand<Result>;
+
+    public record Result(bool IsSuccess);
+
+    public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
     {
-        app.MapDelete("/products/{id}", async (Guid id, ISender sender) =>
+        public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
-            var result = await sender.Send(new Command(id));
+            var product = await repo.GetByIdAsync(ProductId.Of(command.ProductId), cancellationToken);
 
-            var response = result.Adapt<Response>();
+            if (product is null)
+                throw new ProductNotFoundException(command.ProductId);
 
-            // TODO return better response
-            return (response == null)
-             ? Results.BadRequest("Failed to delete Product")
-             : Results.NoContent();
-        })
-        .WithName("DeleteProduct")
-        .Produces<Response>(StatusCodes.Status200OK)
-        .ProducesProblem(StatusCodes.Status400BadRequest)
-        .ProducesProblem(StatusCodes.Status404NotFound)
-        .WithSummary("Delete Product")
-        .WithDescription("Delete Product");
+            repo.Delete(product);
+
+            var result = await repo.SaveAllAsync(cancellationToken);
+
+            return new Result(result);
+        }
+    }
+
+    public static async Task<IResult> Handle(Guid id, ISender sender)
+    {
+        var result = await sender.Send(new Command(id));
+
+        var response = result.Adapt<Response>();
+
+        // TODO return better response
+        return (response == null)
+            ? Results.BadRequest("Failed to delete Product")
+            : Results.NoContent();
     }
 }

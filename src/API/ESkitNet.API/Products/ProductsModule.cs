@@ -6,7 +6,8 @@ public class ProductsModule : ICarterModule
     {
         var group = app
             .MapGroup("/api/products")
-            .WithTags("Products Module");
+            .WithTags("Products Module")
+            .RequireCors("CorsPolicy");
 
         group.MapGet("/", Get.Endpoint.Handle)
             .WithName("GetProducts")
@@ -31,5 +32,21 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Product")
             .WithDescription("Create Product");
+
+        group.MapPut("/{id}", Update.Endpoint.Handle)
+            .WithName("UpdateProduct")
+            .Produces<Update.Endpoint.Response>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithSummary("Update Product")
+            .WithDescription("Update Product");
+
+        group.MapDelete("/{id}", Delete.Endpoint.Handle)
+            .WithName("DeleteProduct")
+            .Produces<Delete.Endpoint.Response>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .WithSummary("Delete Product")
+            .WithDescription("Delete Product");
     }
 }
