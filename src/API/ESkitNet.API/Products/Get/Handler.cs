@@ -1,4 +1,6 @@
-﻿namespace ESkitNet.API.Products.Get;
+﻿using ESkitNet.Core.Specifications;
+
+namespace ESkitNet.API.Products.Get;
 
 public record Query(ProductsPaginationRequest PaginationRequest) : IQuery<Result>;
 
@@ -14,8 +16,8 @@ public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandle
 
         //var productDtos = products
         //    .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
-
-        var products = await repo.ListAllAsync(cancellationToken);
+        var spec = new ProductSpecification(query.PaginationRequest.Brand, query.PaginationRequest.Type);
+        var products = await repo.ListAllWithSpecificationAsync(spec, cancellationToken);
         var productDtos = products
             .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
         var paginatedResult = new PaginatedResult<ProductDto>(1, products.Count, products.Count, productDtos);

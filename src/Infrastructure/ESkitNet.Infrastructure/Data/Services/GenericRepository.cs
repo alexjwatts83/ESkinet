@@ -1,4 +1,5 @@
 ﻿using ESkitNet.Core.Interfaces;
+using ESkitNet.Core.Specifications;
 
 namespace ESkitNet.Infrastructure.Data.Services;
 
@@ -6,6 +7,11 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
     where TEntity : Entity<TKey>
     where TKey : class
 {
+    private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> spec)
+    {
+        return SpecificationEvaluator<TEntity, TKey>.GetQuery(dbContext.Set<TEntity>().AsQueryable(), spec);
+    }
+
     public void Add(TEntity entity)
     {
         dbContext.Set<TEntity>().Add(entity);
@@ -45,5 +51,15 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
         dbContext.Set<TEntity>().Update(entity);
         //dbContext.Set<TEntity>().Attach(entity);
         //dbContext.Entry(entity).State = EntityState.Modified;
+    }
+
+    public async Task<TEntity?> GetByIdWithSpecificationAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<TEntity>> ListAllWithSpecificationAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        return await ApplySpecification(specification).ToListAsync(cancellationToken);
     }
 }
