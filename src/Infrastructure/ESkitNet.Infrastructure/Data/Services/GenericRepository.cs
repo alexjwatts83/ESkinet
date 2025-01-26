@@ -27,19 +27,19 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
         return dbContext.Set<TEntity>().Any(x => x.Id == id);
     }
 
-    public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
-    {
-        return await dbContext
-            .Set<TEntity>()
-            .FindAsync([id], cancellationToken);
-    }
+    //public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
+    //{
+    //    return await dbContext
+    //        .Set<TEntity>()
+    //        .FindAsync([id], cancellationToken);
+    //}
 
-    public async Task<IReadOnlyList<TEntity>> ListAllAsync(CancellationToken cancellationToken)
-    {
-        return await dbContext
-            .Set<TEntity>()
-            .ToListAsync(cancellationToken);
-    }
+    //public async Task<IReadOnlyList<TEntity>> ListAllAsync(CancellationToken cancellationToken)
+    //{
+    //    return await dbContext
+    //        .Set<TEntity>()
+    //        .ToListAsync(cancellationToken);
+    //}
 
     public async Task<bool> SaveAllAsync(CancellationToken cancellationToken)
     {
@@ -53,12 +53,12 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
         //dbContext.Entry(entity).State = EntityState.Modified;
     }
 
-    public async Task<TEntity?> GetByIdWithSpecificationAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    public async Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken)
     {
-        return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+        return await dbContext.Set<TEntity>().FindAsync([id], cancellationToken);
     }
 
-    public async Task<IReadOnlyList<TEntity>> ListAllWithSpecificationAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken)
     {
         return await ApplySpecification(specification).ToListAsync(cancellationToken);
     }
