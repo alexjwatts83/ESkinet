@@ -29,4 +29,7 @@ ESkinet
 had to install `ng add @angular/material@18` instead as by default it was trying to in stall v17, why don't know I thinkt its a known bug though
 
 ### Angular Tailwind CSS 
-installing https://v3.tailwindcss.com/docs/installation instead of version 4, just I can use the version he was using in the course. V4 looked like a pretty big change
+installing https://v3.tailwindcss.com/docs/installation instead of version 4, just I can use the version he was using in the course. V4 looked like a pretty big change.
+
+Added lint in the setting to ignore the scss warning when adding the @s ine the style.scss file
+`"scss.lint.unknownAtRules": "ignore"`
