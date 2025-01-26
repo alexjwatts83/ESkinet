@@ -1,5 +1,7 @@
-﻿using ESkitNet.Core.Behaviors;
+﻿using ESkitNet.API.Middleware;
+using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
+using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using System.Reflection;
@@ -21,6 +23,9 @@ public static class DependencyInjection
             config.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
 
+        // Fluent Validation
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
         services.AddExceptionHandler<CustomExceptionHandler>();
 
         services.AddHealthChecks()
@@ -32,6 +37,8 @@ public static class DependencyInjection
     public static WebApplication UseApiServices(this WebApplication app)
     {
         app.MapCarter();
+
+        app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseExceptionHandler(options => { });
 

@@ -40,7 +40,7 @@ public class Module : ICarterModule
         .WithSummary("Buggy InternalError")
         .WithDescription("Buggy InternalError");
 
-        app.MapPost("/buggy/validation-error", (ProductDto product) =>
+        app.MapPost("/buggy/validation-error", (Product product) =>
         {
             return Results.Ok();
         })
