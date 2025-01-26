@@ -21,3 +21,12 @@ ESkinet
 
 ### drop
 `dotnet ef database drop -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure`
+
+
+## Client App
+
+### Angular Material Components
+had to install `ng add @angular/material@18` instead as by default it was trying to in stall v17, why don't know I thinkt its a known bug though
+
+### Angular Tailwind CSS 
+installing https://v3.tailwindcss.com/docs/installation instead of version 4, just I can use the version he was using in the course. V4 looked like a pretty big change
