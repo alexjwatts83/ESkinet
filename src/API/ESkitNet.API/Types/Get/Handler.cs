@@ -2,7 +2,7 @@
 
 namespace ESkitNet.API.Types.Get;
 
-public record Query() : IQuery<Result>;
+public record Query(string? Sort) : IQuery<Result>;
 
 public record Result(IReadOnlyList<string> Types);
 
@@ -10,7 +10,7 @@ public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandle
 {
     public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
     {
-        var spec = new TypeListSpecification();
+        var spec = new TypeListSpecification(query.Sort);
         var brands = await repo.GetAllWithSpecAsync(spec, cancellationToken);
 
         return new Result(brands);

@@ -21,11 +21,23 @@ public static class SpecificationEvaluator<TEntity, TKey>
         if (specification.IsDistinct.HasValue && specification.IsDistinct.Value)
             query = query.Distinct();
 
-        if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
-            query = query.OrderBy(x => x);
+        //if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
+        //    query = query.OrderBy(x => x);
 
-        if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
-            query = query.OrderByDescending(x => x);
+        //if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
+        //    query = query.OrderByDescending(x => x);
+
+        switch (specification.DistinctSort)
+        {
+            case "asc":
+                query = query.OrderBy(x => x);
+                break;
+            case "desc":
+                query = query.OrderByDescending(x => x);
+                break;
+            default:
+                break;
+        }
 
         return query;
     }
@@ -51,11 +63,23 @@ public static class SpecificationEvaluator<TEntity, TKey>
         if (specification.IsDistinct.HasValue && specification.IsDistinct.Value)
             selectQuery = selectQuery?.Distinct();
 
-        if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
-            selectQuery = selectQuery?.OrderBy(x => x);
+        //if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
+        //    selectQuery = selectQuery?.OrderBy(x => x);
 
-        if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
-            selectQuery = selectQuery?.OrderByDescending(x => x);
+        //if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
+        //    selectQuery = selectQuery?.OrderByDescending(x => x);
+
+        switch (specification.DistinctSort)
+        {
+            case "asc":
+                selectQuery = selectQuery?.OrderBy(x => x);
+                break;
+            case "desc":
+                selectQuery = selectQuery?.OrderByDescending(x => x);
+                break;
+            default:
+                break;
+        }
 
         return selectQuery!;
     }

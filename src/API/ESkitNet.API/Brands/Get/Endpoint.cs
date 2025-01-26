@@ -6,9 +6,9 @@ public class Endpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/brands", async (ISender sender) =>
+        app.MapGet("/brands", async (ISender sender, string sort = "") =>
         {
-            var result = await sender.Send(new Query());
+            var result = await sender.Send(new Query(sort));
 
             var response = result.Adapt<Response>();
 

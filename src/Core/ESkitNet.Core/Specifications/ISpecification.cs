@@ -12,8 +12,9 @@ public interface ISpecification<T>
     //int Skip { get; }
     //bool IsPagingEnabled { get; }
     bool? IsDistinct { get; }
-    bool? IsDistinctOrdered { get; }
-    bool? IsDistinctOrderedDesc { get; }
+    //bool? IsDistinctOrdered { get; }
+    //bool? IsDistinctOrderedDesc { get; }
+    string? DistinctSort { get; }
 }
 
 public interface ISpecification<T, TResult> : ISpecification<T>

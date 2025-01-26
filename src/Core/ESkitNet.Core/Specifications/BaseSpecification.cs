@@ -15,8 +15,7 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
 
     public bool? IsDistinct { get; private set; }
 
-    public bool? IsDistinctOrdered { get; private set; }
-    public bool? IsDistinctOrderedDesc { get; private set; }
+    public string? DistinctSort { get; private set; }
 
     //public int Take { get; private set; }
 
@@ -51,14 +50,14 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
         IsDistinct = true;
     }
 
-    protected void ApplyDistinctOrdered()
+    protected void ApplyDistinctSort(string? sort)
     {
-        IsDistinctOrdered = true;
+        DistinctSort = sort;
     }
-    protected void ApplyDistinctOrderedDesc()
-    {
-        IsDistinctOrderedDesc = true;
-    }
+    //protected void ApplyDistinctOrderedDesc()
+    //{
+    //    IsDistinctOrderedDesc = true;
+    //}
 }
 
 public class BaseSpecification<T, TResult>(Expression<Func<T, bool>>? criteria)

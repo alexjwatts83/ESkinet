@@ -24,20 +24,20 @@ public class ProductSpecification : BaseSpecification<Product>
 
 public class BrandListSpecification : BaseSpecification<Product, string>
 {
-    public BrandListSpecification()
+    public BrandListSpecification(string? sort)
     {
         AddSelect(x => x.Brand);
         ApplyDistinct();
-        ApplyDistinctOrdered();
+        ApplyDistinctSort(sort);
     }
 }
 
 public class TypeListSpecification : BaseSpecification<Product, string>
 {
-    public TypeListSpecification()
+    public TypeListSpecification(string? sort)
     {
         AddSelect(x => x.Type);
         ApplyDistinct();
-        ApplyDistinctOrderedDesc();
+        ApplyDistinctSort(sort);
     }
 }
