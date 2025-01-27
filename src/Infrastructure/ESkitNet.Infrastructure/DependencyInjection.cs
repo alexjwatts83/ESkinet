@@ -1,6 +1,7 @@
 ﻿using ESkitNet.Core.Interfaces;
 using ESkitNet.Infrastructure.Data.Interceptors;
 using ESkitNet.Infrastructure.Data.Services;
+using ESkitNet.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -21,6 +22,7 @@ public static class DependencyInjection
         // common services
         services.AddScoped<IAppTimeProvider, AppTimeProvider>();
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddScoped<IShoppingCartService, ShoppingCartService>();
 
         // db services
         // No <>

@@ -1,3 +1,5 @@
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 /******************************************/
@@ -13,6 +15,21 @@ builder.Services.AddCors(options =>
             .AllowCredentials()
             .SetIsOriginAllowed((host) => true)
             .AllowAnyHeader());
+});
+
+// Add redis his way
+//builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
+//{
+//    var connectionString = builder.Configuration.GetConnectionString("Redis") ?? throw new Exception("Redis Connetion string is null");
+//    var configuration = ConfigurationOptions.Parse(connectionString, true);
+
+//    return ConnectionMultiplexer.Connect(configuration);
+//});
+// Add Redis
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    //options.InstanceName = "Basket";
 });
 
 builder.Services

@@ -1,5 +1,4 @@
-﻿using ESkitNet.API.Middleware;
-using ESkitNet.Core.Behaviors;
+﻿using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
 using FluentValidation;
 using HealthChecks.UI.Client;
@@ -29,7 +28,8 @@ public static class DependencyInjection
         services.AddExceptionHandler<CustomExceptionHandler>();
 
         services.AddHealthChecks()
-            .AddSqlServer(configuration.GetConnectionString("Database")!);
+            .AddSqlServer(configuration.GetConnectionString("Database")!)
+            .AddRedis(configuration.GetConnectionString("Redis")!);
 
         return services;
     }

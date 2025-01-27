@@ -6,6 +6,9 @@ ESkinet
 
 `docker-compose down`
 
+deletes the volumes as well
+`docker-compose down -v`
+
 ## migrations
 
 ### create
