@@ -1,3 +1,10 @@
 services:
   storedb:
     image: mcr.microsoft.com/azure-sql-edge
+
+  redis:
+    image: redis:latest
+
+volumes:
+  sql-data:
+  redis-data:   

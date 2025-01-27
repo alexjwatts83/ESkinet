@@ -4,5 +4,16 @@ services:
     environment:
       - ACCEPT_EULA=1
       - MSSQL_SA_PASSWORD=SwN@12345678
+    restart: always
     ports:
       - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+
+  redis:
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
