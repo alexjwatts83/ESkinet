@@ -24,33 +24,13 @@ export class ShopService {
     params = params.append('search', shopParams.search);
     params = params.append('pageNumber', shopParams.pageNumber);
     params = params.append('pageSize', shopParams.pageSize);
-    // console.log({ brands, types, pageNumber, pageSize});
-    // if (brands && brands?.length > 0) {
-    //   console.log('adding brands');
-    //   params = params.append('brand', brands.join(','));
-    // }
-    // if (types && types?.length > 0) {
-    //   console.log('adding types');
-    //   params = params.append('type', types.join(','));
-    // }
-
-    // if (sort) {
-    //   console.log('adding sort');
-    //   params = params.append('sort', sort);
-    // }
-
-    // if (pageNumber) {
-    //   console.log('adding pageNumber');
-    //   params = params.append('pageNumber', pageNumber);
-    // }
-
-    // if (pageSize) {
-    //   console.log('adding pageSize');
-    //   params = params.append('pageSize', pageSize);
-    // }
-
     console.log({params});
     return this.httpClient.get<Pagination<Product>>(`${this._baseUrl}/products`, { params });
+  }
+
+  getProduct(id: string): Observable<Product> {
+    console.log({id});
+    return this.httpClient.get<Product>(`${this._baseUrl}/products/${id}`,);
   }
 
   getBrands() {

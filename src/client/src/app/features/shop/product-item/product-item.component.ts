@@ -1,14 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { Product } from '../../../shared/models/products';
 import { CurrencyPipe, NgIf } from '@angular/common';
-import { MatCard, MatCardContent, MatCardActions } from '@angular/material/card';
+import { MatCard, MatCardContent, MatCardActions, MatCardImage } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-item',
   standalone: true,
-  imports: [NgIf, MatCard, MatCardContent, CurrencyPipe, MatCardActions, MatIcon, MatButton],
+  imports: [NgIf, MatCard, MatCardContent, CurrencyPipe, MatCardActions, MatIcon, MatButton, RouterLink, MatCardImage],
   templateUrl: './product-item.component.html',
   styleUrl: './product-item.component.scss'
 })

@@ -20,7 +20,7 @@ public class ProductsModule : ICarterModule
 
         group.MapGet("/{id}", GetById.Endpoint.Handle)
             .WithName("GetProduct")
-            .Produces<GetById.Endpoint.Response>(StatusCodes.Status200OK)
+            .Produces<ProductDto>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Get Product")
