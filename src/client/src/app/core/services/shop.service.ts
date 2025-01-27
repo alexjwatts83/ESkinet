@@ -4,12 +4,13 @@ import { Pagination } from '../../shared/models/pagination';
 import { Product } from '../../shared/models/products';
 import { Observable } from 'rxjs';
 import { ShopParams } from '../../shared/models/shop-params';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopService {
-  private _baseUrl = 'https://localhost:5151/api';
+  private baseUrl = environment.apiUrl;
   private httpClient = inject(HttpClient);
 
   types: string[] = [];
@@ -25,19 +26,19 @@ export class ShopService {
     params = params.append('pageNumber', shopParams.pageNumber);
     params = params.append('pageSize', shopParams.pageSize);
     console.log({params});
-    return this.httpClient.get<Pagination<Product>>(`${this._baseUrl}/products`, { params });
+    return this.httpClient.get<Pagination<Product>>(`${this.baseUrl}/products`, { params });
   }
 
   getProduct(id: string): Observable<Product> {
     console.log({id});
-    return this.httpClient.get<Product>(`${this._baseUrl}/products/${id}`,);
+    return this.httpClient.get<Product>(`${this.baseUrl}/products/${id}`);
   }
 
   getBrands() {
     if (this.brands.length > 0)
       return;
 
-    this.httpClient.get<string[]>(`${this._baseUrl}/brands`).subscribe({
+    this.httpClient.get<string[]>(`${this.baseUrl}/brands`).subscribe({
       next: response => this.brands = response
     });
   }
@@ -46,7 +47,7 @@ export class ShopService {
     if (this.types.length > 0)
       return;
 
-    this.httpClient.get<string[]>(`${this._baseUrl}/types`).subscribe({
+    this.httpClient.get<string[]>(`${this.baseUrl}/types`).subscribe({
       next: response => this.types = response
     });
   }
