@@ -5,18 +5,19 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SnackbarService {
   private snackbar = inject(MatSnackBar);
-  private duration = 50000;
+  private durationInSeconds  = 50;
+  private milliseconds = 1000;
 
   error(message: string) {
     this.snackbar.open(message, 'Close', {
-      duration: this.duration,
+      duration: this.durationInSeconds * this.milliseconds,
       panelClass: ['snack-error'],
     });
   }
 
   success(message: string) {
     this.snackbar.open(message, 'Close', {
-      duration: this.duration,
+      duration: this.durationInSeconds * this.milliseconds,
       panelClass: ['snack-success'],
     });
   }
