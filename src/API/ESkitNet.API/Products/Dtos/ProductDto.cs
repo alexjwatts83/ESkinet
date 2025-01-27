@@ -10,3 +10,18 @@ public record ProductDto(
     string Brand,
     int QuantityInStock
 );
+
+//public record ShoppingCartDto(
+//    string Id,
+//    List<ShoppingCartItemDto> Items
+//);
+
+//public record ShoppingCartItemDto(
+//    string ProductId,
+//    string ProductName,
+//    decimal Price,
+//    string PictureUrl,
+//    string Type,
+//    string Brand,
+//    int Quantity
+//);

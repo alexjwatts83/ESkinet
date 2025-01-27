@@ -2,7 +2,7 @@
 
 public interface IShoppingCartService
 {
-    Task<ShoppingCart?> GetAsync(string id);
-    Task<ShoppingCart?> SetAsync(ShoppingCart cart);
-    Task<bool> DeleteAsync(string id);
+    Task<ShoppingCart?> GetAsync(string id, CancellationToken cancellationToken);
+    Task<ShoppingCart?> SetAsync(ShoppingCart cart, CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(string id, CancellationToken cancellationToken);
 }
