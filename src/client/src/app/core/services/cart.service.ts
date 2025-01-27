@@ -1,9 +1,9 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Cart, CartItem } from '../../shared/models/cart';
 import { Product } from '../../shared/models/products';
-import { map, tap } from 'rxjs';
+import { map, take, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,11 +12,17 @@ export class CartService {
   private httpClient = inject(HttpClient);
 
   cart = signal<Cart | null>(null);
+  itemCount = computed(() => {
+    return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0);
+  });
 
   getCart(id: string) {
-    return this.httpClient
-      .get<Cart>(`${this.baseUrl}/cart/${id}`)
-      .pipe(tap((cart) => this.cart.set(cart)));
+    return this.httpClient.get<Cart>(`${this.baseUrl}/cart/${id}`).pipe(
+      tap((cart) => {
+        console.log({ tap: cart });
+        this.cart.set(cart);
+      })
+    );
   }
 
   setCart(cart: Cart) {
@@ -26,7 +32,8 @@ export class CartService {
         next: (response: { id: string }) => {
           console.log({ cartFromApi: response.id });
           // this.cart.set(cart);
-          this.getCart(response.id);
+          // TODO this is really bad fix this later
+          this.getCart(response.id).subscribe();
         },
       });
   }

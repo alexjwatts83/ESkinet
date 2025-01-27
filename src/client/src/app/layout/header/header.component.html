@@ -1,4 +1,6 @@
-<header class="border-b p-3 shadow-md w-full max-h-20 fixed top-0 z-50 bg-white">
+<header
+  class="border-b p-3 shadow-md w-full max-h-20 fixed top-0 z-50 bg-white"
+>
   <div
     class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto"
   >
@@ -21,7 +23,13 @@
       <a routerLink="/test-error" routerLinkActive="active">Contact</a>
     </nav>
     <div class="flex gap-3 align-middle">
-      <a routerLink="/cart" routerLinkActive="active" matBadge="5" matBadgeSize="large" class="custom-badge mt-2 mr-2">
+      <a
+        routerLink="/cart"
+        routerLinkActive="active"
+        matBadge="{{ cartService.itemCount() }}"
+        matBadgeSize="large"
+        class="custom-badge mt-2 mr-2"
+      >
         <mat-icon>shopping_cart</mat-icon>
       </a>
       <button mat-stroked-button>Login</button>
@@ -30,5 +38,8 @@
   </div>
 </header>
 @if (busyService.loading) {
-  <mat-progress-bar mode="indeterminate" class="fixed top-20 z-50"></mat-progress-bar>
+<mat-progress-bar
+  mode="indeterminate"
+  class="fixed top-20 z-50"
+></mat-progress-bar>
 }
