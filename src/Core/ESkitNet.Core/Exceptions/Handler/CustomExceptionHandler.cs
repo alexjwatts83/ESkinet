@@ -10,13 +10,15 @@ public class CustomExceptionHandler(ILogger<CustomExceptionHandler> logger) : IE
 {
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        logger.LogError("Error Message: {ExceptionMessage}, Time of occurrence {Time}", exception.Message, DateTime.UtcNow);
+        var exceptionTypeName = exception.GetType().Name;
+        logger.LogError("Error Message: {ExceptionMessage}, Time of occurrence {Time}, Type: {Type}", exception.Message, DateTime.UtcNow, exceptionTypeName);
 
         (string Detail, string Title, int StatusCode) = exception switch
         {
             InternalServerException => BuildExceptionDetails(httpContext, exception, StatusCodes.Status500InternalServerError),
             ValidationException => BuildExceptionDetails(httpContext, exception, StatusCodes.Status400BadRequest),
             BadRequestException => BuildExceptionDetails(httpContext, exception, StatusCodes.Status400BadRequest),
+            BadHttpRequestException => BuildExceptionDetails(httpContext, exception, StatusCodes.Status400BadRequest),
             NotFoundException => BuildExceptionDetails(httpContext, exception, StatusCodes.Status404NotFound),
             _ => BuildExceptionDetails(httpContext, exception, StatusCodes.Status500InternalServerError)
         };
