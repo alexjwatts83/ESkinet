@@ -7,7 +7,7 @@ public class AccountsModule : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         var group = app
-            .MapGroup("/accounts")
+            .MapGroup("/api/accounts")
             .WithTags("Accounts Module");
             //.MapIdentityApi<AppUser>();
 
