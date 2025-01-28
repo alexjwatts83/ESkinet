@@ -1,4 +1,7 @@
-﻿namespace ESkitNet.API.Buggy;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
+namespace ESkitNet.API.Buggy;
 
 public class Module : ICarterModule
 {
@@ -48,5 +51,20 @@ public class Module : ICarterModule
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Buggy ValidationError")
         .WithDescription("Buggy ValidationError");
+
+        app.MapGet("/buggy/secret", (HttpContext context) =>
+        {
+            var name = context.User.FindFirstValue(ClaimTypes.Name);
+            var email = context.User.FindFirstValue(ClaimTypes.Email);
+            var id = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var message = $"Name: {name}, Email: {email}, Id: {id}";
+
+            return Results.Ok(message);
+        })
+        .WithName("BuggySecret")
+        .RequireAuthorization()
+        .ProducesProblem(StatusCodes.Status401Unauthorized)
+        .WithSummary("Buggy Secret")
+        .WithDescription("Buggy Secret");
     }
 }

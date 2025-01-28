@@ -19,6 +19,20 @@ public class AccountsModule : ICarterModule
             .WithSummary("Register User")
             .WithDescription("Register User");
 
+        group.MapPost("/logout", Logout.Endpoint.Handle)
+            .WithName("LogoutUser")
+            .RequireAuthorization()
+            .Produces(StatusCodes.Status204NoContent)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .WithSummary("Logout User")
+            .WithDescription("Logout User");
+
+        group.MapGet("/user-info", UserInfo.Endpoint.Handle)
+            .WithName("UserInfo");
+
+        group.MapGet("/", AuthCheck.Endpoint.Handle)
+            .WithName("AuthCheck");
+
         group.MapIdentityApi<AppUser>();
     }
 }
