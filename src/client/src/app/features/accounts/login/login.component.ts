@@ -42,7 +42,7 @@ export class LoginComponent {
     this.accountsService.login(this.loginForm.value).subscribe({
       next: () => {
         console.log('was able to login successfully')
-        this.accountsService.getUserInfo();
+        this.accountsService.getUserInfo().subscribe();
         this.router.navigateByUrl('/shop');
       },
     });

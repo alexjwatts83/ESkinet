@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Address, RegisterResult, User } from '../../shared/models/user';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -35,10 +36,12 @@ export class AccountsService {
       .get<User>(`${this.baseUrl}/accounts/user-info`, {
         withCredentials: true,
       })
-      .subscribe((data) => {
-        console.log({ userInfo: data });
-        this.currentUser.set(data);
-      });
+      .pipe(
+        tap((data) => {
+          console.log({ userInfo: data });
+          this.currentUser.set(data);
+        })
+      );
   }
 
   logout() {

@@ -40,8 +40,8 @@ export class HeaderComponent {
       },
     });
   }
-  
+
   getInfo() {
-    this.accountsService.getUserInfo();
+    this.accountsService.getUserInfo().subscribe();
   }
 }
