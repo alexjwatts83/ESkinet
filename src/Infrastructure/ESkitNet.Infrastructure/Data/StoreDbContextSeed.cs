@@ -7,7 +7,6 @@ public static class StoreDbContextSeedExtensions
 {
     public static async Task InitialiseDatabaseAsync(this WebApplication app)
     {
-
         try
         {
             using var scope = app.Services.CreateScope();
@@ -27,28 +26,30 @@ public static class StoreDbContextSeedExtensions
 
     private static async Task SeedAsync(StoreDbContext context)
     {
-        await SeedProductAsync(context);
+        await SeedDataAsync<Product, ProductId>(context, "products");
+        await SeedDataAsync<DeliveryMethod, DeliveryMethodId>(context, "delivery");
     }
 
-    private static async Task SeedProductAsync(StoreDbContext context)
+    private static async Task SeedDataAsync<TEntity, TKey>(StoreDbContext context, string jsonFileName)
+        where TEntity : Entity<TKey>
     {
-        if (await context.Products.AnyAsync())
+        if (await context.Set<TEntity>().AnyAsync())
             return;
 
-        var path = "../../Infrastructure/ESkitNet.Infrastructure/Data/SeedData/products.json";
+        var path = $"../../Infrastructure/ESkitNet.Infrastructure/Data/SeedData/{jsonFileName}.json";
 
         var exists = File.Exists(path);
 
         if (!exists)
             return;
 
-        var productData = await File.ReadAllTextAsync(path);
-        var products = JsonSerializer.Deserialize<List<Product>>(productData);
+        var entitiesRaw = await File.ReadAllTextAsync(path);
+        var entities = JsonSerializer.Deserialize<List<TEntity>>(entitiesRaw);
 
-        if (products == null || products.Count == 0) 
+        if (entities == null || entities.Count == 0)
             return;
 
-        context.Products.AddRange(products);
+        context.Set<TEntity>().AddRange(entities);
 
         await context.SaveChangesAsync();
     }
