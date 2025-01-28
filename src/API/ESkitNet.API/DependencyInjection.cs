@@ -1,5 +1,6 @@
 ﻿using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
+using ESkitNet.Identity.Entities;
 using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -30,19 +31,19 @@ public static class DependencyInjection
         services.AddHealthChecks()
             .AddSqlServer(configuration.GetConnectionString("Database")!)
             .AddRedis(configuration.GetConnectionString("Redis")!);
+        
+        services.AddAuthorization();
+        services
+            .AddIdentityApiEndpoints<AppUser>()
+            .AddEntityFrameworkStores<StoreDbContext>();
 
         return services;
     }
 
     public static WebApplication UseApiServices(this WebApplication app)
     {
-        app.MapCarter();
-
         // TODO delete ExceptionMiddleware altogether later on
         //app.UseMiddleware<ExceptionMiddleware>();
-
-        
-
         app.UseExceptionHandler(options => { });
 
         app.UseHealthChecks("/health",
@@ -50,6 +51,12 @@ public static class DependencyInjection
             {
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
+
+        app.MapCarter();
+
+        //app.MapIdentityApi<AppUser>();
+
+        //app.MapGroup("/account").MapIdentityApi<AppUser>();
 
         return app;
     }

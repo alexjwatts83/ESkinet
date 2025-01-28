@@ -1,0 +1,709 @@
+{
+	"info": {
+		"_postman_id": "a01a4c2c-502d-46b6-a4fd-0451e32a6813",
+		"name": "ESkinet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1585465"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": {\r\n        \"name\":  \"Product 1\",\r\n        \"description\": \"Some description\",\r\n        \"price\": 1.99,\r\n        \"pictureUrl\": \"/some/url/pic.png\",\r\n        \"type\": \"Pickle\",\r\n        \"brand\": \"Sony\",\r\n        \"quantityInStock\": 10\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=6",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=10&search=hat",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "search",
+									"value": "hat"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Brand",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=10&brand=react,angular",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "brand",
+									"value": "react,angular"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Type",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=10&type=boards,boots",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "brand",
+									"value": "angular",
+									"disabled": true
+								},
+								{
+									"key": "type",
+									"value": "boards,boots"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Sort By",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=10&type=boards&sort=priceAsc",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "type",
+									"value": "boards"
+								},
+								{
+									"key": "brand",
+									"value": "angular",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "priceAsc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products/63482980-9190-4f51-87a5-7485eb7e8deb",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"63482980-9190-4f51-87a5-7485eb7e8deb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": {\r\n        \"id\": \"63482980-9190-4f51-87a5-7485eb7e8deb\",\r\n        \"name\": \"Product 1 - updated\",\r\n        \"description\": \"Some description - updated\",\r\n        \"price\": 2.99,\r\n        \"pictureUrl\": \"/some/url/pic-updated.png\",\r\n        \"type\": \"Pickle - updated\",\r\n        \"brand\": \"Sony - updated\",\r\n        \"quantityInStock\": 20\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products/63482980-9190-4f51-87a5-7485eb7e8deb",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"63482980-9190-4f51-87a5-7485eb7e8deb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products/63482980-9190-4f51-87a5-7485eb7e8deb",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"63482980-9190-4f51-87a5-7485eb7e8deb"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/health",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Brands",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/brands?sort=asc",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"brands"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Types",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/api/types?sort=asc",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"types"
+							],
+							"query": [
+								{
+									"key": "sort",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Buggy",
+			"item": [
+				{
+					"name": "unauthorised",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/buggy/unauthorised",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"buggy",
+								"unauthorised"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BuggyNotFound",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/buggy/not-found",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"buggy",
+								"not-found"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BuggyBadRequest",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/buggy/bad-request",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"buggy",
+								"bad-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BuggyInternalError",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{skinet_api_url}}/buggy/internal-error",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"buggy",
+								"internal-error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "BuggyValidationError",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\" :{}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/buggy/validation-error",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"buggy",
+								"validation-error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Error",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": {\r\n        \"name\": \"asdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskld\",\r\n        \"description\": \"asdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskldasdadkjasdkljasdkjasldkjasldkjasdlkjasdklajsdlkasjdlkasjdlkasjdlkasjdalksjdalksjdaskljdaskld\",\r\n        \"price\": -1,\r\n        \"pictureUrl\": \"/some/url/pic.png\",\r\n        \"type\": \"Pickle\",\r\n        \"brand\": \"Sony\",\r\n        \"quantityInStock\": -1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/products",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cart\": {\r\n        \"id\": \"abc123\",\r\n        \"items\": [\r\n            {\r\n                \"productId\": \"847d47ce-f9e6-4177-94c2-69545a1e2e41\",\r\n                \"productName\": \"Angular Blue Boots\",\r\n                \"price\": 180.00,\r\n                \"pictureUrl\": \"/images/products/boot-ang1.png\",\r\n                \"type\": \"Boots\",\r\n                \"brand\": \"Angular\",\r\n                \"quantity\": 1\r\n            }\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/cart",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/cart/abc123",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"abc123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/api/cart/abc123",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"abc123"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Identity",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"Pa$$wOrd321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/register",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"Pa$$wOrd321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/login",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Cookies",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"password\": \"Pa$$wOrd321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{skinet_api_url}}/login?useCookies=true",
+							"host": [
+								"{{skinet_api_url}}"
+							],
+							"path": [
+								"login"
+							],
+							"query": [
+								{
+									"key": "useCookies",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CORS Test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"has content type\", function() {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"});\r",
+							"pm.test(\"Cors header present\", function() {\r",
+							"    pm.response.to.have.header(\"Access-Control-Allow-Origin\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{skinet_api_url}}/api/products?pageNumber=1&pageSize=10",
+					"host": [
+						"{{skinet_api_url}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "pageNumber",
+							"value": "1"
+						},
+						{
+							"key": "pageSize",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.Infrastructure", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{26C7C6A0-B360-4446-9197-4E4811282B53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESkitNet.Identity", "Core\ESkitNet.Identity\ESkitNet.Identity.csproj", "{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{26C7C6A0-B360-4446-9197-4E4811282B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26C7C6A0-B360-4446-9197-4E4811282B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26C7C6A0-B360-4446-9197-4E4811282B53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +59,6 @@ Global
 		{3AAD9714-A23D-4CA9-970F-36749BD54DB4} = {08C75D93-6258-48B4-B3FE-F3580A29905B}
 		{90F8BD15-1424-45E9-BC20-70124379B1DF} = {2ADB33F7-38DD-4F90-92E5-123BD4ED8932}
 		{235F1291-5F8C-4FE4-8D49-D0BEB4453FDD} = {28A3C46B-60A8-455A-9D4A-FFC7B5A58842}
+		{1447BB7C-E4EB-4E8F-BBEB-39450E43EAE1} = {2ADB33F7-38DD-4F90-92E5-123BD4ED8932}
 	EndGlobalSection
 EndGlobal
