@@ -30,7 +30,7 @@ public class AccountsModule : ICarterModule
         group.MapGet("/user-info", UserInfo.Endpoint.Handle)
             .WithName("UserInfo");
 
-        group.MapGet("/", AuthCheck.Endpoint.Handle)
+        group.MapGet("/auth-status", AuthCheck.Endpoint.Handle)
             .WithName("AuthCheck");
 
         // TODO there really should a 2 different endpoints to create and update address

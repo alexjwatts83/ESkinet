@@ -59,4 +59,16 @@ export class AccountsService {
       addressDto,
     });
   }
+
+  getAuthState() {
+    return this.httpClient
+      .get<{ isAuthenticated : boolean }>(`${this.baseUrl}/accounts/auth-status`, {
+        withCredentials: true,
+      })
+      .pipe(
+        tap((data) => {
+          console.log({ getAuthState: data });
+        })
+      );
+  }
 }
