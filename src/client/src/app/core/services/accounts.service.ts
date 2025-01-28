@@ -42,9 +42,13 @@ export class AccountsService {
   }
 
   logout() {
-    return this.httpClient.post(`${this.baseUrl}/accounts/logout`, {
-      withCredentials: true,
-    });
+    return this.httpClient.post(
+      `${this.baseUrl}/accounts/logout`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   addOrUpdateAddress(addressDto: Address) {

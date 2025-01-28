@@ -32,8 +32,15 @@
       >
         <mat-icon>shopping_cart</mat-icon>
       </a>
+      @if (accountsService.currentUser()) {
+      <button mat-stroked-button (click)="logout()">Logout</button>
+      <button mat-button (click)="getInfo()">Info</button>
+      } @else {
       <button mat-stroked-button routerLink="/account/login">Login</button>
-      <button mat-stroked-button routerLink="/account/register">Register</button>
+      <button mat-stroked-button routerLink="/account/register">
+        Register
+      </button>
+      }
     </div>
   </div>
 </header>
