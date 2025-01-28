@@ -13,10 +13,22 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackbar = inject(SnackbarService);
 
   return next(req).pipe(
-    catchError((err: HttpErrorResponse) => {
+    catchError((err: HttpErrorResponse | any) => {
       console.log(err);
       if (err.status == 400) {
         const message = err?.error?.detail || err?.error || err?.message;
+
+        if (err?.error?.ValidationErrors) {
+          console.log({ ValidationErrors: err.error.ValidationErrors });
+          const validationErrors: string[] = [];
+          for (const element of err?.error?.ValidationErrors) {
+            // code
+            console.log(element);
+            validationErrors.push(element.errorMessage);
+          }
+          throw validationErrors.flat();
+        }
+
         // alert(message);
         snackbar.error(message);
       }

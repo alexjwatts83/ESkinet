@@ -33,8 +33,11 @@
         <mat-icon>shopping_cart</mat-icon>
       </a>
       @if (accountsService.currentUser()) {
-      <button mat-stroked-button (click)="logout()">Logout</button>
-      <button mat-button (click)="getInfo()">Info</button>
+      <button mat-button [mat-menu-trigger-for]="menu">
+        <mat-icon>arrow_drop_down</mat-icon>
+        <span>{{ accountsService.currentUser()?.email }}</span>
+      </button>
+      <!-- <button mat-button (click)="getInfo()">Info</button> -->
       } @else {
       <button mat-stroked-button routerLink="/account/login">Login</button>
       <button mat-stroked-button routerLink="/account/register">
@@ -50,3 +53,19 @@
   class="fixed top-20 z-50"
 ></mat-progress-bar>
 }
+
+<mat-menu #menu="matMenu" class="px-5">
+  <button mat-menu-item class="px-3" routerLink="/cart">
+    <mat-icon>shopping_cart</mat-icon>
+    My Cart
+  </button>
+  <button mat-menu-item class="px-3" routerLink="/orders">
+    <mat-icon>history</mat-icon>
+    My Orders
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item class="px-3" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-menu>

@@ -25,7 +25,7 @@ public static class Endpoint
     {
         public Validator()
         {
-            RuleFor(x => x.Cart.Id).NotNull().WithMessage("Id can not be null");
+            RuleFor(x => x.Cart.Id).NotEmpty().NotNull().WithMessage("Id can not be null");
             RuleFor(x => x.Cart.Items).NotEmpty().WithMessage("Items cannot be empty");
             //RuleFor(x => x.Product.Name).MaximumLength(100).WithMessage("Name must be less than 100 characters");
             //RuleFor(x => x.Product.Description).NotEmpty().WithMessage("Description cannot be empty");
