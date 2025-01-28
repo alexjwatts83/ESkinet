@@ -2,22 +2,14 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import { AccountsService } from '../../../core/services/accounts.service';
 import { Router } from '@angular/router';
+import { TextInputComponent } from '../../../shared/components/text-input/text-input.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatCard,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatButton,
-  ],
+  imports: [ReactiveFormsModule, MatCard, MatButton, TextInputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -32,8 +24,6 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    const formValue = this.loginForm.getRawValue();
-    console.log({ formValue });
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -41,7 +31,6 @@ export class LoginComponent {
 
     this.accountsService.login(this.loginForm.value).subscribe({
       next: () => {
-        console.log('was able to login successfully')
         this.accountsService.getUserInfo().subscribe();
         this.router.navigateByUrl('/shop');
       },
