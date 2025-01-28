@@ -8,7 +8,7 @@ namespace ESkitNet.API.Accounts.Register;
 public static class Endpoint
 {
     public record Request(RegisterDto RegisterDto);
-    public record Response(IdentityResult? IdentityResult);
+    public record Response(bool Succeeded, IEnumerable<IdentityError> Errors);
 
     public static async Task<IResult> Handle(Request request, ISender sender)
     {
@@ -18,19 +18,20 @@ public static class Endpoint
 
         var response = result.Adapt<Response>();
 
-        var identityResult = response.IdentityResult;
-
-        // TODO figure out later if this can acutally happen
-        if (identityResult == null)
-            return Results.BadRequest("Failure During registering the user");
-
-        return (identityResult.Succeeded) 
-            ? Results.Ok(response.IdentityResult)
-            : Results.BadRequest(identityResult.Errors);
+        //// TODO figure out later if this can acutally happen
+        //if (identityResult == null)
+        //    return Results.BadRequest("Failure During registering the user");
+        return (response.Succeeded)
+            ? Results.Ok(new
+            {
+                response.Succeeded,
+                response.Errors
+            })
+            : Results.ValidationProblem(response.Errors!.ToDictionary(x => x.Code, x => new string[] { x.Description }));
     }
 
     public record Command(RegisterDto RegisterDto) : ICommand<Result>;
-    public record Result(IdentityResult? IdentityResult);
+    public record Result(bool Succeeded, IEnumerable<IdentityError> Errors);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -60,7 +61,10 @@ public static class Endpoint
 
             var result = await signInManager.UserManager.CreateAsync(newUser, dto.Password);
 
-            return new Result(result);
+            // for some reason when I returned just result, map couldn't figure out how to
+            // map the errors and if there was an error then the errors returned would return an
+            // empty array
+            return new Result(result.Succeeded, result.Errors);
         }
     }
 }
