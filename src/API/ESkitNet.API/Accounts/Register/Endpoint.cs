@@ -1,7 +1,9 @@
 ﻿using ESkitNet.API.Accounts.Dtos;
 using ESkitNet.Identity.Entities;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
 
 namespace ESkitNet.API.Accounts.Register;
 
@@ -21,13 +23,29 @@ public static class Endpoint
         //// TODO figure out later if this can acutally happen
         //if (identityResult == null)
         //    return Results.BadRequest("Failure During registering the user");
-        return (response.Succeeded)
-            ? Results.Ok(new
+        if (response.Succeeded)
+        {
+            return Results.Ok(new
             {
                 response.Succeeded,
                 response.Errors
-            })
-            : Results.ValidationProblem(response.Errors!.ToDictionary(x => x.Code, x => new string[] { x.Description }));
+            });
+        }
+        var message = new StringBuilder();
+        
+        message.Append("Password Validation Failure: ");
+        message.AppendLine();
+
+        var validationErrors = new List<ValidationFailure>();
+
+        foreach (var x in response.Errors)
+        {
+            var validationException = new ValidationFailure(x.Code, x.Description);
+            message.AppendLine($"-- {x.Description}");
+            validationErrors.Add(validationException);
+        }
+
+        throw new ValidationException(message.ToString(), validationErrors);
     }
 
     public record Command(RegisterDto RegisterDto) : ICommand<Result>;
