@@ -12,6 +12,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpContextAccessor();
+
         services.AddCarter();
 
         services.AddMediatR(config =>
@@ -42,6 +44,7 @@ public static class DependencyInjection
 
     public static WebApplication UseApiServices(this WebApplication app)
     {
+
         // TODO delete ExceptionMiddleware altogether later on
         //app.UseMiddleware<ExceptionMiddleware>();
         app.UseExceptionHandler(options => { });

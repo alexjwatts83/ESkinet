@@ -33,6 +33,11 @@ public class AccountsModule : ICarterModule
         group.MapGet("/", AuthCheck.Endpoint.Handle)
             .WithName("AuthCheck");
 
+        // TODO there really should a 2 different endpoints to create and update address
+        group.MapPost("/address", AddOrUpdateAddress.Endpoint.Handle)
+            .WithName("AddOrUpdateAddress")
+            .RequireAuthorization();
+
         group.MapIdentityApi<AppUser>();
     }
 }

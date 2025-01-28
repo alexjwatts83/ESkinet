@@ -14,13 +14,14 @@ public static class Endpoint
 
         var signInManager = sp.GetRequiredService<SignInManager<AppUser>>();
 
-        var user = await signInManager.UserManager.GetUserByEmail(claimsPrincipal);
+        var user = await signInManager.UserManager.GetUserByEmail(claimsPrincipal, true);
 
         return Results.Ok(new
         {
             user.FirstName,
             user.LastName,
-            user.Email
+            user.Email,
+            user.Address
         });
     }
 }
