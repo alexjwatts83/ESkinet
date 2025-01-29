@@ -5,6 +5,7 @@ import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { StripeService } from '../../core/services/stripe.service';
 import {
+  ConfirmationToken,
   StripeAddressElement,
   StripeAddressElementChangeEvent,
   StripePaymentElement,
@@ -58,6 +59,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     card: false,
     delivery: false,
   });
+  confirmationToken?: ConfirmationToken;
 
   async ngOnInit() {
     try {
@@ -87,6 +89,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
   };
 
+  async getConfirmationToken() {
+    try {
+      const allCompleted = Object.values(this.completionStatus()).every(
+        (status) => status === true
+      );
+      console.log({allCompleted});
+      if (allCompleted) {
+        const result = await this.stripeService.createConfirmationToken();
+        if (result.error) throw new Error(result.error.message);
+        console.log({ confirmationToken: result.confirmationToken });
+        this.confirmationToken = result.confirmationToken;
+      }
+    } catch (error: any) {
+      this.snack.error(error.message);
+    }
+  }
+
   handleDeliveryChange(ev: boolean) {
     this.completionStatus.update((state) => {
       state.delivery = ev;
@@ -114,6 +133,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       if (this.cartService.selectedDelivery()) {
         await firstValueFrom(this.stripeService.creatOrUpdatePaymentIntent());
       }
+    }
+    if (selectedIndex === 3) {
+      await this.getConfirmationToken();
     }
   }
 

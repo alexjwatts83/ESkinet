@@ -116,6 +116,18 @@ export class StripeService {
       );
   }
 
+  async createConfirmationToken() {
+    const stripe = await this.getStripeInstance();
+    if (!stripe) throw new Error('Stripe has not been loaded');
+
+    const elements = await this.initialiseElements();
+    const result = await elements.submit();
+
+    if (result.error) throw new Error(result.error.message);
+
+    return await stripe.createConfirmationToken({ elements });
+  }
+
   disposeElements() {
     this.elements = undefined;
     this.addressElememnt = undefined;

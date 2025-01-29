@@ -1,8 +1,8 @@
-<div class="mt-4 w-full">
+<div class="mt-4 w-full" *ngIf="confirmationToken">
   <h4 class="text-lg font-semibold">Billing and delivery information</h4>
   <dl>
     <dt class="font-medium">Shipping Address</dt>
-    <dd class="mt-1 text-gray-500">Shipping Address goes here</dd>
+    <dd class="mt-1 text-gray-500">{{ confirmationToken.shipping | address }}</dd>
     <dt class="font-medium">Payment Details</dt>
     <dd class="mt-1 text-gray-500">pat goes here</dd>
   </dl>
