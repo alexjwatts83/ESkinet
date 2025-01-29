@@ -27,16 +27,16 @@ public static class Endpoint
         {
             RuleFor(x => x.Cart.Id).NotEmpty().NotNull().WithMessage("Id can not be null");
             RuleFor(x => x.Cart.Items).NotEmpty().WithMessage("Items cannot be empty");
-            //RuleFor(x => x.Product.Name).MaximumLength(100).WithMessage("Name must be less than 100 characters");
-            //RuleFor(x => x.Product.Description).NotEmpty().WithMessage("Description cannot be empty");
-            //RuleFor(x => x.Product.Description).MaximumLength(1000).WithMessage("Description must be less than 1000 characters");
-            //RuleFor(x => x.Product.PictureUrl).NotEmpty().WithMessage("PictureUrl cannot be empty");
-            //RuleFor(x => x.Product.Type).NotEmpty().WithMessage("Type cannot be empty");
-            //RuleFor(x => x.Product.Brand).NotEmpty().WithMessage("Brand cannot be empty");
-            //RuleFor(x => x.Product.QuantityInStock).NotEmpty().WithMessage("QuantityInStock cannot be empty");
-            //RuleFor(x => x.Product.QuantityInStock).GreaterThanOrEqualTo(0).WithMessage("QuantityInStock must be greater than or equal to 0");
-            //RuleFor(x => x.Product.Price).NotEmpty().WithMessage("Price cannot be empty");
-            //RuleFor(x => x.Product.Price).GreaterThanOrEqualTo(0).WithMessage("QuantityInStock must be greater than or equal to 0");
+            RuleForEach(x => x.Cart.Items).ChildRules(item =>
+            {
+                item.RuleFor(i => i.ProductId).NotNull().NotEmpty();
+                item.RuleFor(i => i.ProductName).NotNull().NotEmpty();
+                item.RuleFor(i => i.PictureUrl).NotNull().NotEmpty();
+                item.RuleFor(i => i.Type).NotNull().NotEmpty();
+                item.RuleFor(i => i.Brand).NotNull().NotEmpty();
+                item.RuleFor(i => i.Price).NotNull().NotEmpty().GreaterThanOrEqualTo(0);
+                item.RuleFor(i => i.Quantity).NotNull().NotEmpty().GreaterThanOrEqualTo(1);
+            });
         }
     }
 

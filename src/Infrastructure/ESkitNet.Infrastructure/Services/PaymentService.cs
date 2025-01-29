@@ -32,9 +32,10 @@ public class PaymentService(
 
         if (cart.DeliveryMethodId != null)
         {
-            logger.LogDebug("Delivery Method for cart is not null {DeliveryMethodId}", cart.DeliveryMethodId.Value);
+            logger.LogDebug("Delivery Method for cart is not null {DeliveryMethodId}", cart.DeliveryMethodId);
 
-            var deliveryMethod = await deliveryRepo.GetByIdAsync(cart.DeliveryMethodId, cancellationToken);
+            var deliveryMethodId = DeliveryMethodId.Of(cart.DeliveryMethodId.Value);
+            var deliveryMethod = await deliveryRepo.GetByIdAsync(deliveryMethodId, cancellationToken);
 
             if (deliveryMethod == null)
             {

@@ -8,6 +8,10 @@ public static class Endpoint
     {
         var result = await repository.GetAllAsync(cancellationToken);
 
-        return Results.Ok(result.Select(x => x.Adapt<DeliveryMethodDto>()));
+        var sorted = result
+            .Select(x => x.Adapt<DeliveryMethodDto>())
+            .OrderBy(x => x.Price);
+
+        return Results.Ok(sorted);
     }
 }

@@ -3,7 +3,7 @@
   <div class="flex justify-between">
     <mat-paginator
       (page)="handlePageEvent($event)"
-      [length]="products?.count"
+      [length]="products.count"
       [pageSize]="shopParams.pageSize"
       [showFirstLastButtons]="true"
       [pageSizeOptions]="pageSizeOptions"

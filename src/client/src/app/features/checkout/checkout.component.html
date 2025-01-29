@@ -1,25 +1,48 @@
 <div class="flex mt-32 gap-6">
   <div class="w-3/4">
-    <mat-stepper #stepper class="bg-white border border-gray-200 shadow-sm">
+    <mat-stepper #stepper class="bg-white border border-gray-200 shadow-sm" (selectionChange)="onStepChanged($event)">
       <mat-step label="Address">
         <div id="address-element"></div>
+        <div class="flex justtify-end mt-1">
+          <mat-checkbox
+            [checked]="saveAddress"
+            (change)="onSaveAddressChanged($event)"
+          >
+            Save as default address
+          </mat-checkbox>
+        </div>
         <div class="flex justify-between mt-6">
           <button mat-stroked-button routerLink="/shop">
             Continue Shopping
           </button>
-          <button mat-flat-button matStepperNext>
-            Next
-          </button>
+          <button mat-flat-button matStepperNext>Next</button>
         </div>
         <div class="w-full">
-<pre>
-{{ cartService.cart()| json }}
-</pre>
+<pre
+>{{ cartService.cart() | json }}
+</pre
+          >
         </div>
       </mat-step>
-      <mat-step label="Shipping"> Shipping Form </mat-step>
-      <mat-step label="Payment"> Payment Form </mat-step>
-      <mat-step label="Confirmation"> Review all the things </mat-step>
+      <mat-step label="Shipping">
+        <app-checkout-delivery></app-checkout-delivery>
+        <div class="flex justify-between mt-6">
+          <button mat-flat-button matStepperPrevious>Back</button>
+          <button mat-flat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step label="Payment"> Payment Form 
+        <div class="flex justify-between mt-6">
+          <button mat-flat-button matStepperPrevious>Back</button>
+          <button mat-flat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
+      <mat-step label="Confirmation"> Review all the things 
+        <div class="flex justify-between mt-6">
+          <button mat-flat-button matStepperPrevious>Back</button>
+          <button mat-flat-button matStepperNext>Next</button>
+        </div>
+      </mat-step>
     </mat-stepper>
   </div>
   <div class="w-1/4">
