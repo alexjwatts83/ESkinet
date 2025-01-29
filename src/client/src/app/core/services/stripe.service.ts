@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { CartService } from './cart.service';
 import { Cart } from '../../shared/models/cart';
 import { firstValueFrom, tap } from 'rxjs';
+import { AccountsService } from './accounts.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,7 @@ export class StripeService {
   private cartService = inject(CartService);
   private elements?: StripeElements;
   private addressElememnt?: StripeAddressElement;
+  private accountsService = inject(AccountsService);
 
   constructor() {
     this.stripePromise = loadStripe(environment.stripePublicKey);
@@ -52,8 +54,23 @@ export class StripeService {
     if (!this.addressElememnt) {
       const elements = await this.initialiseElements();
       if (elements) {
+        const user = this.accountsService.currentUser();
+        let defaultValues: StripeAddressElementOptions['defaultValues'] = {
+          name: user ? `${user.firstName} ${user.lastName}` : undefined,
+          address: user && user.address ? {
+            line1: user.address.line1,
+            line2: user.address.line2,
+            country: user.address.country,
+            city: user.address.city,
+            postal_code: user.address.postalCode,
+            state: user.address.state
+          }
+          : undefined
+        };
+        console.log({defaultValues});
         const options: StripeAddressElementOptions = {
           mode: 'shipping',
+          defaultValues
         };
         this.addressElememnt = elements.create('address', options);
       } else {
@@ -80,5 +97,10 @@ export class StripeService {
           this.cartService.cart.set(data);
         })
       );
+  }
+
+  disposeElements() {
+    this.elements = undefined;
+    this.addressElememnt = undefined;
   }
 }
