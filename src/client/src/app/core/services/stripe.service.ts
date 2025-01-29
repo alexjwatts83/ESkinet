@@ -94,7 +94,7 @@ export class StripeService {
         tap((data) => {
           console.log({ afterPaymentIntent: data });
           console.log({ items: data.items });
-          this.cartService.cart.set(data);
+          this.cartService.setCart(cart)
         })
       );
   }
