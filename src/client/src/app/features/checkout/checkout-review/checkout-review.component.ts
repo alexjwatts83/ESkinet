@@ -3,11 +3,12 @@ import { CartService } from '../../../core/services/cart.service';
 import { CurrencyPipe, NgIf } from '@angular/common';
 import { ConfirmationToken } from '@stripe/stripe-js';
 import { AddressPipe } from '../../../shared/pipes/address.pipe';
+import { CardPipe } from '../../../shared/pipes/card.pipe';
 
 @Component({
   selector: 'app-checkout-review',
   standalone: true,
-  imports: [CurrencyPipe, NgIf, AddressPipe],
+  imports: [CurrencyPipe, NgIf, AddressPipe, CardPipe],
   templateUrl: './checkout-review.component.html',
   styleUrl: './checkout-review.component.scss'
 })
