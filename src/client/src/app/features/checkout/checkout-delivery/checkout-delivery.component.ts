@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { CheckoutService } from '../../../core/services/checkout.service';
 import { AsyncPipe, CurrencyPipe, JsonPipe, NgIf } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
@@ -15,6 +15,7 @@ import { DeliveryMethod } from '../../../shared/models/deliveryMethod';
 export class CheckoutDeliveryComponent {
   checkoutService = inject(CheckoutService);
   cartService = inject(CartService);
+  deliveryComplete = output<boolean>();
 
   deliveryMethods$ = this.checkoutService.getDeliveryMethods().pipe(
     tap(methods => {
@@ -23,6 +24,7 @@ export class CheckoutDeliveryComponent {
         const method = methods.find(x => x.id == deliveryMethodId);
         if (method) {
           this.cartService.selectedDelivery.set(method);
+          this.deliveryComplete.emit(true);
         }
       }
     })
@@ -34,6 +36,7 @@ export class CheckoutDeliveryComponent {
     if (cart) {
       cart.deliveryMethodId = method.id;
       this.cartService.setCart(cart);
+      this.deliveryComplete.emit(true);
     }
   }
 }

@@ -4,10 +4,15 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { StripeService } from '../../core/services/stripe.service';
-import { StripeAddressElement, StripePaymentElement } from '@stripe/stripe-js';
+import {
+  StripeAddressElement,
+  StripeAddressElementChangeEvent,
+  StripePaymentElement,
+  StripePaymentElementChangeEvent,
+} from '@stripe/stripe-js';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { CartService } from '../../core/services/cart.service';
-import { CurrencyPipe, JsonPipe, NgIf } from '@angular/common';
+import { CurrencyPipe, JsonPipe } from '@angular/common';
 import {
   MatCheckboxChange,
   MatCheckboxModule,
@@ -26,7 +31,6 @@ import { CheckoutReviewComponent } from './checkout-review/checkout-review.compo
     MatButton,
     RouterLink,
     JsonPipe,
-    NgIf,
     MatCheckboxModule,
     CheckoutDeliveryComponent,
     CheckoutReviewComponent,
@@ -44,15 +48,50 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   saveAddress: boolean = false;
   shippingAddress = signal<Address | null>(null);
   private paymentElement?: StripePaymentElement;
+
+  completionStatus = signal<{
+    address: boolean;
+    card: boolean;
+    delivery: boolean;
+  }>({
+    address: false,
+    card: false,
+    delivery: false,
+  });
+
   async ngOnInit() {
     try {
       this.addressElement = await this.stripeService.createAddressElement();
       this.addressElement.mount('#address-element');
+      this.addressElement.on('change', this.handleAddressChange);
+
       this.paymentElement = await this.stripeService.createPaymentElemment();
       this.paymentElement.mount('#payment-element');
+      this.paymentElement.on('change', this.handlePaymentChange);
     } catch (error: any) {
       this.snack.error(error.message);
     }
+  }
+
+  private handleAddressChange = (ev: StripeAddressElementChangeEvent) => {
+    this.completionStatus.update((state) => {
+      state.address = ev.complete;
+      return state;
+    });
+  };
+
+  private handlePaymentChange = (ev: StripePaymentElementChangeEvent) => {
+    this.completionStatus.update((state) => {
+      state.card = ev.complete;
+      return state;
+    });
+  };
+
+  handleDeliveryChange(ev: boolean) {
+    this.completionStatus.update((state) => {
+      state.delivery = ev;
+      return state;
+    });
   }
 
   ngOnDestroy(): void {
