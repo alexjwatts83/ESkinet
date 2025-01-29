@@ -18,7 +18,7 @@ public class PaymentService(
     {
         logger.LogInformation("CreateOrUpdatePaymentIntent cartId = {CartId}", cartId);
         // TODO change this a type class instead later on
-        StripeConfiguration.ApiKey = config["StripeSettings.SecretKey"];
+        StripeConfiguration.ApiKey = config["StripeSettings:SecretKey"];
 
         var cart = await cartService.GetAsync(cartId, cancellationToken);
 

@@ -2,15 +2,11 @@
 
 public static class Endpoint
 {
-    public record Request(string CartId);
-
     public record Response(ShoppingCart Cart);
 
-    public static async Task<IResult> Handle(Request request, ISender sender)
+    public static async Task<IResult> Handle(string cartId, ISender sender)
     {
-        var command = request.Adapt<Command>();
-
-        var result = await sender.Send(command);
+        var result = await sender.Send(new Command(cartId));
 
         var response = result.Adapt<Response>();
 

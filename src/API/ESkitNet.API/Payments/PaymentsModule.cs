@@ -11,7 +11,7 @@ public class PaymentsModule : ICarterModule
             .WithTags("Payments Module");
         //.MapIdentityApi<AppUser>();
 
-        group.MapPost("/", CreateOrUpdateIntent.Endpoint.Handle)
+        group.MapPost("/{cartId}", CreateOrUpdateIntent.Endpoint.Handle)
             .WithName("CreateOrUpdateIntent")
             .RequireAuthorization();
 
