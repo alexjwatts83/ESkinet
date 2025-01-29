@@ -1,7 +1,22 @@
 <div class="flex mt-32 gap-6">
   <div class="w-3/4">
     <mat-stepper #stepper class="bg-white border border-gray-200 shadow-sm">
-      <mat-step label="Address"> Address Form </mat-step>
+      <mat-step label="Address">
+        <div id="address-element"></div>
+        <div class="flex justify-between mt-6">
+          <button mat-stroked-button routerLink="/shop">
+            Continue Shopping
+          </button>
+          <button mat-flat-button matStepperNext>
+            Next
+          </button>
+        </div>
+        <div class="w-full">
+<pre>
+{{ cartService.cart()| json }}
+</pre>
+        </div>
+      </mat-step>
       <mat-step label="Shipping"> Shipping Form </mat-step>
       <mat-step label="Payment"> Payment Form </mat-step>
       <mat-step label="Confirmation"> Review all the things </mat-step>

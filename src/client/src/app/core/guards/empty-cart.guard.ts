@@ -5,9 +5,12 @@ import { SnackbarService } from '../services/snackbar.service';
 
 export const emptyCartGuard: CanActivateFn = (route, state) => {
   const cartService = inject(CartService);
+  const cart = cartService.cart();
 
-  if (cartService.cart() && cartService.cart()?.items.length) {
-    return true;
+  if (cart) {
+    if (cart.items) {
+      return true;
+    }
   }
 
   const router = inject(Router);

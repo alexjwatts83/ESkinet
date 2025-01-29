@@ -10,7 +10,7 @@ public static class Endpoint
 
         var response = result.Adapt<Response>();
 
-        return Results.Ok(response);
+        return Results.Ok(response.Cart);
     }
 
     public record Command(string CartId) : ICommand<Result>;
