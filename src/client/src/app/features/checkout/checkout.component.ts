@@ -7,15 +7,16 @@ import { StripeService } from '../../core/services/stripe.service';
 import { StripeAddressElement, StripePaymentElement } from '@stripe/stripe-js';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { CartService } from '../../core/services/cart.service';
-import { JsonPipe, NgIf } from '@angular/common';
+import { CurrencyPipe, JsonPipe, NgIf } from '@angular/common';
 import {
   MatCheckboxChange,
   MatCheckboxModule,
 } from '@angular/material/checkbox';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { Address } from '../../shared/models/user';
-import { CheckoutDeliveryComponent } from "./checkout-delivery/checkout-delivery.component";
+import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery.component';
 import { firstValueFrom } from 'rxjs';
+import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -27,8 +28,10 @@ import { firstValueFrom } from 'rxjs';
     JsonPipe,
     NgIf,
     MatCheckboxModule,
-    CheckoutDeliveryComponent
-],
+    CheckoutDeliveryComponent,
+    CheckoutReviewComponent,
+    CurrencyPipe,
+  ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })

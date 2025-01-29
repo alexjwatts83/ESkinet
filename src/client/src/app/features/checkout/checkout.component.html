@@ -38,10 +38,11 @@
           <button mat-flat-button matStepperNext>Next</button>
         </div>
       </mat-step>
-      <mat-step label="Confirmation"> Review all the things 
+      <mat-step label="Confirmation">
+        <app-checkout-review></app-checkout-review>
         <div class="flex justify-between mt-6">
           <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button matStepperNext>Next</button>
+          <button mat-flat-button>Pay {{ (cartService.totals()?.total ?? 0) | currency }} </button>
         </div>
       </mat-step>
     </mat-stepper>
