@@ -9,7 +9,7 @@ public class ProductsModule : ICarterModule
             .WithTags("Products Module")
             .RequireCors("CorsPolicy");
 
-        group.MapGet("/", Get.Endpoint.Handle)
+        group.MapGet("/", Payments.GetMethods.Endpoint.Handle)
             .WithName("GetProducts")
             .Produces<PaginatedResult<ProductDto>>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)

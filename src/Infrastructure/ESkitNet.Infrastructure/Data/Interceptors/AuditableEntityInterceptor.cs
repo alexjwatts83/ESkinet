@@ -22,20 +22,21 @@ public class AuditableEntityInterceptor(IAppTimeProvider timeProvider, IUserAcce
         if (context == null) return;
 
         var entities = context.ChangeTracker.Entries<IEntity>();
+        var userName = userAccessor.UserName;
+        var now = timeProvider.Now;
 
         foreach (var entity in entities)
         {
-            // TODO: use ITimeProvider later and figure out how to get the user from the context
             if (entity.State == EntityState.Added)
             {
-                entity.Entity.CreatedBy = userAccessor.UserName;
-                entity.Entity.CreatedAt = timeProvider.Now;
+                entity.Entity.CreatedBy = userName;
+                entity.Entity.CreatedAt = now;
             }
 
             if (entity.State == EntityState.Added || entity.State == EntityState.Modified || entity.HasChangedOwnedEntities())
             {
-                entity.Entity.LastModifiedBy = userAccessor.UserName;
-                entity.Entity.LastModified = timeProvider.Now;
+                entity.Entity.LastModifiedBy = userName;
+                entity.Entity.LastModified = now;
             }
         }
     }

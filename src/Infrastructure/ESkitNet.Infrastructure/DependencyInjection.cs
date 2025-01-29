@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IAppTimeProvider, AppTimeProvider>();
         services.AddScoped<IUserAccessor, UserAccessor>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IPaymentService, PaymentService>();
 
         // db services
         // No <>

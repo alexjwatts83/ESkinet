@@ -1,4 +1,5 @@
-﻿using ESkitNet.Core.Behaviors;
+﻿using ESkitNet.API.Extensions;
+using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
 using ESkitNet.Identity.Entities;
 using FluentValidation;
@@ -38,6 +39,8 @@ public static class DependencyInjection
         services
             .AddIdentityApiEndpoints<AppUser>()
             .AddEntityFrameworkStores<StoreDbContext>();
+
+        services.RegisterMapsterConfiguration();
 
         return services;
     }
