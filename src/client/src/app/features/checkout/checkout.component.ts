@@ -4,7 +4,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { StripeService } from '../../core/services/stripe.service';
-import { StripeAddressElement } from '@stripe/stripe-js';
+import { StripeAddressElement, StripePaymentElement } from '@stripe/stripe-js';
 import { SnackbarService } from '../../core/services/snackbar.service';
 import { CartService } from '../../core/services/cart.service';
 import { JsonPipe, NgIf } from '@angular/common';
@@ -40,11 +40,13 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   addressElement?: StripeAddressElement;
   saveAddress: boolean = false;
   shippingAddress = signal<Address | null>(null);
-
+  private paymentElement?: StripePaymentElement;
   async ngOnInit() {
     try {
       this.addressElement = await this.stripeService.createAddressElement();
       this.addressElement.mount('#address-element');
+      this.paymentElement = await this.stripeService.createPaymentElemment();
+      this.paymentElement.mount('#payment-element');
     } catch (error: any) {
       this.snack.error(error.message);
     }

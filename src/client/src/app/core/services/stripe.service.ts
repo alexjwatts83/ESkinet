@@ -5,6 +5,7 @@ import {
   StripeAddressElement,
   StripeAddressElementOptions,
   StripeElements,
+  StripePaymentElement,
 } from '@stripe/stripe-js';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +25,7 @@ export class StripeService {
   private elements?: StripeElements;
   private addressElememnt?: StripeAddressElement;
   private accountsService = inject(AccountsService);
+  private paymentElement?: StripePaymentElement;
 
   constructor() {
     this.stripePromise = loadStripe(environment.stripePublicKey);
@@ -50,6 +52,19 @@ export class StripeService {
     return this.elements;
   }
 
+  async createPaymentElemment() {
+    if (!this.paymentElement) {
+      const elements = await this.initialiseElements();
+      if (elements) {
+        this.paymentElement = elements.create('payment');
+      } else {
+        throw new Error('Elements Instance has not been loaded');
+      }
+    }
+
+    return this.paymentElement;
+  }
+
   async createAddressElement() {
     if (!this.addressElememnt) {
       const elements = await this.initialiseElements();
@@ -57,20 +72,22 @@ export class StripeService {
         const user = this.accountsService.currentUser();
         let defaultValues: StripeAddressElementOptions['defaultValues'] = {
           name: user ? `${user.firstName} ${user.lastName}` : undefined,
-          address: user && user.address ? {
-            line1: user.address.line1,
-            line2: user.address.line2,
-            country: user.address.country,
-            city: user.address.city,
-            postal_code: user.address.postalCode,
-            state: user.address.state
-          }
-          : undefined
+          address:
+            user && user.address
+              ? {
+                  line1: user.address.line1,
+                  line2: user.address.line2,
+                  country: user.address.country,
+                  city: user.address.city,
+                  postal_code: user.address.postalCode,
+                  state: user.address.state,
+                }
+              : undefined,
         };
-        console.log({defaultValues});
+        console.log({ defaultValues });
         const options: StripeAddressElementOptions = {
           mode: 'shipping',
-          defaultValues
+          defaultValues,
         };
         this.addressElememnt = elements.create('address', options);
       } else {
@@ -94,7 +111,7 @@ export class StripeService {
         tap((data) => {
           console.log({ afterPaymentIntent: data });
           console.log({ items: data.items });
-          this.cartService.setCart(cart)
+          this.cartService.setCart(cart);
         })
       );
   }
@@ -102,5 +119,6 @@ export class StripeService {
   disposeElements() {
     this.elements = undefined;
     this.addressElememnt = undefined;
+    this.paymentElement = undefined;
   }
 }
