@@ -25,6 +25,12 @@ import { firstValueFrom } from 'rxjs';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { AccountsService } from '../../core/services/accounts.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  CreateOrderDto,
+  Order,
+  ShippingAddress,
+} from '../../shared/models/orders.models';
+import { OrderService } from '../../core/services/order.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -48,6 +54,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private snack = inject(SnackbarService);
   private router = inject(Router);
   private accountsService = inject(AccountsService);
+  private orderService = inject(OrderService);
 
   cartService = inject(CartService);
   addressElement?: StripeAddressElement;
@@ -130,7 +137,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   async onStepChanged($event: StepperSelectionEvent) {
     const selectedIndex = $event.selectedIndex;
     if (selectedIndex === 1) {
-      const address = await this.getAddressFromStripeAddress();
+      const address = (await this.getAddressFromStripeAddress()) as Address;
       this.shippingAddress.set(address);
     }
     if (selectedIndex === 2) {
@@ -144,12 +151,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   async confirmPayment(stepper: MatStepper) {
-    // if (this.saveAddress) {
-    //   const address = this.shippingAddress();
-    //   if (address) {
-    //     this.accountsService.addOrUpdateAddress(address).subscribe();
-    //   }
-    // }
     try {
       if (this.confirmationToken) {
         let outputColor = 'color:red; font-size:20px;';
@@ -157,48 +158,58 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         this.loading = true;
         await this.stripeService
           .confirmPayment(this.confirmationToken)
-          .then((response) => {
+          .then(async (response) => {
             console.info('%c stripeService.confirmPayment then', outputColor);
             // Handle successful result
             console.log({ confirmPaymentThen: response });
 
+            // stripe error
             if (response.error) {
               throw new Error(response.error.message);
             }
 
-            this.cartService.deleteCart();
-            this.cartService.selectedDelivery.set(null);
-            if (this.saveAddress) {
-              const address = this.shippingAddress();
-              if (address) {
-                this.accountsService.addOrUpdateAddress(address).subscribe();
+            // I honestly dont know if this check is necessary
+            if (response.paymentIntent?.status === 'succeeded') {
+              const order = await this.createOrderModel();
+              const orderResult$ = this.orderService.creatOrUpdate(order);
+              const orderResult = await firstValueFrom(orderResult$);
+              console.log({ orderResult });
+              if (orderResult) {
+                this.cartService.deleteCart();
+                this.cartService.selectedDelivery.set(null);
+                if (this.saveAddress) {
+                  const address = this.shippingAddress();
+                  if (address) {
+                    this.accountsService
+                      .addOrUpdateAddress(address)
+                      .subscribe();
+                  }
+                }
+                this.router.navigateByUrl('/checkout/success');
+                return;
               }
             }
-            this.router.navigateByUrl('/checkout/success');
+
+            throw new Error('Payment was not successful');
           });
-          // .catch((error) => {
-          //   // Handle error
-          //   console.info('%c stripeService.confirmPayment Error', outputColor);
-          //   console.log({ confirmPaymentError: error });
-          //   throw new Error(error.message);
-          // });
       }
     } catch (error: any) {
-      console.log({error});
-      this.snack.error(
-        error.message || 'Something went wrong during payment'
-      );
+      console.log({ error });
+      this.snack.error(error.message || 'Something went wrong during payment');
       stepper.previous();
     } finally {
       this.loading = false;
     }
   }
 
-  private async getAddressFromStripeAddress(): Promise<Address | null> {
+  private async getAddressFromStripeAddress(): Promise<
+    Address | ShippingAddress | null
+  > {
     const result = await this.addressElement?.getValue();
     const address = result?.value.address;
     if (address) {
       return {
+        name: result.value.name,
         line1: address.line1,
         line2: address.line2 || undefined,
         city: address.city,
@@ -208,5 +219,27 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       };
     }
     return null;
+  }
+
+  private async createOrderModel() {
+    const cart = this.cartService.cart();
+    const shippingAddress =
+      (await this.getAddressFromStripeAddress()) as ShippingAddress;
+    const card = this.confirmationToken?.payment_method_preview.card;
+
+    if (!cart?.id || !cart?.deliveryMethodId || !shippingAddress || !card)
+      throw new Error('Problem Creating Order');
+
+    return {
+      cartId: cart.id,
+      deliveryMethodId: cart.deliveryMethodId,
+      paymentSummary: {
+        last4: Number.parseInt(card.last4),
+        brand: card.brand,
+        expMonth: card.exp_month,
+        expYear: card.exp_year,
+      },
+      shippingAddress,
+    } as CreateOrderDto;
   }
 }
