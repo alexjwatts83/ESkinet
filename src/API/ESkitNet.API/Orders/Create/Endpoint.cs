@@ -92,7 +92,7 @@ public static class Endpoint
             if (deliveryMethod == null)
                 throw new BadHttpRequestException("Delivery Method not found");
 
-            var order = new Order(items) {
+            var order = new Order() {
                 Id = OrderId.Of(Guid.NewGuid()),
                 OrderDate = timeProvider.Now,
                 DeliveryMethod = deliveryMethod,
@@ -100,7 +100,8 @@ public static class Endpoint
                 SubTotal = items.Sum(x => x.Quantity * x.Price),
                 PaymentSummary = dto.PaymentSummary.Adapt<PaymentSummary>(),
                 PaymentIntentId = cart.PaymentIntentId,
-                BuyerEmail = email
+                BuyerEmail = email,
+                OrderItems = items,
             };
 
             unitOfWork.Repository<Order, OrderId>().Add(order);

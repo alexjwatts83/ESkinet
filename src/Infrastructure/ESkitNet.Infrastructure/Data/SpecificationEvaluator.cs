@@ -42,7 +42,8 @@ public static class SpecificationEvaluator<TEntity, TKey>
         if (specification.IsPagingEnabled)
             query = query.Skip(specification.Skip).Take(specification.Take);
 
-        return query;
+        //return query;
+        return specification.Includes.Aggregate(query, (current, include) => current.Include(include));
     }
 
     public static IQueryable<TResult> GetQuery<TSpec, TResult>(IQueryable<TEntity> inputQuery, ISpecification<TEntity, TResult> specification)
