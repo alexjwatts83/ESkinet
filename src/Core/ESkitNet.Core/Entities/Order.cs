@@ -8,9 +8,13 @@ public class Order : Aggregate<OrderId>
     public DeliveryMethod DeliveryMethod { get; set; } = null!;
     public PaymentSummary PaymentSummary { get; set; } = null!;
 
-    private readonly List<OrderItem> _orderItems = [];
-    public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
+    public List<OrderItem> OrderItems { get; set; } = [];
     public OrderStatus Status { get; private set; } = OrderStatus.Pending;
     public decimal SubTotal { get; set; }
     public required string PaymentIntentId { get; set; }
+
+    public decimal Total()
+    {
+        return SubTotal + DeliveryMethod.Price;
+    }
 }

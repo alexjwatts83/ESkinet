@@ -21,12 +21,6 @@ public static class SpecificationEvaluator<TEntity, TKey>
         if (specification.IsDistinct.HasValue && specification.IsDistinct.Value)
             query = query.Distinct();
 
-        //if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
-        //    query = query.OrderBy(x => x);
-
-        //if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
-        //    query = query.OrderByDescending(x => x);
-
         switch (specification.DistinctSort)
         {
             case "asc":
@@ -41,6 +35,9 @@ public static class SpecificationEvaluator<TEntity, TKey>
 
         if (specification.IsPagingEnabled)
             query = query.Skip(specification.Skip).Take(specification.Take);
+
+        query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
+        query = specification.ThenIncludeStrings.Aggregate(query, (current, include) => current.Include(include));
 
         return query;
     }
@@ -65,12 +62,6 @@ public static class SpecificationEvaluator<TEntity, TKey>
 
         if (specification.IsDistinct.HasValue && specification.IsDistinct.Value)
             selectQuery = selectQuery?.Distinct();
-
-        //if (specification.IsDistinctOrdered.HasValue && specification.IsDistinctOrdered.Value)
-        //    selectQuery = selectQuery?.OrderBy(x => x);
-
-        //if (specification.IsDistinctOrderedDesc.HasValue && specification.IsDistinctOrderedDesc.Value)
-        //    selectQuery = selectQuery?.OrderByDescending(x => x);
 
         switch (specification.DistinctSort)
         {

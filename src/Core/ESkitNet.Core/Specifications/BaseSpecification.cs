@@ -7,7 +7,7 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
     protected BaseSpecification() : this(null) { }
     public Expression<Func<T, bool>>? Criteria { get; } = criteria;
 
-    //public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
+    public List<Expression<Func<T, object>>> Includes { get; } = [];
 
     public Expression<Func<T, object>>? OrderBy { get; private set; }
 
@@ -23,10 +23,17 @@ public class BaseSpecification<T>(Expression<Func<T, bool>>? criteria) : ISpecif
 
     public bool IsPagingEnabled { get; private set; }
 
-    //protected void AddInclude(Expression<Func<T, object>> includeExpression)
-    //{
-    //    Includes.Add(includeExpression);
-    //}
+    public List<string> ThenIncludeStrings { get; } = [];
+
+    protected void AddInclude(Expression<Func<T, object>> includeExpression)
+    {
+        Includes.Add(includeExpression);
+    }
+
+    protected void AddInclude(string thenIncludes)
+    {
+        ThenIncludeStrings.Add(thenIncludes);
+    }
 
     protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
     {
