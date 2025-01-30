@@ -93,6 +93,7 @@ public static class Endpoint
                 throw new BadHttpRequestException("Delivery Method not found");
 
             var order = new Order(items) {
+                Id = OrderId.Of(Guid.NewGuid()),
                 OrderDate = timeProvider.Now,
                 DeliveryMethod = deliveryMethod,
                 ShippingAddress = dto.ShippingAddress.Adapt<ShippingAddress>(),
@@ -124,6 +125,7 @@ public static class Endpoint
                 var itemOrdered = productItem.Adapt<ProductItemOrdered>();
                 var orderItem = new OrderItem
                 {
+                    Id = OrderItemId.Of(Guid.NewGuid()),
                     ItemOrdered = itemOrdered,
                     Price = productItem.Price,
                     Quantity = item.Quantity
