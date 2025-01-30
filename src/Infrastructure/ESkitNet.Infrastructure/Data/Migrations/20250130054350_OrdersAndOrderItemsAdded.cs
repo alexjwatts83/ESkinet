@@ -25,6 +25,7 @@ namespace ESkitNet.Infrastructure.Data.Migrations
                     ShippingAddress_State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShippingAddress_PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ShippingAddress_Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeliveryMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PaymentSummary_Last4 = table.Column<int>(type: "int", nullable: false),
                     PaymentSummary_Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentSummary_ExpMonth = table.Column<int>(type: "int", nullable: false),
@@ -32,11 +33,6 @@ namespace ESkitNet.Infrastructure.Data.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValue: "Pending"),
                     SubTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryMethod_DeliveryMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DeliveryMethod_DeliveryTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryMethod_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryMethod_Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DeliveryMethod_ShortName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -45,6 +41,12 @@ namespace ESkitNet.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_DeliveryMethods_DeliveryMethodId",
+                        column: x => x.DeliveryMethodId,
+                        principalTable: "DeliveryMethods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -80,6 +82,11 @@ namespace ESkitNet.Infrastructure.Data.Migrations
                 name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_DeliveryMethodId",
+                table: "Orders",
+                column: "DeliveryMethodId");
         }
 
         /// <inheritdoc />
