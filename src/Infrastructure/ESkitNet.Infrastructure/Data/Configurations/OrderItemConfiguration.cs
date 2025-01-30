@@ -10,23 +10,25 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 
         builder.Property(oi => oi.Id).HasConversion(orderItemId => orderItemId.Value, dbId => OrderItemId.Of(dbId));
 
-        builder.ComplexProperty(
-            o => o.ItemOrdered, nameBuilder =>
-            {
-                nameBuilder.Property(n => n.ProductId)
-                    .IsRequired();
 
-                nameBuilder.Property(n => n.ProductName)
-                    .IsRequired();
+        builder.OwnsOne(x => x.ItemOrdered, o => o.WithOwner());
+        //builder.ComplexProperty(
+        //    o => o.ItemOrdered, nameBuilder =>
+        //    {
+        //        nameBuilder.Property(n => n.ProductId)
+        //            .IsRequired();
 
-                nameBuilder.Property(n => n.PictureUrl)
-                    .IsRequired();
+        //        nameBuilder.Property(n => n.ProductName)
+        //            .IsRequired();
 
-                nameBuilder.Property(n => n.Type)
-                    .IsRequired();
-                nameBuilder.Property(n => n.Brand)
-                    .IsRequired();
-            });
+        //        nameBuilder.Property(n => n.PictureUrl)
+        //            .IsRequired();
+
+        //        nameBuilder.Property(n => n.Type)
+        //            .IsRequired();
+        //        nameBuilder.Property(n => n.Brand)
+        //            .IsRequired();
+        //    });
 
         builder.Property(oi => oi.Quantity).IsRequired();
 
