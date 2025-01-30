@@ -24,6 +24,7 @@ import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery
 import { firstValueFrom } from 'rxjs';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { AccountsService } from '../../core/services/accounts.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -37,6 +38,7 @@ import { AccountsService } from '../../core/services/accounts.service';
     CheckoutDeliveryComponent,
     CheckoutReviewComponent,
     CurrencyPipe,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
@@ -63,6 +65,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     delivery: false,
   });
   confirmationToken?: ConfirmationToken;
+  loading = false;
 
   async ngOnInit() {
     try {
@@ -151,6 +154,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       if (this.confirmationToken) {
         let outputColor = 'color:red; font-size:20px;';
         console.info('%c stripeService.confirmPayment start', outputColor);
+        this.loading = true;
         await this.stripeService
           .confirmPayment(this.confirmationToken)
           .then((response) => {
@@ -171,19 +175,22 @@ export class CheckoutComponent implements OnInit, OnDestroy {
               }
             }
             this.router.navigateByUrl('/checkout/success');
-          })
-          .catch((error) => {
-            // Handle error
-            console.info('%c stripeService.confirmPayment Error', outputColor);
-            console.log({ confirmPaymentError: error });
-            throw new Error(error.error.message);
           });
+          // .catch((error) => {
+          //   // Handle error
+          //   console.info('%c stripeService.confirmPayment Error', outputColor);
+          //   console.log({ confirmPaymentError: error });
+          //   throw new Error(error.message);
+          // });
       }
     } catch (error: any) {
-      this.snack.success(
+      console.log({error});
+      this.snack.error(
         error.message || 'Something went wrong during payment'
       );
       stepper.previous();
+    } finally {
+      this.loading = false;
     }
   }
 
