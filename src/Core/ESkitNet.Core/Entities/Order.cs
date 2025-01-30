@@ -2,10 +2,10 @@
 
 public class Order : Aggregate<OrderId>
 {
-    public DateTime OrderDate { get; set; }
+    public DateTime OrderDate { get; set; } = DateTime.UtcNow;
     public required string BuyerEmail { get; set; }
     public ShippingAddress ShippingAddress { get; set; } = null!;
-    public DeliveryMethod DeliveryMethod { get; set; } = null!;
+    public OrderDeliveryMethod DeliveryMethod { get; set; } = null!;
     public PaymentSummary PaymentSummary { get; set; } = null!;
 
     private readonly List<OrderItem> _orderItems = [];
