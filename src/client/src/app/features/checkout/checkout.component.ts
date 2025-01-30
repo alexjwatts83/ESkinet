@@ -157,6 +157,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
             console.info('%c stripeService.confirmPayment then', outputColor);
             // Handle successful result
             console.log({ confirmPaymentThen: response });
+
+            if (response.error) {
+              throw new Error(response.error.message);
+            }
+
             this.cartService.deleteCart();
             this.cartService.selectedDelivery.set(null);
             if (this.saveAddress) {
