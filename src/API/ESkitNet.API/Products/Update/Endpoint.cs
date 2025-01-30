@@ -6,12 +6,12 @@ public static class Endpoint
 
     public record Result(bool IsSuccess);
 
-    public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
+    public class Handler(IUnitOfWork unitOfWork) : ICommandHandler<Command, Result>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
             var productId = ProductId.Of(command.Product.Id);
-            var product = await repo.GetByIdAsync(productId, cancellationToken);
+            var product = await unitOfWork.Repository<Product, ProductId>().GetByIdAsync(productId, cancellationToken);
 
             if (product is null)
                 throw new ProductNotFoundException(command.Product.Id);
@@ -25,9 +25,9 @@ public static class Endpoint
             product.Brand = command.Product.Brand;
             product.QuantityInStock = command.Product.QuantityInStock;
 
-            repo.Update(product);
+            unitOfWork.Repository<Product, ProductId>().Update(product);
 
-            var result = await repo.SaveAllAsync(cancellationToken);
+            var result = await unitOfWork.Complete(cancellationToken);
 
             return new Result(result);
         }

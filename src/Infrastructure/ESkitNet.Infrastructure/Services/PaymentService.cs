@@ -9,8 +9,7 @@ namespace ESkitNet.Infrastructure.Services;
 public class PaymentService(
     IConfiguration config,
     IShoppingCartService cartService,
-    IGenericRepository<Product, ProductId> productRepo,
-    IGenericRepository<DeliveryMethod, DeliveryMethodId> deliveryRepo,
+    IUnitOfWork unitOfWork,
     ILogger<PaymentService> logger)
     : IPaymentService
 {
@@ -35,7 +34,7 @@ public class PaymentService(
             logger.LogDebug("Delivery Method for cart is not null {DeliveryMethodId}", cart.DeliveryMethodId);
 
             var deliveryMethodId = DeliveryMethodId.Of(cart.DeliveryMethodId.Value);
-            var deliveryMethod = await deliveryRepo.GetByIdAsync(deliveryMethodId, cancellationToken);
+            var deliveryMethod = await unitOfWork.Repository<DeliveryMethod, DeliveryMethodId>().GetByIdAsync(deliveryMethodId, cancellationToken);
 
             if (deliveryMethod == null)
             {
@@ -50,7 +49,7 @@ public class PaymentService(
         foreach (var item in cart.Items)
         {
             var productId = ProductId.Of(new Guid(item.ProductId));
-            var productItem = await productRepo.GetByIdAsync(productId, cancellationToken);
+            var productItem = await unitOfWork.Repository<Product, ProductId>().GetByIdAsync(productId, cancellationToken);
             if (productItem == null)
             {
                 logger.LogDebug("No Product found for {ProductId} ({ProductName}), returning null", productId.Value, item.ProductName);

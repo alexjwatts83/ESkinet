@@ -6,12 +6,12 @@ public static class Endpoint
     public record Query(Guid Id) : IQuery<Result>;
     public record Result(ProductDto Product);
 
-    public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandler<Query, Result>
+    public class Handler(IUnitOfWork unitOfWork) : IQueryHandler<Query, Result>
     {
         public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
         {
             var productId = ProductId.Of(query.Id);
-            var product = await repo.GetByIdAsync(productId, cancellationToken);
+            var product = await unitOfWork.Repository<Product, ProductId>().GetByIdAsync(productId, cancellationToken);
 
             if (product is null)
                 throw new ProductNotFoundException(query.Id);

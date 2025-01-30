@@ -16,7 +16,7 @@ public static class Endpoint
     public record Command(string CartId) : ICommand<Result>;
     public record Result(ShoppingCart Cart);
 
-    public class Handler(IPaymentService paymentService, IGenericRepository<DeliveryMethod, DeliveryMethodId> repo) 
+    public class Handler(IPaymentService paymentService) 
         : ICommandHandler<Command, Result>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)

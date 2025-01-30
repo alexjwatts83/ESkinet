@@ -46,11 +46,6 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext) : IGener
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<bool> SaveAllAsync(CancellationToken cancellationToken)
-    {
-        return await dbContext.SaveChangesAsync(cancellationToken) > 0;
-    }
-
     public void Update(TEntity entity)
     {
         dbContext.Set<TEntity>().Update(entity);

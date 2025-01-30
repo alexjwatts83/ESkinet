@@ -8,7 +8,7 @@ public static class Endpoint
 
     public record Result(PaginatedResult<ProductDto> Products);
 
-    public class Handler(IGenericRepository<Product, ProductId> repo) : IQueryHandler<Query, Result>
+    public class Handler(IUnitOfWork unitOfWork) : IQueryHandler<Query, Result>
     {
         public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
         {
@@ -23,8 +23,8 @@ public static class Endpoint
                 query.PaginationRequest.PageSize
             );
             var spec = new ProductSpecification(specParams);
-            var products = await repo.GetAllWithSpecAsync(spec, cancellationToken);
-            var count = await repo.CountAsync(spec, cancellationToken);
+            var products = await unitOfWork.Repository<Product, ProductId>().GetAllWithSpecAsync(spec, cancellationToken);
+            var count = await unitOfWork.Repository<Product, ProductId>().CountAsync(spec, cancellationToken);
             var productDtos = products
                 .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
             var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);

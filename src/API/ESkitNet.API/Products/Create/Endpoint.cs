@@ -41,7 +41,7 @@ public static class Endpoint
         }
     }
 
-    public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
+    public class Handler(IUnitOfWork unitOfWork) : ICommandHandler<Command, Result>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
@@ -58,9 +58,9 @@ public static class Endpoint
                 QuantityInStock = command.Product.QuantityInStock,
             };
 
-            repo.Add(product);
+            unitOfWork.Repository<Product, ProductId>().Add(product);
 
-            await repo.SaveAllAsync(cancellationToken);
+            await unitOfWork.Complete(cancellationToken);
 
             return new Result(product.Id.Value);
         }

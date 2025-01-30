@@ -7,18 +7,18 @@ public static class Endpoint
 
     public record Result(bool IsSuccess);
 
-    public class Handler(IGenericRepository<Product, ProductId> repo) : ICommandHandler<Command, Result>
+    public class Handler(IUnitOfWork unitOfWork) : ICommandHandler<Command, Result>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
         {
-            var product = await repo.GetByIdAsync(ProductId.Of(command.ProductId), cancellationToken);
+            var product = await unitOfWork.Repository<Product, ProductId>().GetByIdAsync(ProductId.Of(command.ProductId), cancellationToken);
 
             if (product is null)
                 throw new ProductNotFoundException(command.ProductId);
 
-            repo.Delete(product);
+            unitOfWork.Repository<Product, ProductId>().Delete(product);
 
-            var result = await repo.SaveAllAsync(cancellationToken);
+            var result = await unitOfWork.Complete(cancellationToken);
 
             return new Result(result);
         }
