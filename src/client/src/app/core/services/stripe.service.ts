@@ -168,7 +168,7 @@ export class StripeService {
         clientSecret: clientSecret,
         confirmParams: {
           confirmation_token: confirmationToken.id,
-          return_url: 'https://localhost:4200/',
+          return_url: '/',
         },
         redirect: 'if_required',
       });

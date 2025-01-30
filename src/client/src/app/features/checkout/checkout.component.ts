@@ -150,23 +150,29 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     try {
       if (this.confirmationToken) {
         let outputColor = 'color:red; font-size:20px;';
-        console.info('%c stripeService.confirmPayment start',outputColor);
-        const result = await this.stripeService.confirmPayment(
-          this.confirmationToken
-        );
-        console.info('%c stripeService.confirmPayment end',outputColor);
-        if (result.error) {
-          throw new Error(result.error.message);
-        }
-        this.cartService.deleteCart();
-        this.cartService.selectedDelivery.set(null);
-        if (this.saveAddress) {
-          const address = this.shippingAddress();
-          if (address) {
-            this.accountsService.addOrUpdateAddress(address).subscribe();
-          }
-        }
-        this.router.navigateByUrl('/checkout/success');
+        console.info('%c stripeService.confirmPayment start', outputColor);
+        await this.stripeService
+          .confirmPayment(this.confirmationToken)
+          .then((response) => {
+            console.info('%c stripeService.confirmPayment then', outputColor);
+            // Handle successful result
+            console.log({ confirmPaymentThen: response });
+            this.cartService.deleteCart();
+            this.cartService.selectedDelivery.set(null);
+            if (this.saveAddress) {
+              const address = this.shippingAddress();
+              if (address) {
+                this.accountsService.addOrUpdateAddress(address).subscribe();
+              }
+            }
+            this.router.navigateByUrl('/checkout/success');
+          })
+          .catch((error) => {
+            // Handle error
+            console.info('%c stripeService.confirmPayment Error', outputColor);
+            console.log({ confirmPaymentError: error });
+            throw new Error(error.error.message);
+          });
       }
     } catch (error: any) {
       this.snack.success(
