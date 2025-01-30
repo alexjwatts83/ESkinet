@@ -1,6 +1,5 @@
 ﻿using ESkitNet.API.Orders.Dtos;
 using ESkitNet.API.Payments.Dtos;
-using Mapster;
 using System.Reflection;
 
 namespace ESkitNet.API.Extensions;
@@ -26,12 +25,9 @@ public static class MapsterConfig
         TypeAdapterConfig<Order, DisplayOrderDto>
             .NewConfig()
             .Map(dest => dest.Id, src => src.Id.Value)
+            .Map(dest => dest.DeliveryMethod, src => src.DeliveryMethod.Description)
+            .Map(dest => dest.Status, src => src.Status.ToString())
             .Map(dest => dest.Total, src => src.Total());
-            //.Map(dest => dest.DeliveryMethod, src => new DeliveryMethodDto(
-            //    src.DeliveryMethod.Id.Value, src.DeliveryMethod.ShortName,
-            //    src.DeliveryMethod.DeliveryTime, src.DeliveryMethod.Description,
-            //    src.DeliveryMethod.Price));
-            //.Map(dest => dest.OrderId, src => src.OrderId.Value);
 
         TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
     }

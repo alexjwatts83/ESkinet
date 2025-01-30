@@ -3,7 +3,7 @@ using ESkitNet.Core.Extensions;
 using ESkitNet.Core.Services;
 using FluentValidation;
 
-namespace ESkitNet.API.Orders.Create;
+namespace ESkitNet.API.Orders.CreateOrUpdate;
 
 public static class Endpoint
 {

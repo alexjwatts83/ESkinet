@@ -10,12 +10,12 @@ public class OrdersModule : ICarterModule
             .RequireCors("CorsPolicy");
 
         group.MapGet("/", GetForUser.Endpoint.Handle)
-            .WithName("GetForUser");
+            .WithName("GetOrdersForUser");
 
-        group.MapPost("/", Create.Endpoint.Handle)
-            .WithName("CreateOrder");
+        group.MapPost("/", CreateOrUpdate.Endpoint.Handle)
+            .WithName("CreateOrUpdateOrder");
 
         group.MapGet("/{id}", GetForUserById.Endpoint.Handle)
-            .WithName("GetForUserById");
+            .WithName("GetOrderForUserById");
     }
 }
