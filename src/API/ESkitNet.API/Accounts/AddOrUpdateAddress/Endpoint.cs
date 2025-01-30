@@ -9,7 +9,7 @@ namespace ESkitNet.API.Accounts.AddOrUpdateAddress;
 public static class Endpoint
 {
     public record Request(AddressDto AddressDto);
-    public record Response(bool Succeeded, AddressDto? AddressDto);
+    public record Response(AddressDto? AddressDto);
 
     public static async Task<IResult> Handle(Request request, ISender sender)
     {
@@ -19,11 +19,11 @@ public static class Endpoint
 
         var response = result.Adapt<Response>();
 
-        return Results.Ok(response);
+        return Results.Ok(response.AddressDto);
     }
 
     public record Command(AddressDto AddressDto) : ICommand<Result>;
-    public record Result(bool Succeeded, AddressDto? AddressDto);
+    public record Result(AddressDto? AddressDto);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -56,12 +56,11 @@ public static class Endpoint
             var result = await signInManager.UserManager.UpdateAsync(user);
 
             if (!result.Succeeded)
-            {
-                return new Result(false, null);
-            }
+                throw new BadHttpRequestException("There was a problem updating your address", StatusCodes.Status400BadRequest);
 
             var dto = user.Address.Adapt<AddressDto>();
-            return new Result(true, dto);
+
+            return new Result(dto);
         }
     }
 }

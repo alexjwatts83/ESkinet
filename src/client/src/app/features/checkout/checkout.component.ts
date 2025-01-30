@@ -1,8 +1,8 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { OrderSummaryComponent } from '../../shared/components/order-summary/order-summary.component';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatButton } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { StripeService } from '../../core/services/stripe.service';
 import {
   ConfirmationToken,
@@ -23,6 +23,7 @@ import { Address } from '../../shared/models/user';
 import { CheckoutDeliveryComponent } from './checkout-delivery/checkout-delivery.component';
 import { firstValueFrom } from 'rxjs';
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
+import { AccountsService } from '../../core/services/accounts.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -43,6 +44,8 @@ import { CheckoutReviewComponent } from './checkout-review/checkout-review.compo
 export class CheckoutComponent implements OnInit, OnDestroy {
   private stripeService = inject(StripeService);
   private snack = inject(SnackbarService);
+  private router = inject(Router);
+  private accountsService = inject(AccountsService);
 
   cartService = inject(CartService);
   addressElement?: StripeAddressElement;
@@ -94,7 +97,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       const allCompleted = Object.values(this.completionStatus()).every(
         (status) => status === true
       );
-      console.log({allCompleted});
+      console.log({ allCompleted });
       if (allCompleted) {
         const result = await this.stripeService.createConfirmationToken();
         if (result.error) throw new Error(result.error.message);
@@ -124,10 +127,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   async onStepChanged($event: StepperSelectionEvent) {
     const selectedIndex = $event.selectedIndex;
     if (selectedIndex === 1) {
-      if (this.saveAddress) {
-        const address = await this.getAddressFromStripeAddress();
-        this.shippingAddress.set(address);
-      }
+      const address = await this.getAddressFromStripeAddress();
+      this.shippingAddress.set(address);
     }
     if (selectedIndex === 2) {
       if (this.cartService.selectedDelivery()) {
@@ -136,6 +137,42 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     }
     if (selectedIndex === 3) {
       await this.getConfirmationToken();
+    }
+  }
+
+  async confirmPayment(stepper: MatStepper) {
+    // if (this.saveAddress) {
+    //   const address = this.shippingAddress();
+    //   if (address) {
+    //     this.accountsService.addOrUpdateAddress(address).subscribe();
+    //   }
+    // }
+    try {
+      if (this.confirmationToken) {
+        let outputColor = 'color:red; font-size:20px;';
+        console.info('%c stripeService.confirmPayment start',outputColor);
+        const result = await this.stripeService.confirmPayment(
+          this.confirmationToken
+        );
+        console.info('%c stripeService.confirmPayment end',outputColor);
+        if (result.error) {
+          throw new Error(result.error.message);
+        }
+        this.cartService.deleteCart();
+        this.cartService.selectedDelivery.set(null);
+        if (this.saveAddress) {
+          const address = this.shippingAddress();
+          if (address) {
+            this.accountsService.addOrUpdateAddress(address).subscribe();
+          }
+        }
+        this.router.navigateByUrl('/checkout/success');
+      }
+    } catch (error: any) {
+      this.snack.success(
+        error.message || 'Something went wrong during payment'
+      );
+      stepper.previous();
     }
   }
 
@@ -152,7 +189,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         postalCode: address.postal_code,
       };
     }
-
     return null;
   }
 }

@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import {
+  ConfirmationToken,
   loadStripe,
   Stripe,
   StripeAddressElement,
@@ -39,7 +40,11 @@ export class StripeService {
     if (!this.elements) {
       const stripe = await this.getStripeInstance();
       if (stripe) {
+        let outputColor = 'color:blue; font-size:20px;';
+        console.log('%c creatOrUpdatePaymentIntent start', outputColor);
         const cart = await firstValueFrom(this.creatOrUpdatePaymentIntent());
+        console.log('%c creatOrUpdatePaymentIntent end', outputColor);
+        console.log({ initialiseElements: cart });
         this.elements = stripe.elements({
           clientSecret: cart.clientSecret,
           appearance: { labels: 'floating' },
@@ -84,7 +89,7 @@ export class StripeService {
                 }
               : undefined,
         };
-        console.log({ defaultValues });
+        // console.log({ defaultValues });
         const options: StripeAddressElementOptions = {
           mode: 'shipping',
           defaultValues,
@@ -99,6 +104,7 @@ export class StripeService {
 
   creatOrUpdatePaymentIntent() {
     const cart = this.cartService.cart();
+    console.log({ creatOrUpdatePaymentIntent: cart });
     if (cart == null) throw new Error('Problem retrieving cart');
 
     return this.httpClient
@@ -109,9 +115,24 @@ export class StripeService {
       )
       .pipe(
         tap((data) => {
-          console.log({ afterPaymentIntent: data });
-          console.log({ items: data.items });
-          this.cartService.setCart(cart);
+          console.log({ creatOrUpdatePaymentIntentTap: data });
+          // console.log({ items: data.items });
+
+          if (!data.clientSecret)
+            console.warn(
+              'Cart Payment Intent was updated but had no client secret'
+            );
+
+          if (!data.deliveryMethodId)
+            console.warn(
+              'Cart Payment Intent was updated but had no deliveryMethodId'
+            );
+          let outputColor = 'color:blue; font-size:20px;';
+          console.log(
+            '%c creatOrUpdatePaymentIntent response returned and calling set cart',
+            outputColor
+          );
+          this.cartService.setCart(data);
         })
       );
   }
@@ -126,6 +147,37 @@ export class StripeService {
     if (result.error) throw new Error(result.error.message);
 
     return await stripe.createConfirmationToken({ elements });
+  }
+
+  async confirmPayment(confirmationToken: ConfirmationToken) {
+    const stripe = await this.getStripeInstance();
+
+    if (!stripe) throw new Error('Stripe has not been loaded');
+
+    const elements = await this.initialiseElements();
+    const result = await elements.submit();
+
+    if (result.error) throw new Error(result.error.message);
+
+    const clientSecret = this.cartService.cart()?.clientSecret;
+    if (clientSecret) {
+      let outputColor = 'color:blue; font-size:20px;';
+      console.info('%c confirmPayment start',outputColor);
+      const paymentResult = await stripe.confirmPayment({
+        // elements: elements,
+        clientSecret: clientSecret,
+        confirmParams: {
+          confirmation_token: confirmationToken.id,
+          return_url: 'https://localhost:4200/',
+        },
+        redirect: 'if_required',
+      });
+      console.log({ PaymentIntentResult: paymentResult });
+      console.info('%c confirmPayment end',outputColor);
+      return paymentResult;
+    }
+
+    throw new Error('Cart was missing client secret');
   }
 
   disposeElements() {

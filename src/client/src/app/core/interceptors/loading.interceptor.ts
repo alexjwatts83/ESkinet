@@ -6,7 +6,7 @@ import { BusyService } from '../services/busy.service';
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const busyService = inject(BusyService);
 
-  console.log({req});
+  // console.log({req});
 
   busyService.busy();
 

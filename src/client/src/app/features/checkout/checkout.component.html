@@ -22,12 +22,6 @@
           </button>
           <button mat-flat-button matStepperNext class="z-0" [disabled]="!completionStatus().address">Next</button>
         </div>
-        <div class="w-full">
-          <pre
-            >{{ cartService.cart() | json }}
-</pre
-          >
-        </div>
       </mat-step>
       <mat-step label="Shipping" [completed]="completionStatus().delivery">
         <app-checkout-delivery
@@ -49,12 +43,15 @@
         <app-checkout-review [confirmationToken]="confirmationToken"></app-checkout-review>
         <div class="flex justify-between mt-6">
           <button mat-flat-button matStepperPrevious>Back</button>
-          <button mat-flat-button>
+          <button mat-flat-button (click)="confirmPayment(stepper)">
             Pay {{ cartService.totals()?.total ?? 0 | currency }}
           </button>
         </div>
       </mat-step>
     </mat-stepper>
+    <div class="w-full">
+<pre>{{ cartService.cart() | json }}</pre>
+    </div>
   </div>
   <div class="w-1/4">
     <app-order-summary [showCheckoutButtons]="false"></app-order-summary>

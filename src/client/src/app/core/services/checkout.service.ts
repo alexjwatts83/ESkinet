@@ -15,11 +15,12 @@ export class CheckoutService {
   getDeliveryMethods() {
     if (this.deliveryMethods.length) return of(this.deliveryMethods);
 
-    return this.httpClient.get<DeliveryMethod[]>(`${this.baseUrl}/payments/delivery-methods`).pipe(
-      tap((deliveryMethods) => {
-        console.log({ tap: deliveryMethods });
-        this.deliveryMethods = deliveryMethods;
-      })
-    );
+    return this.httpClient
+      .get<DeliveryMethod[]>(`${this.baseUrl}/payments/delivery-methods`)
+      .pipe(
+        tap((deliveryMethods) => {
+          this.deliveryMethods = deliveryMethods;
+        })
+      );
   }
 }

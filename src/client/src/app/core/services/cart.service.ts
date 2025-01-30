@@ -22,7 +22,6 @@ export class CartService {
     if (!cart) return null;
     const items = cart.items;
     const delivery = this.selectedDelivery();
-    console.log({items});
     const subTotal = cart.items.reduce(
       (sum, item) => sum + item.quantity * item.price,
       0
@@ -42,21 +41,23 @@ export class CartService {
   getCart(id: string) {
     return this.httpClient.get<Cart>(`${this.baseUrl}/cart/${id}`).pipe(
       tap((cart) => {
-        console.log({ tap: cart });
+        console.log({ getCart: cart });
         this.cart.set(cart);
       })
     );
   }
 
   setCart(cart: Cart) {
+    console.log({ setCart: cart });
     return this.httpClient
       .post<Cart>(`${this.baseUrl}/cart/`, { cart })
       .subscribe({
         next: (response: { id: string }) => {
-          console.log({ cartFromApi: response.id });
+          console.log({ setCartResponse: response.id });
           // this.cart.set(cart);
           // TODO this is really bad fix this later
-          this.getCart(response.id).subscribe();
+          // this.getCart(response.id).subscribe();
+          this.cart.set(cart);
         },
       });
   }

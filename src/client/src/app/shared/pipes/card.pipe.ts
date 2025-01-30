@@ -14,6 +14,6 @@ export class CardPipe implements PipeTransform {
       const { brand, last4, exp_month, exp_year } = value.card;
       return `${brand.toUpperCase()} **** **** **** ${last4}, Exp: ${exp_month}/${exp_year}`;
     }
-    return 'Unknown Address';
+    return 'Unknown Card';
   }
 }

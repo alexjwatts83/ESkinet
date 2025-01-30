@@ -55,16 +55,37 @@ export class AccountsService {
   }
 
   addOrUpdateAddress(addressDto: Address) {
-    return this.httpClient.post<Address>(`${this.baseUrl}/accounts/address`, {
-      addressDto,
-    });
+    return this.httpClient
+      .post<Address>(
+        `${this.baseUrl}/accounts/address`,
+        {
+          addressDto,
+        },
+        {
+          withCredentials: true,
+        }
+      )
+      .pipe(
+        tap((addressDto) => {
+          console.log({ addressDto });
+          this.currentUser.update((state) => {
+            if (state) {
+              state.address = addressDto;
+            }
+            return state;
+          });
+        })
+      );
   }
 
   getAuthState() {
     return this.httpClient
-      .get<{ isAuthenticated : boolean }>(`${this.baseUrl}/accounts/auth-status`, {
-        withCredentials: true,
-      })
+      .get<{ isAuthenticated: boolean }>(
+        `${this.baseUrl}/accounts/auth-status`,
+        {
+          withCredentials: true,
+        }
+      )
       .pipe(
         tap((data) => {
           console.log({ getAuthState: data });

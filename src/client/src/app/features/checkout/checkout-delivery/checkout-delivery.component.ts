@@ -18,10 +18,10 @@ export class CheckoutDeliveryComponent {
   deliveryComplete = output<boolean>();
 
   deliveryMethods$ = this.checkoutService.getDeliveryMethods().pipe(
-    tap(methods => {
+    tap((methods) => {
       const deliveryMethodId = this.cartService.cart()?.deliveryMethodId;
       if (deliveryMethodId != null) {
-        const method = methods.find(x => x.id == deliveryMethodId);
+        const method = methods.find((x) => x.id == deliveryMethodId);
         if (method) {
           this.cartService.selectedDelivery.set(method);
           this.deliveryComplete.emit(true);
@@ -35,6 +35,7 @@ export class CheckoutDeliveryComponent {
     const cart = this.cartService.cart();
     if (cart) {
       cart.deliveryMethodId = method.id;
+      console.log({ updatDeliveryMethod: cart });
       this.cartService.setCart(cart);
       this.deliveryComplete.emit(true);
     }
