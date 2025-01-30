@@ -66,7 +66,7 @@ namespace ESkitNet.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("ESkitNet.Core.Entities.DeliveryMethod", b =>
@@ -105,7 +105,7 @@ namespace ESkitNet.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryMethods");
+                    b.ToTable("DeliveryMethods", (string)null);
                 });
 
             modelBuilder.Entity("ESkitNet.Core.Entities.Product", b =>
@@ -157,7 +157,7 @@ namespace ESkitNet.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ESkitNet.Identity.Entities.AppUser", b =>
