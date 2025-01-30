@@ -1,4 +1,5 @@
-﻿using ESkitNet.Core.Extensions;
+﻿using ESkitNet.API.Orders.Dtos;
+using ESkitNet.Core.Extensions;
 using ESkitNet.Core.Specifications;
 
 namespace ESkitNet.API.Orders.GetForUserById;
@@ -7,8 +8,8 @@ public static class Endpoint
 {
     public record Query(Guid Id) : IQuery<Result>;
 
-    public record Result(Order Order);
-    public record Response(Order Order);
+    public record Result(DisplayOrderDto Order);
+    public record Response(DisplayOrderDto Order);
 
     public static async Task<IResult> Handle(Guid id, ISender sender)
     {
@@ -35,7 +36,7 @@ public static class Endpoint
             if (order == null)
                 throw new OrderNotFoundException(query.Id);
 
-            return new Result(order);
+            return new Result(order.Adapt<DisplayOrderDto>());
         }
     }
 }

@@ -16,12 +16,12 @@ public record DisplayOrderDto
     DateTime OrderDate,
     string BuyerEmail,
     DeliveryMethodDto DeliveryMethod,
-    //ShippingAddressDto ShippingAddress,
-    //PaymentSummaryDto PaymentSummary,
+    ShippingAddressDto ShippingAddress,
+    PaymentSummaryDto PaymentSummary,
     OrderStatus Status,
     decimal SubTotal,
-    string PaymentIntentId//,
-    //List<DisplayOrderItemDto> OrderItems
+    string PaymentIntentId,
+    List<DisplayOrderItemDto> OrderItems
 );
 
 public record PaymentSummaryDto
