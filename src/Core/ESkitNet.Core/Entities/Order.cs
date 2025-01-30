@@ -2,6 +2,16 @@
 
 public class Order : Aggregate<OrderId>
 {
+    public Order()
+    {
+        
+    }
+
+    public Order(List<OrderItem> items)
+    {
+        _orderItems = items;
+    }
+
     public DateTime OrderDate { get; set; } = DateTime.UtcNow;
     public required string BuyerEmail { get; set; }
     public ShippingAddress ShippingAddress { get; set; } = null!;

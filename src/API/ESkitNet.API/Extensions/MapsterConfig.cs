@@ -11,6 +11,11 @@ public static class MapsterConfig
             .NewConfig()
             .Map(dest => dest.Id, src => src.Id.Value);
 
+        TypeAdapterConfig<Product, ProductItemOrdered>
+            .NewConfig()
+            .Map(dest => dest.ProductId, src => src.Id.Value)
+            .Map(dest => dest.ProductName, src => src.Name);
+
         TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
     }
 }
