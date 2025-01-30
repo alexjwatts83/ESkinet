@@ -21,7 +21,8 @@ public record DisplayOrderDto
     OrderStatus Status,
     decimal SubTotal,
     string PaymentIntentId,
-    List<DisplayOrderItemDto> OrderItems
+    List<DisplayOrderItemDto> OrderItems,
+    decimal Total
 );
 
 public record PaymentSummaryDto

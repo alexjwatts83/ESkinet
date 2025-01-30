@@ -25,7 +25,8 @@ public static class MapsterConfig
 
         TypeAdapterConfig<Order, DisplayOrderDto>
             .NewConfig()
-            .Map(dest => dest.Id, src => src.Id.Value);
+            .Map(dest => dest.Id, src => src.Id.Value)
+            .Map(dest => dest.Total, src => src.Total());
             //.Map(dest => dest.DeliveryMethod, src => new DeliveryMethodDto(
             //    src.DeliveryMethod.Id.Value, src.DeliveryMethod.ShortName,
             //    src.DeliveryMethod.DeliveryTime, src.DeliveryMethod.Description,

@@ -12,4 +12,9 @@ public class Order : Aggregate<OrderId>
     public OrderStatus Status { get; private set; } = OrderStatus.Pending;
     public decimal SubTotal { get; set; }
     public required string PaymentIntentId { get; set; }
+
+    public decimal Total()
+    {
+        return SubTotal + DeliveryMethod.Price;
+    }
 }
