@@ -9,13 +9,13 @@ public class OrdersModule : ICarterModule
             .WithTags("Order Module")
             .RequireCors("CorsPolicy");
 
-        //group.MapGet("/{id}", GetById.Endpoint.Handle)
-        //    .WithName("GetOrder");
+        group.MapGet("/", GetForUser.Endpoint.Handle)
+            .WithName("GetForUser");
 
         group.MapPost("/", Create.Endpoint.Handle)
             .WithName("CreateOrder");
 
-        //group.MapDelete("/{id}", Delete.Endpoint.Handle)
-        //    .WithName("DeleteOrder");
+        group.MapGet("/{id}", GetForUserById.Endpoint.Handle)
+            .WithName("GetForUserById");
     }
 }

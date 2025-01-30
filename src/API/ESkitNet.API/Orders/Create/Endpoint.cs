@@ -7,8 +7,8 @@ namespace ESkitNet.API.Orders.Create;
 
 public static class Endpoint
 {
-    public record Request(OrderDto OrderDto);
-    public record Response(Order Order);
+    public record Request(CreateOrderDto OrderDto);
+    public record Response(DisplayOrderDto Order);
 
     public static async Task<IResult> Handle(Request request, ISender sender)
     {
@@ -25,8 +25,8 @@ public static class Endpoint
         return Results.Ok(response.Order);
     }
 
-    public record Command(OrderDto OrderDto) : ICommand<Result>;
-    public record Result(Order Order);
+    public record Command(CreateOrderDto OrderDto) : ICommand<Result>;
+    public record Result(DisplayOrderDto Order);
 
     protected class AddressValidator : AbstractValidator<ShippingAddressDto>
     {
@@ -110,7 +110,7 @@ public static class Endpoint
             if (!completed)
                 throw new BadHttpRequestException("Problem creating Order");
 
-            return new Result(order);
+            return new Result(order.Adapt<DisplayOrderDto>());
         }
 
         private async Task<List<OrderItem>> MapCartItemsToOrderItems(List<ShoppingCartItem> cartItems, CancellationToken cancellationToken)
