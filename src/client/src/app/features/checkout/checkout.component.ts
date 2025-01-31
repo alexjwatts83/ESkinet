@@ -152,47 +152,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   async confirmPayment(stepper: MatStepper) {
     try {
-      if (this.confirmationToken) {
-        let outputColor = 'color:red; font-size:20px;';
-        console.info('%c stripeService.confirmPayment start', outputColor);
-        this.loading = true;
-        await this.stripeService
-          .confirmPayment(this.confirmationToken)
-          .then(async (response) => {
-            console.info('%c stripeService.confirmPayment then', outputColor);
-            // Handle successful result
-            console.log({ confirmPaymentThen: response });
-
-            // stripe error
-            if (response.error) {
-              throw new Error(response.error.message);
-            }
-
-            // I honestly dont know if this check is necessary
-            if (response.paymentIntent?.status === 'succeeded') {
-              const order = await this.createOrderModel();
-              const orderResult$ = this.orderService.creatOrUpdate(order);
-              const orderResult = await firstValueFrom(orderResult$);
-              console.log({ orderResult });
-              if (orderResult) {
-                this.cartService.deleteCart();
-                this.cartService.selectedDelivery.set(null);
-                if (this.saveAddress) {
-                  const address = this.shippingAddress();
-                  if (address) {
-                    this.accountsService
-                      .addOrUpdateAddress(address)
-                      .subscribe();
-                  }
-                }
-                this.router.navigateByUrl('/checkout/success');
-                return;
-              }
-            }
-
-            throw new Error('Payment was not successful');
-          });
+      if (!this.confirmationToken) {
+        throw new Error('Payment could not be made');
       }
+      await this.processConfirmPayment(this.confirmationToken);
     } catch (error: any) {
       console.log({ error });
       this.snack.error(error.message || 'Something went wrong during payment');
@@ -200,6 +163,47 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     } finally {
       this.loading = false;
     }
+  }
+
+  private async processConfirmPayment(confirmationToken: ConfirmationToken) {
+    let outputColor = 'color:red; font-size:20px;';
+    console.info('%c stripeService.confirmPayment start', outputColor);
+    this.loading = true;
+    var response = await this.stripeService.confirmPayment(confirmationToken);
+    console.info('%c stripeService.confirmPayment then', outputColor);
+    // Handle successful result
+    console.log({ confirmPaymentThen: response });
+
+    // stripe error
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    // I honestly dont know if this check is necessary
+    if (response.paymentIntent?.status !== 'succeeded') {
+      throw new Error(
+        'Payment was not successful but was ' + response.paymentIntent?.status
+      );
+    }
+
+    const order = await this.createOrderModel();
+    const orderResult$ = this.orderService.creatOrUpdate(order);
+    const orderResult = await firstValueFrom(orderResult$);
+    console.log({ orderResult });
+    if (!orderResult) {
+      this.snack.error(
+        'Payment was successful but there was an internal error'
+      );
+    }
+    this.cartService.deleteCart();
+    this.cartService.selectedDelivery.set(null);
+    if (this.saveAddress) {
+      const address = this.shippingAddress();
+      if (address) {
+        this.accountsService.addOrUpdateAddress(address).subscribe();
+      }
+    }
+    this.router.navigateByUrl('/checkout/success');
   }
 
   private async getAddressFromStripeAddress(): Promise<

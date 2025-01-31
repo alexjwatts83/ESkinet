@@ -15,6 +15,13 @@ export class SnackbarService {
     });
   }
 
+  warn(message: string) {
+    this.snackbar.open(message, 'Close', {
+      duration: this.durationInSeconds * this.milliseconds,
+      panelClass: ['snack-warn'],
+    });
+  }
+
   success(message: string) {
     this.snackbar.open(message, 'Close', {
       duration: this.durationInSeconds * this.milliseconds,

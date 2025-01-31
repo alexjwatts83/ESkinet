@@ -13,8 +13,14 @@ export class CartService {
   private httpClient = inject(HttpClient);
 
   cart = signal<Cart | null>(null);
+  
   itemCount = computed(() => {
-    return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0);
+    const cart = this.cart();
+    console.log({ itemCountcart: cart });
+    if (!cart) return 0;
+    const items = cart.items;
+    console.log({ itemCount: items });
+    return items.reduce((sum, item) => sum + item.quantity, 0);
   });
 
   totals = computed(() => {
@@ -22,7 +28,8 @@ export class CartService {
     if (!cart) return null;
     const items = cart.items;
     const delivery = this.selectedDelivery();
-    const subTotal = cart.items.reduce(
+    console.log({ items, delivery });
+    const subTotal = items.reduce(
       (sum, item) => sum + item.quantity * item.price,
       0
     );
@@ -53,11 +60,10 @@ export class CartService {
       .post<Cart>(`${this.baseUrl}/cart/`, { cart })
       .subscribe({
         next: (response: { id: string }) => {
-          console.log({ setCartResponse: response.id });
-          // this.cart.set(cart);
-          // TODO this is really bad fix this later
-          // this.getCart(response.id).subscribe();
-          this.cart.set(cart);
+          console.log({ setCartResponse: response.id, cart });
+          setTimeout(() => this.cart.set(cart));
+          // TODO figure out why the cart.set doesnt trigger compute
+          // this.getCart(cart.id).subscribe();
         },
       });
   }
@@ -71,9 +77,10 @@ export class CartService {
   }
 
   addItemToCart(item: CartItem | Product, quantity = 1) {
-    const cart = this.cart() ?? this.createCart();
-
-    console.log({ cart });
+    console.clear();
+    console.log({ addItemToCart: { item, quantity } });
+    const cart = { ...(this.cart() ?? this.createCart()) } as Cart;
+    console.log({ original: cart });
     if (this.isProduct(item)) {
       console.log('is product');
       item = this.mapProductToCartItem(item);
@@ -84,21 +91,25 @@ export class CartService {
   }
 
   removeItemFromCart(productId: string, quantity = 1) {
-    const cart = this.cart();
+    console.log({ removeItemFromCart: { productId, quantity } });
+    const cart = { ...(this.cart() ?? this.createCart()) } as Cart;
+    console.log({ original: cart });
     if (!cart) return;
     const index = cart.items.findIndex((x) => x.productId === productId);
 
-    if (index !== -1) {
-      if (cart.items[index].quantity > quantity) {
-        cart.items[index].quantity -= quantity;
-      } else {
-        cart.items.splice(index, 1);
-      }
-      if (cart.items.length === 0) {
-        this.deleteCart();
-      } else {
-        this.setCart(cart);
-      }
+    if (index === -1) {
+      return;
+    }
+
+    if (cart.items[index].quantity > quantity) {
+      cart.items[index].quantity -= quantity;
+    } else {
+      cart.items.splice(index, 1);
+    }
+    if (cart.items.length === 0) {
+      this.deleteCart();
+    } else {
+      this.setCart(cart);
     }
   }
 

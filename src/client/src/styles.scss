@@ -47,3 +47,9 @@ button.match-input-height {
     --mat-snack-bar-button-color: black;
     --mdc-snackbar-supporting-text-color: #fff;
 }
+
+.mat-mdc-snack-bar-container.snack-warn {
+    --mdc-snackbar-container-color: orange;
+    --mat-snack-bar-button-color: black;
+    --mdc-snackbar-supporting-text-color: #fff;
+}
