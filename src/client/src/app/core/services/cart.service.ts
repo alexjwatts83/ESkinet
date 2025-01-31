@@ -13,14 +13,9 @@ export class CartService {
   private httpClient = inject(HttpClient);
 
   cart = signal<Cart | null>(null);
-  
+
   itemCount = computed(() => {
-    const cart = this.cart();
-    console.log({ itemCountcart: cart });
-    if (!cart) return 0;
-    const items = cart.items;
-    console.log({ itemCount: items });
-    return items.reduce((sum, item) => sum + item.quantity, 0);
+    return this.cart()?.items.reduce((sum, item) => sum + item.quantity, 0);
   });
 
   totals = computed(() => {
@@ -28,7 +23,6 @@ export class CartService {
     if (!cart) return null;
     const items = cart.items;
     const delivery = this.selectedDelivery();
-    console.log({ items, delivery });
     const subTotal = items.reduce(
       (sum, item) => sum + item.quantity * item.price,
       0
@@ -62,8 +56,6 @@ export class CartService {
         next: (response: { id: string }) => {
           console.log({ setCartResponse: response.id, cart });
           setTimeout(() => this.cart.set(cart));
-          // TODO figure out why the cart.set doesnt trigger compute
-          // this.getCart(cart.id).subscribe();
         },
       });
   }
