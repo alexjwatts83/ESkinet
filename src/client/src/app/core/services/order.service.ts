@@ -21,7 +21,7 @@ export class OrderService {
   }
 
   getForUserById(id: string) {
-    return this.httpClient.get<Order[]>(
+    return this.httpClient.get<Order>(
       `${this.baseUrl}/orders/${id}`,
       this.withCreds
     );

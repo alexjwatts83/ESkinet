@@ -4,7 +4,8 @@ export type Order = {
   id: string;
   orderDate: string;
   buyerEmail: string;
-  deliveryMethod: DeliveryMethod;
+  deliveryMethod: string;
+  deliveryMethodPrice: number;
   shippingAddress: ShippingAddress;
   paymentSummary: PaymentSummary;
   status: string;

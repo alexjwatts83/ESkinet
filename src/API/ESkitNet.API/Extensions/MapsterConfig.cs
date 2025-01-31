@@ -26,6 +26,7 @@ public static class MapsterConfig
             .NewConfig()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.DeliveryMethod, src => src.DeliveryMethod.Description)
+            .Map(dest => dest.DeliveryMethodPrice, src => src.DeliveryMethod.Price)
             .Map(dest => dest.Status, src => src.Status.ToString())
             .Map(dest => dest.Total, src => src.Total());
 

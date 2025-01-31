@@ -16,6 +16,7 @@ public record DisplayOrderDto
     DateTime OrderDate,
     string BuyerEmail,
     string DeliveryMethod,
+    decimal DeliveryMethodPrice,
     ShippingAddressDto ShippingAddress,
     PaymentSummaryDto PaymentSummary,
     string Status,
