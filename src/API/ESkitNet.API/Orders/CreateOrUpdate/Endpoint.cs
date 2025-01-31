@@ -83,6 +83,9 @@ public static class Endpoint
             if (string.IsNullOrEmpty(cart.PaymentIntentId))
                 throw new BadHttpRequestException("No Payment Intent found for Order");
 
+            if (cart.Items == null)
+                throw new BadHttpRequestException("Cart has no items");
+
             var items = await MapCartItemsToOrderItems(cart.Items, cancellationToken);
 
             var deliveryMethod = await unitOfWork
@@ -92,17 +95,26 @@ public static class Endpoint
             if (deliveryMethod == null)
                 throw new BadHttpRequestException("Delivery Method not found");
 
-            var order = new Order() {
-                Id = OrderId.Of(Guid.NewGuid()),
-                OrderDate = timeProvider.Now,
-                DeliveryMethod = deliveryMethod,
-                ShippingAddress = dto.ShippingAddress.Adapt<ShippingAddress>(),
-                SubTotal = items.Sum(x => x.Quantity * x.Price),
-                PaymentSummary = dto.PaymentSummary.Adapt<PaymentSummary>(),
-                PaymentIntentId = cart.PaymentIntentId,
-                BuyerEmail = email,
-                OrderItems = items,
-            };
+            var order = Order.Create(
+                deliveryMethod,
+                dto.ShippingAddress.Adapt<ShippingAddress>(),
+                dto.PaymentSummary.Adapt<PaymentSummary>(),
+                cart.PaymentIntentId,
+                email,
+                items
+            );
+
+            //var order = new Order() {
+            //    Id = OrderId.Of(Guid.NewGuid()),
+            //    OrderDate = timeProvider.Now,
+            //    DeliveryMethod = deliveryMethod,
+            //    ShippingAddress = dto.ShippingAddress.Adapt<ShippingAddress>(),
+            //    SubTotal = items.Sum(x => x.Quantity * x.Price),
+            //    PaymentSummary = dto.PaymentSummary.Adapt<PaymentSummary>(),
+            //    PaymentIntentId = cart.PaymentIntentId,
+            //    BuyerEmail = email,
+            //    OrderItems = items,
+            //};
 
             unitOfWork.Repository<Order, OrderId>().Add(order);
 
