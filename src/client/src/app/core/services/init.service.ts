@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { CartService } from './cart.service';
-import { forkJoin, of } from 'rxjs';
+import { forkJoin, of, tap } from 'rxjs';
 import { AccountsService } from './accounts.service';
+import { SignalrService } from './signalr.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ import { AccountsService } from './accounts.service';
 export class InitService {
   private cartService = inject(CartService);
   private accountsService = inject(AccountsService);
+  private signalrService = inject(SignalrService)
   
   init() {
     const cartId = localStorage.getItem('cart_id');
@@ -16,7 +18,13 @@ export class InitService {
     
     return forkJoin( {
       cart: cart$,
-      user: this.accountsService.getUserInfo()
+      user: this.accountsService.getUserInfo().pipe(
+        tap(user => {
+          if (user) {
+            this.signalrService.createHubConnection()
+          }
+        })
+      )
     });
   }
 }
