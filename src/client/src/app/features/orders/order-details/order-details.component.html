@@ -1,9 +1,12 @@
 <mat-card
   *ngIf="order$ | async as order"
-  class="bg-white py-8 shadow-md max-w-screen-lg mx-auto"
+  class="bg-white py-8 shadow-md max-w-screen-md mx-auto"
 >
   <div class="px-4 w-full">
-    <h2 class="text-xl text-center font-semibold">Order Summary</h2>
+    <div class="flex justify-between items-center align-middle">
+        <h2 class="text-xl text-center font-semibold">Order Summary</h2>
+        <button mat-stroked-button routerLink="/orders">Return to Orders</button>
+    </div>
     <div class="mt-8 py-3 border-t border-gray-200 flex gap-16">
       <div class="space-y-2 border-0 flex-1">
         <h4 class="text-lg font-semibold">Billing and delivery information</h4>
@@ -66,7 +69,7 @@
     </div>
 
     <div
-      class="space-y-4 border-y mt-4 border-gray-200 bg-white p-4"
+      class="space-y-4 border-gray-200 bg-white mt-4"
     >
       <p class="text-xl font-semibold">Order Summary</p>
       <div class="space-y-4">
