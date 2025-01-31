@@ -24,7 +24,6 @@ public static class DependencyInjection
         services.AddScoped<IUserAccessor, UserAccessor>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<IPaymentService, PaymentService>();
-        services.AddScoped<IStripeWebhookService, StripeWebhookService>();
 
         // db services
         // No <>
