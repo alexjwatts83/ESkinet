@@ -195,6 +195,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         'Payment was successful but there was an internal error'
       );
     }
+    this.orderService.orderComplete = true;
     this.cartService.deleteCart();
     this.cartService.selectedDelivery.set(null);
     if (this.saveAddress) {
