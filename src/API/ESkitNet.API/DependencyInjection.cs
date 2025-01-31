@@ -1,5 +1,4 @@
 ﻿using ESkitNet.API.Extensions;
-using ESkitNet.API.Payments.StripeWebhook;
 using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
 using ESkitNet.Identity.Entities;
@@ -14,8 +13,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IStripeWebhookService, StripeWebhookService>();
-
         services.AddHttpContextAccessor();
 
         services.AddCarter();
@@ -50,7 +47,6 @@ public static class DependencyInjection
 
     public static WebApplication UseApiServices(this WebApplication app)
     {
-
         // TODO delete ExceptionMiddleware altogether later on
         //app.UseMiddleware<ExceptionMiddleware>();
         app.UseExceptionHandler(options => { });

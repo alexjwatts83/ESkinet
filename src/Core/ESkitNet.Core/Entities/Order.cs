@@ -17,4 +17,24 @@ public class Order : Aggregate<OrderId>
     {
         return SubTotal + DeliveryMethod.Price;
     }
+
+    public static Order Create(DeliveryMethod deliveryMethod,
+        ShippingAddress shippingAddress, PaymentSummary paymentSummary,
+        string paymentIntentId, string email, List<OrderItem> items)
+    {
+        var order = new Order()
+        {
+            Id = OrderId.Of(Guid.NewGuid()),
+            //OrderDate = timeProvider.Now,
+            DeliveryMethod = deliveryMethod,
+            ShippingAddress = shippingAddress,
+            SubTotal = items.Sum(x => x.Quantity * x.Price),
+            PaymentSummary = paymentSummary,
+            PaymentIntentId = paymentIntentId,
+            BuyerEmail = email,
+            OrderItems = items,
+        };
+
+        return order;
+    }
 }
