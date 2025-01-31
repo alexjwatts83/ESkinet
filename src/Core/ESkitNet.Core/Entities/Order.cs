@@ -9,7 +9,7 @@ public class Order : Aggregate<OrderId>
     public PaymentSummary PaymentSummary { get; set; } = null!;
 
     public List<OrderItem> OrderItems { get; set; } = [];
-    public OrderStatus Status { get; private set; } = OrderStatus.Pending;
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
     public decimal SubTotal { get; set; }
     public required string PaymentIntentId { get; set; }
 

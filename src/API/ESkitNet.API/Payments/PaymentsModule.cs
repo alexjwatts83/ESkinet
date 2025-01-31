@@ -8,8 +8,9 @@ public class PaymentsModule : ICarterModule
     {
         var group = app
             .MapGroup("/api/payments")
-            .WithTags("Payments Module");
-        //.MapIdentityApi<AppUser>();
+            .WithTags("Payments Module")
+            //.RequireCors("CorsPolicy")
+            ;
 
         group.MapPost("/{cartId}", CreateOrUpdateIntent.Endpoint.Handle)
             .WithName("CreateOrUpdateIntent")
@@ -17,6 +18,10 @@ public class PaymentsModule : ICarterModule
 
         group.MapGet("/delivery-methods", GetMethods.Endpoint.Handle)
             .WithName("GetMethods");
+
+        group.MapPost("/webhook", StripeWebhook.Endpoint.Handle)
+            .WithName("StripeWebhook")
+            .AllowAnonymous();
 
         group.MapIdentityApi<AppUser>();
     }
