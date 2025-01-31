@@ -1,4 +1,6 @@
 ﻿using ESkitNet.Core.Specifications;
+using ESkitNet.Infrastructure.Data.Services;
+using Microsoft.Extensions.Logging;
 using Stripe;
 
 namespace ESkitNet.API.Payments.StripeWebhook;
@@ -9,7 +11,7 @@ public interface IStripeWebhookService
     Task<IResult> Process(string webHookSecret, CancellationToken cancellationToken);
 }
 
-public class StripeWebhookService(IHttpContextAccessor context, IUnitOfWork unitOfWork, ILogger<StripeWebhookService> logger) : IStripeWebhookService
+public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider sp, ILogger<StripeWebhookService> logger) : IStripeWebhookService
 {
     public Event ConstructStripeEvent(HttpRequest request, string json, string webHookSecret)
     {
@@ -28,23 +30,43 @@ public class StripeWebhookService(IHttpContextAccessor context, IUnitOfWork unit
     {
         if (intent.Status == "succeeded")
         {
-            var spec = new OrderSpecificationForStripe(intent.Id);
-            var order = await unitOfWork.Repository<Order, OrderId>().GetOneWithSpecAsync(spec, cancellationToken)
+            int tryCount = 1;
 
-
-            if (order == null)
-                throw new Exception("Order Not Found with specified intent");
-
-            if ((long)order.Total() * 100 != intent.Amount)
+            while (tryCount <= 5)
             {
-                order.Status = OrderStatus.PaymentMismatch;
-            }
-            else
-            {
-                order.Status = OrderStatus.PaymenReceived;
+                using var scope = sp.CreateScope();
+                var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                var spec = new OrderSpecificationForStripe(intent.Id);
+                logger.LogInformation("Count {TryCount}", tryCount);
+                var order = await unitOfWork.Repository<Order, OrderId>().GetOneWithSpecAsync(spec, cancellationToken);
+
+                if (order == null)
+                {
+                    if (tryCount < 5)
+                    {
+                        tryCount++;
+                        logger.LogInformation("Abot to sleep and attempt # {TryCount}", tryCount);
+                        Thread.Sleep(1000);
+                        logger.LogInformation("Continueing");
+                        continue;
+                    }
+                    throw new Exception("Order Not Found with specified intent");
+                }
+
+                if ((long)order.Total() * 100 != intent.Amount)
+                {
+                    order.Status = OrderStatus.PaymentMismatch;
+                }
+                else
+                {
+                    order.Status = OrderStatus.PaymenReceived;
+                }
+
+                await unitOfWork.Complete(cancellationToken);
+
+                break;
             }
 
-            await unitOfWork.Complete(cancellationToken);
 
             // TODO signal r
         }
