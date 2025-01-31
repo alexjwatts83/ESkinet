@@ -15,3 +15,12 @@ public class OrderSpecification : BaseSpecification<Order>
         AddInclude(nameof(Order.DeliveryMethod));
     }
 }
+
+public class OrderSpecificationForStripe : BaseSpecification<Order>
+{
+    public OrderSpecificationForStripe(string paymentIntentId) : base(x => x.PaymentIntentId == paymentIntentId)
+    {
+        AddInclude(nameof(Order.OrderItems));
+        AddInclude(nameof(Order.DeliveryMethod));
+    }
+}
