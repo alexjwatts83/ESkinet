@@ -1,13 +1,13 @@
-﻿using ESkitNet.Core.Interfaces;
+﻿using ESkitNet.API.Orders.Dtos;
+using ESkitNet.API.SignalR;
 using ESkitNet.Core.Specifications;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.SignalR;
 using Stripe;
 
-namespace ESkitNet.Infrastructure.Services;
+namespace ESkitNet.API.Services;
 
-public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider sp, ILogger<StripeWebhookService> logger)
+public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider sp, 
+    IHubContext<NotificationHub> hubContext, ILogger<StripeWebhookService> logger)
     : IStripeWebhookService
 {
     public Event ConstructStripeEvent(HttpRequest request, string json, string webHookSecret)
@@ -70,10 +70,15 @@ public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider
 
             await unitOfWork.Complete(cancellationToken);
 
+            var connectionId = NotificationHub.GetConnectionStringByEmail(order.BuyerEmail);
+
+            if (!string.IsNullOrWhiteSpace(connectionId))
+            {
+                await hubContext.Clients.Client(connectionId).SendAsync("OrderCompleteNotification", order.Adapt<DisplayOrderDto>());
+            }
+
             break;
         }
-
-        // TODO signal r
     }
 
     public async Task<IResult> Process(string webHookSecret, CancellationToken cancellationToken)

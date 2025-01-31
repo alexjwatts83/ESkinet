@@ -1,4 +1,6 @@
 ﻿using ESkitNet.API.Extensions;
+using ESkitNet.API.Services;
+using ESkitNet.API.SignalR;
 using ESkitNet.Core.Behaviors;
 using ESkitNet.Core.Exceptions.Handler;
 using ESkitNet.Identity.Entities;
@@ -42,6 +44,10 @@ public static class DependencyInjection
 
         services.RegisterMapsterConfiguration();
 
+        services.AddSignalR();
+
+        services.AddScoped<IStripeWebhookService, StripeWebhookService>();
+
         return services;
     }
 
@@ -57,7 +63,13 @@ public static class DependencyInjection
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
 
+        app.UseAuthentication();
+
+        app.UseAuthorization();
+
         app.MapCarter();
+
+        app.MapHub<NotificationHub>("/hub/notifications");
 
         //app.MapIdentityApi<AppUser>();
 
