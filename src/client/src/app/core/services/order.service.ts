@@ -12,6 +12,7 @@ export class OrderService {
   private withCreds = {
     withCredentials: true,
   };
+  orderComplete = false;
 
   getForUser() {
     return this.httpClient.get<Order[]>(
