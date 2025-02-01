@@ -21,6 +21,7 @@ import { AccountsService } from './accounts.service';
 export class StripeService {
   private stripePromise: Promise<Stripe | null>;
   private baseUrl = environment.apiUrl;
+  private appUrl = environment.appUrl;
   private httpClient = inject(HttpClient);
   private cartService = inject(CartService);
   private elements?: StripeElements;
@@ -168,7 +169,7 @@ export class StripeService {
         clientSecret: clientSecret,
         confirmParams: {
           confirmation_token: confirmationToken.id,
-          return_url: 'https://localhost:4200/checkout/success/',
+          return_url: `${this.appUrl}checkout/success/`,
         },
         redirect: 'if_required',
       });

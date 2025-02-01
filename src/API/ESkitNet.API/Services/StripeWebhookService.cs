@@ -65,16 +65,23 @@ public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider
             }
             else
             {
-                order.Status = OrderStatus.PaymenReceived;
+                order.Status = OrderStatus.PaymentReceived;
             }
 
             await unitOfWork.Complete(cancellationToken);
 
             var connectionId = NotificationHub.GetConnectionStringByEmail(order.BuyerEmail);
 
+            logger.LogInformation($"connectionId = {connectionId}");
+
             if (!string.IsNullOrWhiteSpace(connectionId))
             {
+                logger.LogInformation($"Sending Message");
                 await hubContext.Clients.Client(connectionId).SendAsync("OrderCompleteNotification", order.Adapt<DisplayOrderDto>());
+                logger.LogInformation($"Message Sent");
+            } else
+            {
+                logger.LogWarning("No connection id found for '{BuyerEmail}'", order.BuyerEmail);
             }
 
             break;
