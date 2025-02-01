@@ -1,7 +1,7 @@
 # ESkinet
 ESkinet
 
-## docker
+## Docker
 `docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d`
 
 `docker-compose down`
@@ -9,7 +9,7 @@ ESkinet
 deletes the volumes as well
 `docker-compose down -v`
 
-## migrations
+## EF Migrations
 
 ### create
 `dotnet ef migrations add InitialCreate -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure -o Data\Migrations`
@@ -24,6 +24,14 @@ deletes the volumes as well
 
 ### drop
 `dotnet ef database drop -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure`
+
+## Stripe
+
+In order to trigger a stripe event when a Order is created.
+
+`stripe login`
+
+`stripe listen --forward-to https://localhost:5151/api/payments/webhook --events=payment_intent.succeeded`
 
 
 ## Client App

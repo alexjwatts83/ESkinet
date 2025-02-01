@@ -104,18 +104,6 @@ public static class Endpoint
                 items
             );
 
-            //var order = new Order() {
-            //    Id = OrderId.Of(Guid.NewGuid()),
-            //    OrderDate = timeProvider.Now,
-            //    DeliveryMethod = deliveryMethod,
-            //    ShippingAddress = dto.ShippingAddress.Adapt<ShippingAddress>(),
-            //    SubTotal = items.Sum(x => x.Quantity * x.Price),
-            //    PaymentSummary = dto.PaymentSummary.Adapt<PaymentSummary>(),
-            //    PaymentIntentId = cart.PaymentIntentId,
-            //    BuyerEmail = email,
-            //    OrderItems = items,
-            //};
-
             unitOfWork.Repository<Order, OrderId>().Add(order);
 
             var completed = await unitOfWork.Complete(cancellationToken);
