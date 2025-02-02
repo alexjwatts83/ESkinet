@@ -1,5 +1,6 @@
 ﻿using ESkitNet.API.Accounts.Dtos;
 using ESkitNet.API.Extensions;
+using ESkitNet.Core.Extensions;
 using ESkitNet.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 
@@ -22,7 +23,8 @@ public static class Endpoint
             user.FirstName,
             user.LastName,
             user.Email,
-            Address = user.Address.Adapt<AddressDto>()
+            Address = user.Address.Adapt<AddressDto>(),
+            Roles = claimsPrincipal.GetRoles()
         });
     }
 }

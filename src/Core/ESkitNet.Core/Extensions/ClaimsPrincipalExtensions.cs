@@ -10,6 +10,11 @@ public static class ClaimsPrincipalExtensions
         return GetValue(claimsPrincipal, ClaimTypes.Email, throwException);
     }
 
+    public static string? GetRoles(this ClaimsPrincipal claimsPrincipal)
+    {
+        return claimsPrincipal.FindFirstValue(ClaimTypes.Role);
+    }
+
     private static string? GetValue(ClaimsPrincipal claimsPrincipal, string indentifier, bool throwException)
     {
         var nameIdentifier = claimsPrincipal.FindFirstValue(indentifier);
