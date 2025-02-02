@@ -46,3 +46,8 @@ Added lint in the setting to ignore the scss warning when adding the @s ine the 
 `"scss.lint.unknownAtRules": "ignore"`
 
 Settings -> type in folders -> uncheck `Explorer : Compact Folders`
+
+
+### Deployment
+
+## Redis
