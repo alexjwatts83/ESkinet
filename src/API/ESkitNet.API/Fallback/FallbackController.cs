@@ -2,10 +2,12 @@
 
 namespace ESkitNet.API.Fallback;
 
-public class FallbackController : Controller
+public class FallbackController(ILogger<FallbackController> logger) : Controller
 {
     public IActionResult Index()
     {
-        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
+        var indexFile = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
+        logger.LogInformation("{IndexFile} exists {Exists}", indexFile, System.IO.File.Exists(indexFile));
+        return PhysicalFile(indexFile, "text/HTML");
     }
 }
