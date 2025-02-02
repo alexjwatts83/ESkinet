@@ -20,7 +20,9 @@ export class InitService {
       cart: cart$,
       user: this.accountsService.getUserInfo().pipe(
         tap(user => {
+          console.log({getUserInfoInit: user})
           if (user) {
+            console.log('connect to signalr on init');
             this.signalrService.createHubConnection()
           }
         })

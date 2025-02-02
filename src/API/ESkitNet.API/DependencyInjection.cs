@@ -69,12 +69,16 @@ public static class DependencyInjection
 
         app.UseAuthorization();
 
-        if (!app.Environment.IsDevelopment())
-        {
-            app.UseDefaultFiles();
+        //if (!app.Environment.IsDevelopment())
+        //{
+        //    app.UseDefaultFiles();
 
-            app.UseStaticFiles();
-        }
+        //    app.UseStaticFiles();
+        //}
+
+        app.UseDefaultFiles();
+
+        app.UseStaticFiles();
 
         app.MapCarter();
 
@@ -83,8 +87,11 @@ public static class DependencyInjection
 
         app.MapHub<NotificationHub>("/hub/notifications");
 
-        if (!app.Environment.IsDevelopment())
-            app.MapFallbackToController("Index", "Fallback");
+        //if (!app.Environment.IsDevelopment())
+        //    app.MapFallbackToController("Index", "Fallback");
+
+        //app.MapFallbackToController("Index", "Fallback");
+        app.MapFallbackToFile("Index.html");
 
         return app;
     }

@@ -14,6 +14,7 @@ import { CartService } from './cart.service';
 import { Cart } from '../../shared/models/cart';
 import { firstValueFrom, tap } from 'rxjs';
 import { AccountsService } from './accounts.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -21,16 +22,19 @@ import { AccountsService } from './accounts.service';
 export class StripeService {
   private stripePromise: Promise<Stripe | null>;
   private baseUrl = environment.apiUrl;
-  private appUrl = environment.appUrl;
+  private appUrl?: string;
   private httpClient = inject(HttpClient);
   private cartService = inject(CartService);
   private elements?: StripeElements;
   private addressElememnt?: StripeAddressElement;
   private accountsService = inject(AccountsService);
   private paymentElement?: StripePaymentElement;
+  private router = inject(Router);
 
   constructor() {
     this.stripePromise = loadStripe(environment.stripePublicKey);
+    this.appUrl = window.location.href;
+    console.log({appUrl: this.appUrl})
   }
 
   getStripeInstance() {
@@ -161,6 +165,11 @@ export class StripeService {
     if (result.error) throw new Error(result.error.message);
 
     const clientSecret = this.cartService.cart()?.clientSecret;
+
+    const checkoutReturnUrl = `${this.appUrl}/success/`;
+
+    console.log({checkoutReturnUrl});
+
     if (clientSecret) {
       let outputColor = 'color:blue; font-size:20px;';
       console.info('%c confirmPayment start',outputColor);
@@ -169,7 +178,7 @@ export class StripeService {
         clientSecret: clientSecret,
         confirmParams: {
           confirmation_token: confirmationToken.id,
-          return_url: `${this.appUrl}checkout/success/`,
+          return_url: checkoutReturnUrl,
         },
         redirect: 'if_required',
       });

@@ -1,5 +1,5 @@
 <section>
-@if(this.cartService.cart()?.items?.length) {
+  @if(this.cartService.cart()?.items?.length) {
   <div class="flex w-full items-start gap-6 mt-32">
     <div class="w-3/4">
       @for (item of cartService.cart()?.items; track item.productId) {
@@ -13,7 +13,12 @@
       <app-order-summary></app-order-summary>
     </div>
   </div>
-} @else {
-  <app-empty-state></app-empty-state>
-}
+  } @else {
+  <app-empty-state
+    icon="shopping_cart"
+    message="Your shopping cart is empty"
+    actionText="Go shopping!"
+    (action)="onEmptyStateAction()"
+  ></app-empty-state>
+  }
 </section>

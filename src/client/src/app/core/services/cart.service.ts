@@ -69,7 +69,6 @@ export class CartService {
   }
 
   addItemToCart(item: CartItem | Product, quantity = 1) {
-    console.clear();
     console.log({ addItemToCart: { item, quantity } });
     const cart = { ...(this.cart() ?? this.createCart()) } as Cart;
     console.log({ original: cart });

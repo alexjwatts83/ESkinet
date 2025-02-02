@@ -26,9 +26,8 @@ export class AccountsService {
       })
       .pipe(
         tap((user) => {
-          if (user) {
-            this.signalrService.createHubConnection();
-          }
+          console.log('login completed');
+          this.signalrService.createHubConnection();
         })
       );
   }

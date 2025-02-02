@@ -6,7 +6,7 @@ using System.Collections.Concurrent;
 namespace ESkitNet.API.SignalR;
 
 [Authorize]
-public class NotificationHub : Hub
+public class NotificationHub(ILogger<NotificationHub> logger) : Hub
 {
     private static readonly ConcurrentDictionary<string, string> UserConnections = new();
 
@@ -14,8 +14,12 @@ public class NotificationHub : Hub
     {
         var email = Context.User?.GetEmail(false);
 
+        logger.LogWarning("OnConnectedAsync: Email = '{Email}', ConnectionId = {ConnectionId}", email, Context.ConnectionId);
+
         if (!string.IsNullOrWhiteSpace(email))
             UserConnections[email] = Context.ConnectionId;
+
+        logger.LogWarning("UserConnections['{Email}'] = {ConnectionId}", email, UserConnections[email!]);
 
         return base.OnConnectedAsync();
     }
@@ -23,6 +27,8 @@ public class NotificationHub : Hub
     public override Task OnDisconnectedAsync(Exception? exception)
     {
         var email = Context.User?.GetEmail(false);
+
+        logger.LogWarning("OnDisconnectedAsync: {Email}", email);
 
         if (!string.IsNullOrWhiteSpace(email))
             UserConnections.TryRemove(email, out var _);
