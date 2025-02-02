@@ -1,3 +1,5 @@
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 /******************************************/
@@ -15,7 +17,7 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader());
 });
 
-// Add redis his way
+//// Add redis his way
 //builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 //{
 //    var connectionString = builder.Configuration.GetConnectionString("Redis") ?? throw new Exception("Redis Connetion string is null");
@@ -23,10 +25,12 @@ builder.Services.AddCors(options =>
 
 //    return ConnectionMultiplexer.Connect(configuration);
 //});
-// Add Redis
+
+//Add Redis
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    var connectionString = builder.Configuration.GetConnectionString("Redis") ?? throw new Exception("Redis Connetion string is null");
+    options.Configuration = connectionString;
     //options.InstanceName = "Basket";
 });
 

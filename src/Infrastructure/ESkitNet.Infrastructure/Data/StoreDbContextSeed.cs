@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using System.Text.Json;
 
 namespace ESkitNet.Infrastructure.Data;
@@ -26,17 +27,19 @@ public static class StoreDbContextSeedExtensions
 
     private static async Task SeedAsync(StoreDbContext context)
     {
-        await SeedDataAsync<Product, ProductId>(context, "products");
-        await SeedDataAsync<DeliveryMethod, DeliveryMethodId>(context, "delivery");
+        var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+        await SeedDataAsync<Product, ProductId>(context, path!, "products");
+        await SeedDataAsync<DeliveryMethod, DeliveryMethodId>(context, path!, "delivery");
     }
 
-    private static async Task SeedDataAsync<TEntity, TKey>(StoreDbContext context, string jsonFileName)
+    private static async Task SeedDataAsync<TEntity, TKey>(StoreDbContext context, string dirPath, string jsonFileName)
         where TEntity : Entity<TKey>
     {
         if (await context.Set<TEntity>().AnyAsync())
             return;
 
-        var path = $"../../Infrastructure/ESkitNet.Infrastructure/Data/SeedData/{jsonFileName}.json";
+        var path = dirPath + @$"/Data/SeedData/{jsonFileName}.json";
 
         var exists = File.Exists(path);
 

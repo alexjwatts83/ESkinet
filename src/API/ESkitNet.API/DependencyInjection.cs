@@ -19,6 +19,8 @@ public static class DependencyInjection
 
         services.AddCarter();
 
+        services.AddControllers();
+
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
@@ -67,13 +69,22 @@ public static class DependencyInjection
 
         app.UseAuthorization();
 
+        if (!app.Environment.IsDevelopment())
+        {
+            app.UseDefaultFiles();
+
+            app.UseStaticFiles();
+        }
+
         app.MapCarter();
+
+        // for fall back controller
+        app.MapControllers();
 
         app.MapHub<NotificationHub>("/hub/notifications");
 
-        //app.MapIdentityApi<AppUser>();
-
-        //app.MapGroup("/account").MapIdentityApi<AppUser>();
+        if (!app.Environment.IsDevelopment())
+            app.MapFallbackToController("Index", "Fallback");
 
         return app;
     }
