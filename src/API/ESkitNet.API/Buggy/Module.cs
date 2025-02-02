@@ -66,5 +66,19 @@ public class Module : ICarterModule
         .ProducesProblem(StatusCodes.Status401Unauthorized)
         .WithSummary("Buggy Secret")
         .WithDescription("Buggy Secret");
+
+        app.MapGet("api/buggy/admin-secret", [Authorize(Roles = "Admin")] (HttpContext context) =>
+        {
+            return Results.Ok(new {
+                Name = context.User.FindFirstValue(ClaimTypes.Name),
+                Email = context.User.FindFirstValue(ClaimTypes.Email),
+                Id = context.User.FindFirstValue(ClaimTypes.NameIdentifier),
+                Roles = context.User.FindFirstValue(ClaimTypes.Role)
+            });
+        })
+        .WithName("BuggyAdmiSecret")
+        .ProducesProblem(StatusCodes.Status401Unauthorized)
+        .WithSummary("Buggy Admin Secret")
+        .WithDescription("Buggy Admin Secret");
     }
 }

@@ -7,6 +7,7 @@ using ESkitNet.Identity.Entities;
 using FluentValidation;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
 namespace ESkitNet.API;
@@ -42,6 +43,7 @@ public static class DependencyInjection
         services.AddAuthorization();
         services
             .AddIdentityApiEndpoints<AppUser>()
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<StoreDbContext>();
 
         services.RegisterMapsterConfiguration();
