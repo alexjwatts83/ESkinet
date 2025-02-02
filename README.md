@@ -1,6 +1,31 @@
 # ESkinet
 ESkinet
 
+## Running Locally
+
+### Prereqs
+
+- Create account in Stripe, https://stripe.com/au
+  - Copy `PublishableKey` and `SecretKey` into User Secrets
+- download and install Stripe cli locally
+  - https://docs.stripe.com/stripe-cli
+  - Try later use Docker image instead, when I tried I always got a connection refused message
+- Docker Desktop
+- Create an account in upstash https://upstash.com/ for Prod Redis
+- probably more but I can't remember what
+
+### Debug Locally
+
+- start docker
+  - `docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d` or `.\docker-app-up.ps1`
+- build ui
+  - `ng serve`
+- start stripe
+  - `stripe login` (optional - need to login first, could probably use the api key instead)
+  - `stripe listen --forward-to https://localhost:5151/api/payments/webhook --events=payment_intent.succeeded`
+  - The command line generates a WH Secret copy that value into User Secrets
+- Start Debugging the `ESkitNet.API` project with the `https` profile
+
 ## Docker
 `docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d`
 
@@ -10,6 +35,8 @@ deletes the volumes as well
 `docker-compose down -v`
 
 ## EF Migrations
+
+Migrations are automatically applied on startup and also data is seeded if it doesn't exists
 
 ### create
 `dotnet ef migrations add InitialCreate -s API\ESkitNet.API -p Infrastructure\ESkitNet.Infrastructure -o Data\Migrations`
