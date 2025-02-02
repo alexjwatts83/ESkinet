@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { Product } from '../../shared/models/products';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-test-error',
@@ -11,48 +11,36 @@ import { Product } from '../../shared/models/products';
   styleUrl: './test-error.component.scss',
 })
 export class TestErrorComponent {
-  private _baseUrl = 'https://localhost:5151/buggy';
+  private _baseUrl = environment.apiUrl;
   private httpClient = inject(HttpClient);
 
   get404Error() {
-    this.httpClient.get(`${this._baseUrl}/not-found`).subscribe({
+    this.httpClient.get(`${this._baseUrl}/buggy/not-found`).subscribe({
       next: (response) => console.log('here'),
     });
   }
 
   get400Error() {
-    this.httpClient.get(`${this._baseUrl}/bad-request`).subscribe({
+    this.httpClient.get(`${this._baseUrl}/buggy/bad-request`).subscribe({
       next: (response) => console.log('here'),
-      // error: (error) => {
-      //   console.error(error);
-      // },
     });
   }
 
   get401Error() {
-    this.httpClient.get(`${this._baseUrl}/unauthorised`).subscribe({
+    this.httpClient.get(`${this._baseUrl}/buggy/unauthorised`).subscribe({
       next: (response) => console.log('here'),
-      // error: (error) => {
-      //   console.error(error);
-      // },
     });
   }
 
   get500Error() {
-    this.httpClient.get(`${this._baseUrl}/internal-error`).subscribe({
+    this.httpClient.get(`${this._baseUrl}/buggy/internal-error`).subscribe({
       next: (response) => console.log('here'),
-      // error: (error) => {
-      //   console.error(error);
-      // },
     });
   }
 
   get400ValidationError1() {
-    this.httpClient.post(`${this._baseUrl}/validation-error`, {}).subscribe({
+    this.httpClient.post(`${this._baseUrl}/buggy/validation-error`, {}).subscribe({
       next: (response) => console.log('here'),
-      // error: (error) => {
-      //   console.error(error);
-      // },
     });
   }
 
@@ -67,12 +55,9 @@ export class TestErrorComponent {
       quantityInStock: -1,
     };
     this.httpClient
-      .post(`https://localhost:5151/api/products/`, { product: productJson })
+      .post(`${this._baseUrl}/products/`, { product: productJson })
       .subscribe({
         next: (response) => console.log('here'),
-        // error: (error) => {
-        //   console.error(error);
-        // },
       });
   }
 }

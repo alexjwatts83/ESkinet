@@ -7,7 +7,7 @@ public class Module : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("/buggy/unauthorised", () =>
+        app.MapGet("api/buggy/unauthorised", () =>
         {
             return Results.Unauthorized();
         })
@@ -16,7 +16,7 @@ public class Module : ICarterModule
         .WithSummary("BuggyUnauthorised")
         .WithDescription("Buggy Unauthorised");
 
-        app.MapGet("/buggy/not-found", () =>
+        app.MapGet("api/buggy/not-found", () =>
         {
             return Results.NotFound();
         })
@@ -25,7 +25,7 @@ public class Module : ICarterModule
         .WithSummary("Buggy NotFound")
         .WithDescription("Buggy NotFound");
 
-        app.MapGet("/buggy/bad-request", () =>
+        app.MapGet("api/buggy/bad-request", () =>
         {
             return Results.BadRequest();
         })
@@ -34,7 +34,7 @@ public class Module : ICarterModule
         .WithSummary("Buggy BadRequest")
         .WithDescription("Buggy BadRequest");
 
-        app.MapGet("/buggy/internal-error", () =>
+        app.MapGet("api/buggy/internal-error", () =>
         {
             throw new Exception("Tis an intention error");
         })
@@ -43,7 +43,7 @@ public class Module : ICarterModule
         .WithSummary("Buggy InternalError")
         .WithDescription("Buggy InternalError");
 
-        app.MapPost("/buggy/validation-error", (Product product) =>
+        app.MapPost("api/buggy/validation-error", (Product product) =>
         {
             return Results.Ok();
         })
@@ -52,7 +52,7 @@ public class Module : ICarterModule
         .WithSummary("Buggy ValidationError")
         .WithDescription("Buggy ValidationError");
 
-        app.MapGet("/buggy/secret", (HttpContext context) =>
+        app.MapGet("api/buggy/secret", (HttpContext context) =>
         {
             var name = context.User.FindFirstValue(ClaimTypes.Name);
             var email = context.User.FindFirstValue(ClaimTypes.Email);
