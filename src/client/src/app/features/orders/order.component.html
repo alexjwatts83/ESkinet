@@ -35,7 +35,7 @@
             <td class="py-3">
               {{ order.orderDate | date : "medium" }}
             </td>
-            <td class="py-3">{{ order.subTotal | currency }}</td>
+            <td class="py-3">{{ order.subTotal + order.deliveryMethodPrice | currency }}</td>
             <td class="py-3">{{ order.status }}</td>
           </tr>
         </tbody>
