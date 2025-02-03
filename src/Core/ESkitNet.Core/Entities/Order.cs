@@ -20,12 +20,12 @@ public class Order : Aggregate<OrderId>
 
     public static Order Create(DeliveryMethod deliveryMethod,
         ShippingAddress shippingAddress, PaymentSummary paymentSummary,
-        string paymentIntentId, string email, List<OrderItem> items)
+        string paymentIntentId, string email, List<OrderItem> items, DateTime now)
     {
         var order = new Order()
         {
             Id = OrderId.Of(Guid.NewGuid()),
-            //OrderDate = timeProvider.Now,
+            OrderDate = now,
             DeliveryMethod = deliveryMethod,
             ShippingAddress = shippingAddress,
             SubTotal = items.Sum(x => x.Quantity * x.Price),

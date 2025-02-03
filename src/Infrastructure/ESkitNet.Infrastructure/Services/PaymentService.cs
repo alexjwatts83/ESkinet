@@ -6,18 +6,19 @@ using Product = ESkitNet.Core.Entities.Product;
 
 namespace ESkitNet.Infrastructure.Services;
 
-public class PaymentService(
-    IConfiguration config,
-    IShoppingCartService cartService,
-    IUnitOfWork unitOfWork,
-    ILogger<PaymentService> logger)
+public class PaymentService(IShoppingCartService cartService, IUnitOfWork unitOfWork, ILogger<PaymentService> logger)
     : IPaymentService
 {
+
+    public PaymentService(IConfiguration config, IShoppingCartService cartService, IUnitOfWork unitOfWork, ILogger<PaymentService> logger) 
+        : this(cartService, unitOfWork, logger)
+    {
+        StripeConfiguration.ApiKey = config["StripeSettings:SecretKey"];
+    }
+
     public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId, CancellationToken cancellationToken)
     {
         logger.LogInformation("CreateOrUpdatePaymentIntent cartId = {CartId}", cartId);
-        // TODO change this a type class instead later on
-        StripeConfiguration.ApiKey = config["StripeSettings:SecretKey"];
 
         var cart = await cartService.GetAsync(cartId, cancellationToken);
 
@@ -60,7 +61,7 @@ public class PaymentService(
             {
                 logger.LogDebug("Updated Cart Item Price to {ProductItemPrice} from {CartItemPrice}", productItem.Price, item.Price);
                 item.Price = productItem.Price;
-                
+
             }
         }
 
@@ -69,7 +70,7 @@ public class PaymentService(
 
         if (string.IsNullOrWhiteSpace(cart.PaymentIntentId))
         {
-            
+
             var options = new PaymentIntentCreateOptions
             {
                 Amount = (long)cart.Items.Sum(x => x.Quantity * (x.Price * 100))
@@ -106,5 +107,19 @@ public class PaymentService(
         await cartService.SetAsync(cart, cancellationToken);
 
         return cart;
+    }
+
+    public async Task<string> RefundPayment(string paymentIntentId)
+    {
+        logger.LogInformation("RefundPayment paymentIntentId = {PaymentIntentId}", paymentIntentId);
+
+        var refundOptions = new RefundCreateOptions
+        {
+            PaymentIntent = paymentIntentId,
+        };
+        var refundService = new RefundService();
+        var result = await refundService.CreateAsync(refundOptions);
+
+        return result.Status;
     }
 }
