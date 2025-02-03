@@ -35,9 +35,7 @@ public class OrderSpecification : BaseSpecification<Order>
     private static OrderStatus? ParseStatus(string status)
     {
         if (Enum.TryParse<OrderStatus>(status, true, out var enumValue))
-        {
             return enumValue;
-        }
 
         return null;
     }
