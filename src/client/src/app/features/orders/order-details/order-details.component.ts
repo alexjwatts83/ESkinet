@@ -15,6 +15,7 @@ import { CardPipe } from '../../../shared/pipes/card.pipe';
 import { AddressPipe } from '../../../shared/pipes/address.pipe';
 import { AccountsService } from '../../../core/services/accounts.service';
 import { AdminService } from '../../../core/services/admin.service';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-order-details',
@@ -29,6 +30,7 @@ import { AdminService } from '../../../core/services/admin.service';
     CurrencyPipe,
     AddressPipe,
     CardPipe,
+    TruncatePipe,
   ],
   templateUrl: './order-details.component.html',
   styleUrl: './order-details.component.scss',
