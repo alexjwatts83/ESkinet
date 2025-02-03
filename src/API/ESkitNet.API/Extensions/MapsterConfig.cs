@@ -17,6 +17,10 @@ public static class MapsterConfig
             .Map(dest => dest.ProductId, src => src.Id.Value)
             .Map(dest => dest.ProductName, src => src.Name);
 
+        TypeAdapterConfig<Product, ProductDto>
+            .NewConfig()
+            .Map(dest => dest.Id, src => src.Id.Value);
+
         TypeAdapterConfig<OrderItem, DisplayOrderItemDto>
             .NewConfig()
             .Map(dest => dest.Id, src => src.Id.Value)

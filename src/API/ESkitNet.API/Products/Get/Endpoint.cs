@@ -25,8 +25,7 @@ public static class Endpoint
             var spec = new ProductSpecification(specParams);
             var products = await unitOfWork.Repository<Product, ProductId>().GetAllWithSpecAsync(spec, cancellationToken);
             var count = await unitOfWork.Repository<Product, ProductId>().CountAsync(spec, cancellationToken);
-            var productDtos = products
-                .Select(x => new ProductDto(x.Id.Value, x.Name, x.Description, x.Price, x.PictureUrl, x.Type, x.Brand, x.QuantityInStock));
+            var productDtos = products.Adapt<List<ProductDto>>();
             var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);
 
             return new Result(paginatedResult);

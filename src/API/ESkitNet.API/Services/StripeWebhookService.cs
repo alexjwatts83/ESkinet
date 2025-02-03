@@ -36,8 +36,12 @@ public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider
         while (tryCount <= 5)
         {
             using var scope = sp.CreateScope();
+
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-            var spec = new OrderSpecificationForStripe(intent.Id);
+
+            var specParams = new OrderSpecParams(paymentId: intent.Id);
+            var spec = new OrderSpecification(specParams);
+
             logger.LogDebug("Count {TryCount}", tryCount);
             var order = await unitOfWork.Repository<Order, OrderId>().GetOneWithSpecAsync(spec, cancellationToken);
 
