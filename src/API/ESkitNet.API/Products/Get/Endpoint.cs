@@ -1,4 +1,5 @@
-﻿using ESkitNet.Core.Specifications;
+﻿using ESkitNet.API.Helpers;
+using ESkitNet.Core.Specifications;
 
 namespace ESkitNet.API.Products.Get;
 
@@ -23,10 +24,13 @@ public static class Endpoint
                 query.PaginationRequest.PageSize
             );
             var spec = new ProductSpecification(specParams);
-            var products = await unitOfWork.Repository<Product, ProductId>().GetAllWithSpecAsync(spec, cancellationToken);
-            var count = await unitOfWork.Repository<Product, ProductId>().CountAsync(spec, cancellationToken);
-            var productDtos = products.Adapt<List<ProductDto>>();
-            var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);
+            var paginatedResult = await PaginatedResultHelpers.GetPageDetails<ProductDto, Product, ProductId>(
+                unitOfWork, spec, specParams.PageNumber, specParams.PageSize, cancellationToken
+            );
+            //var products = await unitOfWork.Repository<Product, ProductId>().GetAllWithSpecAsync(spec, cancellationToken);
+            //var count = await unitOfWork.Repository<Product, ProductId>().CountAsync(spec, cancellationToken);
+            //var productDtos = products.Adapt<List<ProductDto>>();
+            //var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);
 
             return new Result(paginatedResult);
         }

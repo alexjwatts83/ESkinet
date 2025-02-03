@@ -1,4 +1,5 @@
-﻿using ESkitNet.API.Orders.Dtos;
+﻿using ESkitNet.API.Helpers;
+using ESkitNet.API.Orders.Dtos;
 using ESkitNet.Core.Specifications;
 
 namespace ESkitNet.API.Admin.GetOrders;
@@ -20,10 +21,13 @@ public static class Endpoint
                 query.PaginationRequest.PageSize
             );
             var spec = new OrderSpecification(specParams);
-            var entities = await unitOfWork.Repository<Order, OrderId>().GetAllWithSpecAsync(spec, cancellationToken);
-            var count = await unitOfWork.Repository<Order, OrderId>().CountAsync(spec, cancellationToken);
-            var dtos = entities.Adapt<List<DisplayOrderDto>>();
-            var paginatedResult = new PaginatedResult<DisplayOrderDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, dtos);
+            var paginatedResult = await PaginatedResultHelpers.GetPageDetails<DisplayOrderDto, Order, OrderId>(
+                unitOfWork, spec, specParams.PageNumber, specParams.PageSize, cancellationToken
+            );
+            //var entities = await unitOfWork.Repository<Order, OrderId>().GetAllWithSpecAsync(spec, cancellationToken);
+            //var count = await unitOfWork.Repository<Order, OrderId>().CountAsync(spec, cancellationToken);
+            //var dtos = entities.Adapt<List<DisplayOrderDto>>();
+            //var paginatedResult = new PaginatedResult<DisplayOrderDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, dtos);
 
             return new Result(paginatedResult);
         }
