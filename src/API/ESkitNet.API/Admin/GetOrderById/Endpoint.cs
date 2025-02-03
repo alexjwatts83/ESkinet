@@ -13,7 +13,7 @@ public static class Endpoint
     {
         public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
         {
-            var request = new OrderRequest();
+            var request = new OrderRequest(Id: query.Id);
             var specParams = new OrderSpecParams(request);
             var spec = new OrderSpecification(specParams);
             var order = await unitOfWork.Repository<Order, OrderId>().GetOneWithSpecAsync(spec, cancellationToken);
