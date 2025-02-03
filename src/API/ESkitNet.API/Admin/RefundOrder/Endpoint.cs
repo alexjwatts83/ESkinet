@@ -1,7 +1,7 @@
 ﻿using ESkitNet.API.Orders.Dtos;
 using ESkitNet.Core.Specifications;
 
-namespace ESkitNet.API.Orders.RefundOrder;
+namespace ESkitNet.API.Admin.RefundOrder;
 
 public static class Endpoint
 {
@@ -22,7 +22,7 @@ public static class Endpoint
     public record Command(Guid Id) : ICommand<Result>;
     public record Result(DisplayOrderDto Order);
 
-    public class Handler(IPaymentService paymentService, IUnitOfWork unitOfWork) 
+    public class Handler(IPaymentService paymentService, IUnitOfWork unitOfWork)
         : ICommandHandler<Command, Result>
     {
         public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
@@ -56,7 +56,7 @@ public static class Endpoint
                 return new Result(order.Adapt<DisplayOrderDto>());
             }
 
-            throw new BadHttpRequestException($"Payment refund failed with status of '{ result }'");
+            throw new BadHttpRequestException($"Payment refund failed with status of '{result}'");
         }
     }
 }

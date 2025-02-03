@@ -15,5 +15,8 @@ public class AdminModule : ICarterModule
 
         group.MapGet("/orders/{id}", GetOrderById.Endpoint.Handle)
             .WithName("AdminGetOrderById");
+
+        group.MapPost("/orders/{id}/refund", RefundOrder.Endpoint.Handle)
+            .WithName("AdminRefundOrder");
     }
 }
