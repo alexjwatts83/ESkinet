@@ -22,6 +22,7 @@ public static class DependencyInjection
         // common services
         services.AddScoped<IAppTimeProvider, AppTimeProvider>();
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddScoped<IResponseCacheService, ResponseCacheService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<IPaymentService, PaymentService>();
 
