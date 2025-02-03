@@ -1,6 +1,4 @@
-﻿using ESkitNet.API.Payments.Dtos;
-
-namespace ESkitNet.API.Orders.Dtos;
+﻿namespace ESkitNet.API.Orders.Dtos;
 
 public record CreateOrderDto
 (
