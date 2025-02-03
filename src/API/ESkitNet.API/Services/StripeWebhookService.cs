@@ -39,7 +39,8 @@ public class StripeWebhookService(IHttpContextAccessor context, IServiceProvider
 
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-            var specParams = new OrderSpecParams(paymentId: intent.Id);
+            var request = new OrderRequest(PaymentId: intent.Id);
+            var specParams = new OrderSpecParams(request);
             var spec = new OrderSpecification(specParams);
 
             logger.LogDebug("Count {TryCount}", tryCount);

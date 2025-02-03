@@ -15,22 +15,11 @@ public static class Endpoint
         {
             // TODO: return the dto by adding some additional mapper or something like tha
             //       so the mapping isn't done here
-            var specParams = new ProductSpecParams(
-                query.PaginationRequest.Brand,
-                query.PaginationRequest.Type,
-                query.PaginationRequest.Sort,
-                query.PaginationRequest.Search,
-                query.PaginationRequest.PageNumber,
-                query.PaginationRequest.PageSize
-            );
+            var specParams = new ProductSpecParams(query.PaginationRequest);
             var spec = new ProductSpecification(specParams);
             var paginatedResult = await PaginatedResultHelpers.GetPageDetails<ProductDto, Product, ProductId>(
                 unitOfWork, spec, specParams.PageNumber, specParams.PageSize, cancellationToken
             );
-            //var products = await unitOfWork.Repository<Product, ProductId>().GetAllWithSpecAsync(spec, cancellationToken);
-            //var count = await unitOfWork.Repository<Product, ProductId>().CountAsync(spec, cancellationToken);
-            //var productDtos = products.Adapt<List<ProductDto>>();
-            //var paginatedResult = new PaginatedResult<ProductDto>(query.PaginationRequest.PageNumber, query.PaginationRequest.PageSize, count, productDtos);
 
             return new Result(paginatedResult);
         }

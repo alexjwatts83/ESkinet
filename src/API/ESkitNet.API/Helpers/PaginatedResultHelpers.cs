@@ -11,7 +11,6 @@ public static class PaginatedResultHelpers
         where TEntityKey : class
         where TDto : class
     {
-        //var spec = new ProductSpecification(specParams);
         var entities = await unitOfWork.Repository<TEntity, TEntityKey>().GetAllWithSpecAsync(spec, cancellationToken);
         var count = await unitOfWork.Repository<TEntity, TEntityKey>().CountAsync(spec, cancellationToken);
         var dtos = entities.Adapt<List<TDto>>();
