@@ -101,7 +101,8 @@ public static class Endpoint
                 dto.PaymentSummary.Adapt<PaymentSummary>(),
                 cart.PaymentIntentId,
                 email,
-                items
+                items,
+                timeProvider.Now
             );
 
             unitOfWork.Repository<Order, OrderId>().Add(order);
