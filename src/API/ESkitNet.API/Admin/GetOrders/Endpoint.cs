@@ -15,12 +15,10 @@ public static class Endpoint
         {
             var specParams = new OrdersSpecParams(
                 query.PaginationRequest.Email,
-                query.PaginationRequest.Status
-            )
-            {
-                PageNumber = query.PaginationRequest.PageNumber,
-                PageSize = query.PaginationRequest.PageSize
-            };
+                query.PaginationRequest.Status,
+                query.PaginationRequest.PageNumber,
+                query.PaginationRequest.PageSize
+            );
             var spec = new OrderSpecification(specParams);
             var entities = await unitOfWork.Repository<Order, OrderId>().GetAllWithSpecAsync(spec, cancellationToken);
             var count = await unitOfWork.Repository<Order, OrderId>().CountAsync(spec, cancellationToken);
