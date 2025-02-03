@@ -16,8 +16,8 @@ export class AdminService {
   getOrders(orderParams: OrderParams): Observable<Pagination<Order>> {
     let params = new HttpParams();
     console.log({ orderParams });
-    if (orderParams.filter && orderParams.filter !== 'All') {
-      params = params.append('filter', orderParams.filter);
+    if (orderParams.status && orderParams.status !== 'All') {
+      params = params.append('status', orderParams.status);
     }
 
     params = params.append('pageNumber', orderParams.pageNumber);
