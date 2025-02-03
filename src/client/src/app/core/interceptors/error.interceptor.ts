@@ -37,6 +37,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // alert(message);
         snackbar.error(message);
       }
+      if (err.status == 403) {
+        snackbar.error('Forbidden');
+      }
       if (err.status == 404) {
         router.navigateByUrl('/not-found');
       }
