@@ -66,7 +66,16 @@
                   >
                     <mat-icon color="accent">visibility</mat-icon>
                   </button>
-                  <button matTooltip="Refund" mat-icon-button>
+                  <button
+                    [matTooltip]="
+                      order.status === 'Refunded'
+                        ? 'Order is already Refunded'
+                        : 'Refund'
+                    "
+                    mat-icon-button
+                    (click)="confirmRefund(order.id)"
+                    [disabled]="order.status === 'Refunded'"
+                  >
                     <mat-icon color="warn">undo</mat-icon>
                   </button>
                 </div>

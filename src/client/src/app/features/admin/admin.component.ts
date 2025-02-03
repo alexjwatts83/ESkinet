@@ -25,6 +25,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { TruncatePipe } from '../../shared/pipes/truncate.pipe';
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
+import { DialogService } from '../../core/services/dialog.service';
+import { SnackbarService } from '../../core/services/snackbar.service';
 
 @Component({
   selector: 'app-admin',
@@ -42,7 +44,6 @@ import { MatButton } from '@angular/material/button';
     MatTooltipModule,
     MatTabsModule,
     NgFor,
-    NgIf,
     TruncatePipe,
     RouterLink,
     MatButton,
@@ -52,6 +53,9 @@ import { MatButton } from '@angular/material/button';
 })
 export class AdminComponent implements OnInit {
   private adminService = inject(AdminService);
+  private dialogService = inject(DialogService);
+  private snack = inject(SnackbarService);
+
   orderParams = new OrderParams();
 
   displayedColumns: string[] = [
@@ -102,5 +106,27 @@ export class AdminComponent implements OnInit {
     this.orderParams.status = event.value;
     this.orderParams.pageNumber = 1;
     this.loadOrders();
+  }
+
+  async confirmRefund(id: string) {
+    const confirm = await this.dialogService.confirm(
+      'Confirm Refund',
+      `Are you sure you want to issue refund? This cannot be undone!`
+    );
+
+    if (confirm) this.refundOrder(id);
+  }
+
+  private refundOrder(id: string) {
+    console.log({ refund: id });
+    this.adminService.refundOrder(id).subscribe({
+      next: (order) => {
+        console.log({ refundedOrder: order });
+        this.dataSource.data = this.dataSource.data.map((x) =>
+          x.id == id ? order : x
+        );
+        this.snack.success('Order was refunded');
+      },
+    });
   }
 }

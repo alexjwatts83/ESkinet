@@ -4,7 +4,7 @@
 >
   <div class="px-4 w-full">
     <div class="flex justify-between items-center align-middle">
-        <h2 class="text-xl text-center font-semibold">Order Summary</h2>
+        <h2 class="text-xl text-center font-semibold" [title]="order.id">Order Summary {{ order.id | truncate : 5 }}</h2>
         <button mat-stroked-button (click)="onActionClick()">{{ buttonText }}</button>
     </div>
     <div class="mt-8 py-3 border-t border-gray-200 flex gap-16">

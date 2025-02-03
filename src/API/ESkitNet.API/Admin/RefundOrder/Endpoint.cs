@@ -5,14 +5,11 @@ namespace ESkitNet.API.Admin.RefundOrder;
 
 public static class Endpoint
 {
-    public record Request(Guid Id);
     public record Response(DisplayOrderDto Order);
 
-    public static async Task<IResult> Handle(Request request, ISender sender)
+    public static async Task<IResult> Handle(Guid id, ISender sender)
     {
-        var command = request.Adapt<Command>();
-
-        var result = await sender.Send(command);
+        var result = await sender.Send(new Command(id));
 
         var response = result.Adapt<Response>();
 
@@ -50,7 +47,9 @@ public static class Endpoint
             {
                 order.Status = OrderStatus.Refunded;
 
-                if (await unitOfWork.Complete(cancellationToken))
+                var completed = await unitOfWork.Complete(cancellationToken);
+
+                if (!completed)
                     throw new BadHttpRequestException("Payment was refunded but an error occurred saving details to the database");
 
                 return new Result(order.Adapt<DisplayOrderDto>());
