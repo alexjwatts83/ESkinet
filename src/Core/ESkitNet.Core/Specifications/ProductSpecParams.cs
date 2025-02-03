@@ -1,52 +1,58 @@
-﻿namespace ESkitNet.Core.Specifications;
+﻿using ESkitNet.Core.Pagination;
+
+namespace ESkitNet.Core.Specifications;
 
 
-public class PagingSpecParams(int pageNumber = 1, int pageSize = 5)
+public class PagingSpecParams(PaginationRequest request)
 {
     private const int _maxPageSize = 50;
 
-    public int PageNumber { get; set; } = pageNumber;
-    public int PageSize { get; private set; } = (pageSize > _maxPageSize) 
-        ? _maxPageSize 
-        : pageSize;
+    public int PageNumber { get; set; } = request.PageNumber;
+    public int PageSize { get; private set; } = (request.PageSize > _maxPageSize)
+        ? _maxPageSize
+        : request.PageSize;
 }
 
-public class OrdersSpecParams(
-    string? email = "",
-    string? status = "",
-    int pageNumber = 1,
-    int pageSize = 5) : PagingSpecParams(pageNumber, pageSize)
+public class OrdersSpecParams()
 {
-    public string? Status { get; private set; } = status;
-    public string? Email { get; private set; } = email;
+    public OrdersSpecParams(string email) : this()
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            throw new ArgumentNullException(nameof(email));
+        }
+
+        Email = email;
+    }
+    public string? Email { get; private set; }
 }
 
-public class OrderSpecParams(string? email = "", Guid? id = null, string? paymentId = "")
+public class OrdersPagingSpecParams(OrdersPaginationRequest request) : PagingSpecParams(request)
 {
-    public string? Email { get; private set; } = email;
-    public OrderId? Id { get; private set; } = id.HasValue ? OrderId.Of(id.Value) : null;
-    public string? PaymentId { get; private set; } = paymentId;
+    public string? Status { get; private set; } = request.Status;
+    public string? Email { get; private set; } = request.Email;
 }
 
-public class ProductSpecParams(
-    string? brands = "",
-    string? types = "",
-    string? sort = "",
-    string? search = "",
-    int pageNumber = 1,
-    int pageSize = 5) : PagingSpecParams(pageNumber, pageSize)
+public class OrderSpecParams(OrderRequest request)
 {
-    public List<string> Brands { get; private set; } = string.IsNullOrWhiteSpace(brands) 
-        ? [] 
-        : [.. brands.Split(',', StringSplitOptions.RemoveEmptyEntries)];
-    
-    public List<string> Types { get; private set; } = string.IsNullOrWhiteSpace(types) 
-        ? [] 
-        : [.. types.Split(',', StringSplitOptions.RemoveEmptyEntries)];
+    public string? Email { get; private set; } = request.Email;
+    public OrderId? Id { get; private set; } = request.Id.HasValue ? OrderId.Of(request.Id.Value) : null;
+    public string? PaymentId { get; private set; } = request.PaymentId;
+}
 
-    public string Sort { get; set; } = sort ?? "";
+public class ProductSpecParams(ProductsPaginationRequest request) : PagingSpecParams(request)
+{
+    public List<string> Brands { get; private set; } = string.IsNullOrWhiteSpace(request.Brand)
+        ? []
+        : [.. request.Brand.Split(',', StringSplitOptions.RemoveEmptyEntries)];
 
-    public string Search { get; private set; } = string.IsNullOrWhiteSpace(search) 
-        ? string.Empty 
-        : search.ToLower();
+    public List<string> Types { get; private set; } = string.IsNullOrWhiteSpace(request.Type)
+        ? []
+        : [.. request.Type.Split(',', StringSplitOptions.RemoveEmptyEntries)];
+
+    public string Sort { get; set; } = request.Sort ?? "";
+
+    public string Search { get; private set; } = string.IsNullOrWhiteSpace(request.Search)
+        ? string.Empty
+        : request.Search.ToLower();
 }
