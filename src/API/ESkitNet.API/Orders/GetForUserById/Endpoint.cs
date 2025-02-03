@@ -29,7 +29,8 @@ public static class Endpoint
             if (string.IsNullOrWhiteSpace(email))
                 throw new BadHttpRequestException("Email not found for user");
 
-            var spec = new OrderSpecification(email, OrderId.Of(query.Id));
+            var specParams = new OrderSpecParams(email, query.Id);
+            var spec = new OrderSpecification(specParams);
 
             var order = await unitOfWork.Repository<Order, OrderId>().GetOneWithSpecAsync(spec, cancellationToken);
 
