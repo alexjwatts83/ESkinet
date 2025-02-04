@@ -1,4 +1,6 @@
-﻿namespace ESkitNet.API.Products;
+﻿using ESkitNet.API.EndpointFilters;
+
+namespace ESkitNet.API.Products;
 
 public class ProductsModule : ICarterModule
 {
@@ -15,7 +17,9 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Get Products")
-            .WithDescription("Get Products");
+            .WithDescription("Get Products")
+            .AddEndpointFilter<CacheFilter<ProductDto>>()
+            .WithMetadata(new CacheFilterMetadata(2 * 60));
         //.RequireCors("CorsPolicy");
 
         group.MapGet("/{id}", GetById.Endpoint.Handle)
