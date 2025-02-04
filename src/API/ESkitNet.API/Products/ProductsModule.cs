@@ -19,7 +19,7 @@ public class ProductsModule : ICarterModule
             .WithSummary("Get Products")
             .WithDescription("Get Products")
             .AddEndpointFilter<CacheFilter<ProductDto>>()
-            .WithMetadata(new CacheFilterMetadata(2 * 60));
+            .WithMetadata(new CacheFilterMetadata(5 * 60));
         //.RequireCors("CorsPolicy");
 
         group.MapGet("/{id}", GetById.Endpoint.Handle)
@@ -35,7 +35,8 @@ public class ProductsModule : ICarterModule
             .Produces<Create.Endpoint.Response>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Product")
-            .WithDescription("Create Product");
+            .WithDescription("Create Product")
+            .RequireAuthorization(x => x.RequireRole("Admin"));
 
         group.MapPut("/{id}", Update.Endpoint.Handle)
             .WithName("UpdateProduct")
@@ -43,7 +44,8 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Update Product")
-            .WithDescription("Update Product");
+            .WithDescription("Update Product")
+            .RequireAuthorization(x => x.RequireRole("Admin"));
 
         group.MapDelete("/{id}", Delete.Endpoint.Handle)
             .WithName("DeleteProduct")
@@ -51,6 +53,7 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Delete Product")
-            .WithDescription("Delete Product");
+            .WithDescription("Delete Product")
+            .RequireAuthorization(x => x.RequireRole("Admin"));
     }
 }
