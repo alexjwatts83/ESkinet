@@ -36,7 +36,9 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .WithSummary("Create Product")
             .WithDescription("Create Product")
-            .RequireAuthorization(x => x.RequireRole("Admin"));
+            .RequireAuthorization(x => x.RequireRole("Admin"))
+            .AddEndpointFilter<InvalidateCacheFilter>()
+            .WithMetadata(new InvalidateCacheFilterMetadata("/api/products|"));
 
         group.MapPut("/{id}", Update.Endpoint.Handle)
             .WithName("UpdateProduct")
@@ -45,7 +47,9 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Update Product")
             .WithDescription("Update Product")
-            .RequireAuthorization(x => x.RequireRole("Admin"));
+            .RequireAuthorization(x => x.RequireRole("Admin"))
+            .AddEndpointFilter<InvalidateCacheFilter>()
+            .WithMetadata(new InvalidateCacheFilterMetadata("/api/products|"));
 
         group.MapDelete("/{id}", Delete.Endpoint.Handle)
             .WithName("DeleteProduct")
@@ -54,6 +58,8 @@ public class ProductsModule : ICarterModule
             .ProducesProblem(StatusCodes.Status404NotFound)
             .WithSummary("Delete Product")
             .WithDescription("Delete Product")
-            .RequireAuthorization(x => x.RequireRole("Admin"));
+            .RequireAuthorization(x => x.RequireRole("Admin"))
+            .AddEndpointFilter<InvalidateCacheFilter>()
+            .WithMetadata(new InvalidateCacheFilterMetadata("/api/products|"));
     }
 }

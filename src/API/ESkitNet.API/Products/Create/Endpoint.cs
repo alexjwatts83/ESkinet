@@ -16,7 +16,9 @@ public static class Endpoint
 
         var response = result.Adapt<Response>();
 
-        return Results.Created($"/api/products/{response.Id}", response);
+        var iresult = Results.Created($"/api/products/{response.Id}", response.Id);
+
+        return iresult;
     }
 
     public record Command(ProductDto Product) : ICommand<Result>;
